@@ -92,12 +92,12 @@ add_bars <- function(x, y, y0=NULL, width=1, horiz=FALSE, ...){
 
 
 
-#' Add rug to plot, based on model.
+#' Add groups of points to a plot
 #'
 #' @export
 #' @import grDevices
 #' @import graphics
-#' @description Add rug based on model data.
+#' @description Add groups of points to a plot
 #' 
 #' @param x average X position of points to plot,
 #' @param y average Y position of points to plot,
@@ -399,8 +399,11 @@ alpha <- function(x, f = 0.5) {
 alphaPalette <- function(x, f.seq, n=NULL) {
     out <- c()
     if(!is.null(n)){
-        if(n[1]>1 & length(f.seq) > 1){
+        if(n[1]>1 & length(f.seq) == 2){
+            f.seq <- seq(min(max(c(f.seq[1],0)),1), min(max(c(f.seq[2],0)),1), length=n)
+        } else if(n[1]>1 & length(f.seq) > 2){
             f.seq <- seq(min(f.seq), max(f.seq), length=n)
+            warning("N values between the min and max of f.seq are selected.")
         }else{
             n <- length(f.seq)
             warning("Argument n will be ignored.")
@@ -625,7 +628,13 @@ color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
     } else if (color[1] == "gray" || color[1] == "bw") {
         color <- gray(seq(0.1, 0.9, length = nCol))
         col <- 1
-    } 
+    }else {
+            if( all(isColor(color)) ){
+                color <- colorRampPalette(color)(nCol)
+            }else{
+                stop("color scheme not recognised")
+            }  
+    }
     if (is.null(col)){
         col <- 'black'
     } 
@@ -869,232 +878,277 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #'
 #' @export
 #' @import graphics
-#' @description Function for positioning a legend or label in or outside the 
-#' plot region based on proportion of the plot region rather than Cartesian 
-#' coordinates.
-#' 
-#' @param pos0 2-number vector with x and y coordinate of start position. 
-#' Could be defined in coordinates (default), proportions of the plot region, 
-#' or proportions of the figure. See \code{input}. 
-#' @param pos1 2-number vector with x and y coordinate of end position. 
-#' Could be defined in coordinates (default), proportions of the plot region, 
-#' or proportions of the figure. See \code{input}. 
-#' @param type Type of coordinates provided: type=1 is coordinates with 
-#' respect to the x- and y-axis; type=2 is proportions with respect to the 
-#' x- and y-axis, with proportions > 1 or < 0 falling outside the plot 
-#' region; type=3 is proportions with respect to the figure region, with 
-#' proportions > 1 or < 0 falling outside the figure window. See examples 
-#' for arrows crossing figure borders.
-#' @param plot Logical: whether or not to plot the arrow. 
-#' Might be useful for calculating arrow parts in advance.
+#' @import grDevices
+#' @description Function for drawing arrows between different plot regions. 
+#'
+#' @param start The x and y coordinates of a set of points that define 
+#' the start points of the arrow(s), specified in a 
+#' list with x and y slots. Similar to \code{\link[grDevices]{xy.coords}}.
+#' Alternatively, start could be a matrix with start and end points in 
+#' two columns. In that case, \code{end} is set to NULL.
+#' @param end The x and y coordinates of a set of points that define 
+#' the end points of the arrow(s), specified in a 
+#' list with x and y slots.
+#' @param arrows On which end of the line to draw arrows: 
+#' "end" (default), "start", "both", "none".
+#' @param units Units in which x- and y-coordinates are provided:
+#' "inch" (default), "prop" (proportion), "coords". "inch" and "prop" are 
+#' with respect to device region.
 #' @param ... graphical parameters and parameters provided for 
 #' \code{\link[graphics]{arrows}}.
-#' @return The function outputs the proportions with respect to the figure 
-#' window for the start point and the end point. 
-#' @section Notes:
-#' \itemize{
-#' \item For drawing lines or arrows through different plots the order of the plot 
-#' is crucial. See the example 1 below. 
-#' \item The function assumes that the different figure windows have the same size. 
-#' See example 2 below for the use of layout and different sized figure 
-#' windows.
-#' }
 #' 
 #' @author Jacolien van Rij
-#'
 #' @family Functions for plotting
 #'
 #' @examples
 #'
 #' ### EXAMPLE 1 ################################
-#'
+#' 
+#' # setup 4 panels:
+#' par(mfrow=c(2,2))
+#' 
+#' #------------------
+#' # PLOT 1: two points
+#' #------------------
+#' 
+#' plot(0.5, 0.5, main="1", 
+#' 	pch=21, lwd=3, col='red', bg='white', cex=1.2)
+#' points(.5, .375, pch=22, lwd=3, col="blue", cex=1.2)
+#' 
+#' # Draw an error between the two points:
+#' drawDevArrows(start=c(.5,.5), end=c(.5,.375), 
+#' 	units="coords", arrows="start", length=.1, lty=1)
+#' # ... which is the same as using arrows:
+#' arrows(x0=.5, x1=.5, y0=.5, y1=.375, code=1, length=.1, lty=1)
+#' 
+#' # ... but these arrows can also be clipped to the device 
+#' # instead of the plot region (see leftbottom corner):
+#' drawDevArrows(start=c(.5,.5), end=c(.5,.375), 
+#' 	units="dev", arrows="start", length=.1, lty=1)
+#' 
+#' # The function getArrowPos converts coordinates to device coordinates:
+#' x1 <- getArrowPos(x=0.5, y=0.5, units="coords")
+#' x2 <- getArrowPos(x=0.5, y=0.375, units="coords")
+#' drawDevArrows(x1, x2, col="purple",
+#' 	arrows="start", length=.1, lty=2, lwd=2)
+#' 
+#' 
+#' # Setup 4 arrows with the same starting points, 
+#' # but defined differently:
+#' a1 <- getArrowPos(x=0.5, y=0.375, units="coords")
+#' a2 <- getArrowPos(x=0.5, y=0.21, units="prop")
+#' a3 <- getArrowPos(x=0.55, y=0.36, units="prop", dev="fig")
+#' a4 <- getArrowPos(x=0.5*0.55, y=.5*0.36+.5, units="prop", dev="dev")
+#' 
+#' # Setup 3 arrows with the same x and y values, 
+#' # which define different starting points in practice:
+#' b1 <- getArrowPos(x=.5, y=.5, units="prop", dev="plot")
+#' b2 <- getArrowPos(x=.5, y=.5, units="prop", dev="fig")
+#' b3 <- getArrowPos(x=.5, y=.5, units="prop", dev="dev")
+#' 
+#' 
+#' #------------------
+#' # PLOT 2: different coordinates
+#' #------------------
+#' 
+#' plot(c(-2.33, 20), c(.3, .8), type='n', main='2')
+#' points(15,.8, pch=21, lwd=3, col='red', bg='white', cex=1.2)
+#' 
+#' # define end point for b:
+#' b <- getArrowPos(x=15, y=.8)
+#' 
+#' # Draw arrow b1:
+#' drawDevArrows(start=b1, end=b, arrows="start", length=.1, lty=1)
+#' 
+#' 
+#' #------------------
+#' # PLOT 3: upside down axis
+#' #------------------
+#' 
+#' emptyPlot(c(25, 1050), c(15,-15), eegAxis=TRUE, h0=0)
+#' # plot line:
+#' x <- 0:1000
+#' y <- 10*cos(x/100)
+#' lines(x, y, col=4)
+#' # draw point points on gthe line:
+#' x <- c(200,400,600,800)
+#' y <- 10*cos(x/100)
+#' points(x,y, pch=18)
+#' 
+#' # To avoid calling the function drawDevArrows 4 times, we rewrite
+#' # the x- and y-positions of the 4 coordinates a1, a2, a3, a4 in one list:
+#' a.start <- list(x=c(a1$x, a2$x, a3$x, a4$x), y=c(a1$y, a2$y, a3$y, a4$y))
+#' # Define end points on the line:
+#' a.end <- getArrowPos(x=x, y=y)
+#' drawDevArrows(start=a.start, end=a.end, arrows="none", lty=3)
+#' 
+#' # Note that these four coordinates are actually referring 
+#' # to the same starting point!
+#' # So instead we could have written:
+#' drawDevArrows(start=a1, end=a.end, arrows="none", col=alpha("red"), lwd=2)
+#' 
+#' 
+#' #------------------
+#' # PLOT 4: wrapping up
+#' #------------------
+#' 
+#' # Arrows could be constructed when the plot is not yet called, 
+#' # as they are clipped to the device:
+#' drawDevArrows(start=c(0,7), end=c(7,0), col='gray', lwd=4, lty=3, arrows="none")
+#' 
+#' # Add the plot:
+#' plot(1,1, bg="green")
+#' 
+#' # Finish b2 and b3: same x and y, but different coordinates
+#' drawDevArrows(start=b2, end=b, arrows="start", length=.1, lty=2)
+#' drawDevArrows(start=b3, end=b, arrows="start", length=.1, lty=3)
+#' 
+#' 
+#' 
+#' ### EXAMPLE 2 ################################
+#' 
+#' 
+#' 
 #' # setup 4 plots:
 #' par(mfrow=c(2,2))
-#'
-#' # add first plot:
-#' plot(0.5, 0.5, pch="1")
 #' 
-#' # add arrow from plot 1 to plot 3, using plot coordinates:
-#' a <- drawArrows(pos0=c(0.5, .5), pos1=c(0.5, -.5), code=2, 
-#'    col='blue', lwd=2)
-#' # add arrow from plot 1 to plot 2, using plot proportions:
-#' b <- drawArrows(pos0=c(1, .5), pos1=c(2, 1), type=2, code=2, 
-#'    col='red', lwd=2, lty=3)
-#' # add arrow from plot 1 to plot 4, using figure proportions, end in plot 1:
-#' c <- drawArrows(pos0=c(.9,.1), pos1=c(1.25, -0.25), type=3, 
-#'    code=1, col='green', lwd=2, lty=5)
+#' n <- 50
 #' 
-#' # add second plot, with different coordinates:
-#' plot(c(-2.33, 20), c(.3, .8), type='n', main='2')
-#' # finish arrow b:
-#' p0 <- b$pos0[['right']]
-#' p1 <- b$pos1[['right']]
-#' # note that we have to set type=3, because output is figure proportions:
-#' drawArrows(pos0=p0, pos1=p1, code=2, col='red', lwd=2, lty=3, type=3)
+#' #------------------
+#' # PLOT 1: empty
+#' #------------------
 #' 
-#' # start arrow from plot 2 to plot 3:
-#' # combine plot proportions (middle of x-axis) with figure proportions
-#' # (center of new figure) 
-#' d <- drawArrows(pos0=getProps(getCoords(c(.5,0), side=c(1,2)), 
-#'         side=c(1,2), output="f"), 
-#'     pos1=c(-.25,-.25), type=3, code=2, lwd=2)
 #' 
-#' # add third plot, with different coordinates:
-#' plot(c(25, 20), c(7,-7), type='n', main='3')
+#' emptyPlot(c(25, 1050), c(15,-15), axes=FALSE)
+#' lines(0:1000, 10*cos(0:1000/200), col=4)
+#' x <- seq(0,1000, length=n)
+#' y <- 10*cos(x/200)
 #' 
-#' # finish arrow a:
-#' p0 <- a$pos0[['bottom']]
-#' p1 <- a$pos1[['bottom']]
-#' drawArrows(pos0=p0, pos1=p1, type=3, code=2, col='blue', lwd=2)
+#' a <- getArrowPos(x=x, y=y)
 #' 
-#' # continue arrow c
-#' p0 <- c$pos0[['bottom']]
-#' p1 <- c$pos1[['bottom']]
-#' # note that we could save the output as a new list:
-#' cnew <- drawArrows(pos0=p0, pos1=p1, type=3, code=0, 
-#'    col='green', lwd=2, lty=5)
 #' 
-#' # finish arrow d
-#' p0 <- d$pos0[['bottomleft']]
-#' p1 <- d$pos1[['bottomleft']]
-#' # now we see that a part of the arrow is missing:
-#' drawArrows(pos0=p0, pos1=p1, code=2, lwd=2, type=3)
+#' #------------------
+#' # PLOT 2
+#' #------------------
 #' 
-#' # add fourth plot:
-#' plot(c(25, 20), c(7,-7), type='n', main='4')
+#' emptyPlot(c(25, 1050), c(15,-15), axes=FALSE)
+#' lines(0:1000, 10*sin(0:1000/200), col=1)
+#' x <- seq(0,1000, length=n)
+#' y <- 10*sin(x/200)
 #' 
-#' # finish arrow c using the new variable cnew:
-#' p0 <- cnew$pos0[['right']]
-#' p1 <- cnew$pos1[['right']]
-#' drawArrows(pos0=p0, pos1=p1, code=0, col='green', lwd=2, lty=5, type=3)
-#' # ... or we could finish arrow c using the old variable c:
-#' p0 <- c$pos0[['bottomright']]
-#' p1 <- c$pos1[['bottomright']]
-#' drawArrows(pos0=p0, pos1=p1, code=0, col='darkgreen', lwd=2,type=3)
 #' 
-#' # finish arrow d:
-#' p0 <- d$pos0[['bottom']]
-#' p1 <- d$pos1[['bottom']]
-#' drawArrows(pos0=p0, pos1=p1, code=2, lwd=2, type=3)
-#'
-#'
-#' ### EXAMPLE 2 ################################
-#'
-#' layout(matrix(c(1,3,2,2), byrow=FALSE, ncol=2))
-#' layout.show(3)
+#' b <- getArrowPos(x=x, y=y)
 #' 
-#' # plot 1:
-#' plot(1,1, type='n', main='1')
-#' a <- drawArrows(pos0=c(.5,.5), pos1=c(1.5, 0), type=3, code=1, 
-#'    col='green', lwd=2, lty=5)
 #' 
-#' plot(1,1, type='n', main='2')
-#' # this will result in incorrect continuation of the error, 
-#' # because the proportion method assumes the same size of 
-#' # figure windows:
-#' p0 <- a$pos0[['right']]
-#' p1 <- a$pos1[['right']]
-#' drawArrows(pos0=p0, pos1=p1, type=3, code=0, col='red', lwd=2, 
-#'    lty=5)
 #' 
-#' # as the window is twice as high, we could adjust y-position
-#' # to fix this:
-#' p0[2] <- p0[2]/2+.5
-#' p1[2] <- p1[2]/2+.5
-#' drawArrows(pos0=p0, pos1=p1, type=3, code=0, col='darkgreen', 
-#'    lwd=2, lty=3)
-#'
-#'
-#' ### EXAMPLE 3 ################################
-#' # Differences between three types
+#' #------------------
+#' # PLOT 3
+#' #------------------
 #' 
-#' par(mfrow=c(1,2))
+#' emptyPlot(c(25, 1050), c(15,-15), axes=FALSE)
+#' lines(0:1000, 10*cos(0:1000/200), col=4)
+#' x <- seq(0,1000, length=n)
+#' y <- 10*cos(x/200)
 #' 
-#' # add first plot:
-#' par(mar=c(6,6,6,6))
-#' plot(0.75, 0.75, pch="1")
 #' 
-#' # TYPE 1:
-#' a <- drawArrows(pos0=c(.8, .5), pos1=c(2, .6), type=1, code=2, 
-#'    col='red', lwd=2, lty=3)
-#' # TYPE 2:
-#' b <- drawArrows(pos0=c(.8, .5), pos1=c(2, .6), type=2, code=2, 
-#'    col='green', lwd=2, lty=3)
-#' # TYPE 3:
-#' c <- drawArrows(pos0=c(.8, .5), pos1=c(2, .6), type=3, code=2, 
-#'    col='blue', lwd=2, lty=5)
+#' c <- getArrowPos(x=rev(x), y=rev(y))
 #' 
-#' # add second plot:
-#' par(mar=c(3,1,1,1))
-#' plot(0.95, 0.95, pch="2")
-#' # finish arrow a:
-#' p0 <- a$pos0[['right']]
-#' p1 <- a$pos1[['right']]
-#' drawArrows(pos0=p0, pos1=p1, type=3, code=2, col='red', lwd=2, lty=3)
-#' # finish arrow b:
-#' p0 <- b$pos0[['right']]
-#' p1 <- b$pos1[['right']]
-#' drawArrows(pos0=p0, pos1=p1, type=3, code=2, col='green', lwd=2, lty=3)
-#' # finish arrow c:
-#' p0 <- c$pos0[['right']]
-#' p1 <- c$pos1[['right']]
-#' drawArrows(pos0=p0, pos1=p1, type=3, code=2, col='blue', lwd=2, lty=5)
-#'
-drawArrows <- function(pos0, pos1, type=1, plot=TRUE, ...){
-    p0 <- c()
-    p1 <- c()
-    a0 <- c()
-    a1 <- c()
-    new0 <- NULL
-    new1 <- NULL
-    if(type==1){
-        p0 <- pos0
-        p1 <- pos1
-        a0 <- getProps(p0, side=c(1,2), output='f')
-        a1 <- getProps(p1, side=c(1,2), output='f')    
-    }else if(type==2){
-        p0 <- getCoords(pos0, side=c(1,2), input='p')
-        p1 <- getCoords(pos1, side=c(1,2), input='p')
-        a0 <- getProps(p0, side=c(1,2), output='f')
-        a1 <- getProps(p1, side=c(1,2), output='f')          
-    }else if(type==3){
-        a0 <- pos0
-        a1 <- pos1 
-        p0 <- getCoords(a0, side=c(1,2), input='f')
-        p1 <- getCoords(a1, side=c(1,2), input='f')   
-    }
-    if(plot==TRUE){
-        arrows(x0=p0[1], y0=p0[2],
-            x1=p1[1], y1=p1[2], ..., xpd=TRUE)    
-    }
-    gfc <- getFigCoords('f')
-    getNewProp <- function(pos){
-        bottom      <- c(NA, NA)
-        left        <- c(NA, NA)
-        top         <- c(NA, NA)
-        right       <- c(NA, NA)
-        bottomleft  <- c(NA, NA)
-        bottomright <- c(NA, NA)
-        topleft     <- c(NA, NA)
-        topright    <- c(NA, NA)
-        bottom[1]      <- pos[1]
-        top[1]         <- pos[1]
-        left[1] <- bottomleft[1] <- topleft[1] <- 1+pos[1]
-        right[1]  <- bottomright[1] <- topright[1] <- -1*(1-pos[1]) 
-   
-        bottom[2] <- bottomleft[2] <- bottomright[2] <- 1+pos[2]
-        top[2]    <- topleft[2] <- topright[2]<- -1*(1-pos[2])
-        left[2]   <- pos[2]
-        right[2]  <- pos[2]
-        return(list(bottom=bottom, left=left, top=top, right=right,
-            bottomleft=bottomleft, bottomright=bottomright,
-            topleft=topleft, topright=topright))
-    }
-    new0 <- getNewProp(a0)
-    new1 <- getNewProp(a1)
-    invisible(list(coords0=p0, coords1=p1,
-        fig.prop0=a0, fig.prop1=a1,
-        pos0=new0, pos1=new1))
+#' 
+#' #------------------
+#' # PLOT 4
+#' #------------------
+#' 
+#' emptyPlot(c(25, 1050), c(15,-15), axes=FALSE)
+#' lines(0:1000, 10*sin(0:1000/200), col=1)
+#' x <- seq(0,1000, length=n)
+#' y <- 10*sin(x/200)
+#' 
+#' d1 <- getArrowPos(x=rev(x), y=rev(y))
+#' d2 <- getArrowPos(x=x, y=y)
+#' 
+#' 
+#' #------------------
+#' # DRAW ARROWS
+#' #------------------
+#' 
+#' drawDevArrows(start=a, end=b, arrows="none", col='gray')
+#' drawDevArrows(start=c, end=d1, arrows="none", col='gray')
+#' 
+#' drawDevArrows(start=a, end=c, arrows="none", 
+#'     col=alphaPalette(c('green', 'blue'), f.seq=c(0,1), n=n))
+#' drawDevArrows(start=b, end=d2, arrows="none", 
+#'     col=alphaPalette('pink', f.seq=c(1,.1), n=n))
+drawDevArrows <- function(start, end=NULL, 
+	arrows = c("end", "start", "both", "none"),
+	units=c("inch", "prop", "coords"),
+	...
+	){
+	# process input 
+	arrows = tolower(arrows[1])
+	if(!arrows %in% c("end", "start", "both", "none")){
+		warning(sprintf("Incorrect arrow type '%s'. Must be 'end', 'start', 'both', or 'none'. By default 'end' is selected.", arrows))
+		arrows="end"
+	}
+	units = tolower(units[1])
+	if(!units %in% c("coords", "c", "prop", "inch", "proportions", "inches", 'p', 'i')){
+		warning(sprintf("Incorrect units '%s'. Must be 'coords'/'c' (coordinates of current plot region), 'prop'/'p' (proportions), or 'inch'/'i'. By default 'inch' is selected.", units))
+		units="inch"
+	}else{
+		if(tolower(substr(units,1,1))=="p"){
+			units="prop"
+		}else if(tolower(substr(units,1,1))=="i"){
+			units="inch"
+		}else if(tolower(substr(units,1,1))=="c"){
+			units="coords"
+		}
+	}
+	# x and y:
+	x0 <- x1 <- NULL
+	y0 <- y1 <- NULL
+	if(!is.null(dim(start))){
+		if(dim(start)[2] < 2){
+			stop("Start should have two columns, for x and y coordinates respectively.")
+		}
+		x0 <- start[,1]
+		y0 <- start[,2]
+	}else if(is.list(start)){
+		x0 <- start$x
+		y0 <- start$y
+	}else{
+		x0 <- start[1]
+		y0 <- start[2]
+	}
+	if(!is.null(dim(end))){
+		if(dim(end)[2] < 2){
+			stop("End should have two columns, for x and y coordinates respectively.")
+		}
+		x1 <- end[,1]
+		y1 <- end[,2]
+	}else if(is.list(end)){
+		x1 <- end$x
+		y1 <- end$y
+	}else{
+		x1 <- end[1]
+		y1 <- end[2]
+	}
+	pos0 <- list(x=x0, y=y0)
+	pos1 <- list(x=x1, y=y1)
+	# convert to coords:
+	if(units=="inch"){
+		pos0 <- inch2coords(x0, ypos=y0, simplify=FALSE)
+		pos1 <- inch2coords(x1, ypos=y1, simplify=FALSE)
+	}
+	
+	# draw lines:
+	if(arrows=="none"){
+		segments(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, ...)		
+	}else if(arrows=="start"){
+		arrows(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, code=1, ...)
+	}else if(arrows=="end"){
+		arrows(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, code=2, ...)
+	}else if(arrows=="both"){
+		arrows(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, code=3, ...)
+	}
 }
 
 
@@ -1909,9 +1963,11 @@ legend_margin <- function(x, legend, adj=NULL, ... ){
 #' provides the y-values to plot.
 #' @param side Number: 1 = bottom, 2 = left, 3 = top, 4 = left
 #' @param from A number indicating the starting position (bottom) of the 
-#' density plot. Defaults to 0, which is the border of the plot. 
-#' Measured in proportions of the margin area available. Note that  
-#' value could be negative (starting in the plot region).
+#' density plot. Measured in plot coordinates. 
+#' Defaults to NULL, which indicate that the border of the plot 
+#' is taken as the base of the density plot. 
+#' @param scale Scale of the density plot. By default set to 1, 
+#' which is the size of the margin region.
 #' @param maxDensityValue Number for scaling the density axis. 
 #' Default is NULL (automatic scaling fitting the d)
 #' @param allDensities List with other density objects to determine 
@@ -1956,11 +2012,11 @@ legend_margin <- function(x, legend, adj=NULL, ... ){
 #' 	col=NA, border=alpha(1), lwd=2)
 #' marginDensityPlot(dens2, side=3, allDensities=list(dens1, dens2), 
 #' 	col=NA, border=alpha('steelblue'), lwd=3)
-#' # adjust the starting point with argument from:
-#' marginDensityPlot(dens1, side=1, 
-#' 	from=.5, lwd=2)
-#' marginDensityPlot(dens2, side=1, 
-#' 	col='steelblue', from=-.90, lwd=2,
+#' # adjust the starting point with argument 'from' to bottom of plot:
+#' marginDensityPlot(dens1, side=3, 
+#' 	from=getCoords(0, side=2), lwd=2)
+#' marginDensityPlot(dens2, side=3, 
+#' 	col='steelblue', from=getCoords(0, side=2), lwd=2,
 #'  maxDensityValue=2*max(dens2$y))
 #' 
 #' legend(getFigCoords('p')[2], getFigCoords('p')[3],
@@ -1974,7 +2030,8 @@ legend_margin <- function(x, legend, adj=NULL, ... ){
 #' @seealso \code{\link{check_normaldist}}
 #' @family Functions for plotting
 #' 
-marginDensityPlot <- function(x, y=NULL, side, from=0, 
+marginDensityPlot <- function(x, y=NULL, side, 
+	from=NULL, scale=1,
 	maxDensityValue=NULL, 
 	allDensities=NULL, plot=TRUE, ...){
     if(!inherits(x, "density")){
@@ -1997,6 +2054,7 @@ marginDensityPlot <- function(x, y=NULL, side, from=0,
     }else if (is.null(maxDensityValue) & !is.null(allDensities)){
     	maxDensityValue <- max( unlist( lapply(allDensities, function(a){ max(a$y)}) ) )
     }
+    horiz=TRUE
     # set region:
     x0 <- y0 <- 0
     x1 <- y1 <- 1
@@ -2004,44 +2062,55 @@ marginDensityPlot <- function(x, y=NULL, side, from=0,
     y.dist <- 1
     gfc.f <- getFigCoords("f")
     gfc.p <- getFigCoords("p")
-    horiz = TRUE
     if( side==1){       # bottom, going down
         x0 <- gfc.p[1]
         x1 <- gfc.p[2]
-        y.range <- gfc.f[3] - gfc.p[3]
-        y0 <- gfc.p[3] + from*y.range
-        y1 <- gfc.f[3] - .05*y.range
+        y.range <- scale*.95*(gfc.f[3] - gfc.p[3])
+        y0 <- gfc.p[3]
+        if(!is.null(from)){
+        	y0 <- from
+        }
+        y1 <- y0+y.range
         y.dist <- y1-y0
     }else if (side==2){   # left
         x0 <- gfc.p[3]
         x1 <- gfc.p[4]
-        y.range <- gfc.f[1] - gfc.p[1]
-        y0 <- gfc.p[1] + from*y.range
-        y1 <- gfc.f[1] - .05*y.range
+        y.range <- scale*.95*(gfc.f[1] - gfc.p[1])
+        y0 <- gfc.p[1]
+        if(!is.null(from)){
+        	y0 <- from
+        }
+        y1 <- y0+y.range
         y.dist <- y1-y0
         horiz = FALSE
     }else if (side==3){   # top
         x0 <- gfc.p[1]
         x1 <- gfc.p[2]
-        y.range <- gfc.f[4] - gfc.p[4]
-        y0 <- gfc.p[4] + from*y.range
-        y1 <- gfc.f[4] - 0.05*y.range
+        y.range <- scale*.95*(gfc.f[4] - gfc.p[4])
+        y0 <- gfc.p[4]
+        if(!is.null(from)){
+        	y0 <- from
+        }
+        y1 <- y0+y.range
         y.dist <- y1-y0
     }else if (side==4){   # right
         x0 <- gfc.p[3]
         x1 <- gfc.p[4]
-        y.range <- gfc.f[2] - gfc.p[2]
-        y0 <- gfc.p[2] + from*y.range
-        y1 <- gfc.f[2] - 0.05*y.range
+        y.range <- scale*.95*(gfc.f[2] - gfc.p[2])
+        y0 <- gfc.p[2]
+        if(!is.null(from)){
+        	y0 <- from
+        }
+        y1 <- y0+y.range
         y.dist <- y1-y0
         horiz = FALSE
     }
-    scale <- y.dist / maxDensityValue
+    f <- y.dist / maxDensityValue
     if(plot){
-        fill_area(x, y*scale+y0, from=y0, horiz=horiz, xpd=TRUE, ...)
+        fill_area(x, y*f+y0, from=y0, horiz=horiz, xpd=TRUE, ...)
     }
     
-    invisible( list(plot.x=x, plot.y=y*scale+y0, x=x, y=y, scale=scale, y0=y0 ))
+    invisible( list(plot.x=x, plot.y=y*f+y0, x=x, y=y, f=f, y0=y0 ))
  
 }
 
@@ -2214,6 +2283,8 @@ plot_error <- function(x, fit, se.fit, se.fit2=NULL,
 #' colors (in hexadecimal values), or regular expressions matching colors. The 
 #' values are the replacements.
 #' @param add Logical: whether or not to add the plot to the current plot.
+#' @param interpolate Logical: a logical vector (or scalar) indicating whether 
+#' to apply linear interpolation to the image when drawing.
 #' @param ... Other arguments for plotting, see \code{\link[graphics]{par}}.
 #' @return Optionally returns
 #' @author Jacolien van Rij
@@ -2242,7 +2313,7 @@ plot_image <- function(img, type='image',
 	xrange=c(0,1), yrange=c(0,1), 
 	fill.plotregion=FALSE,
 	replace.colors=NULL, 
-	add=FALSE, ...){
+	add=FALSE, interpolate=TRUE, ...){
 	# Check if the appropriate packages are installed:
 	checkpkg <- function(x){
 	    if(x %in% rownames(installed.packages())==FALSE) {
@@ -2274,7 +2345,7 @@ plot_image <- function(img, type='image',
 				if(length(col) >= max(x)){
 					out <- col[x]
 				}else{
-					warning('Color definition does not fit image. COnverted to gray scale.')
+					warning('Color definition does not fit image. Converted to gray scale.')
 					x <- x / max(x)
 					out <- gray(x)					
 				}
@@ -2357,7 +2428,7 @@ plot_image <- function(img, type='image',
 		xpd=parlist[['xpd']]
 	}		
 	rasterImage(as.raster(matrix(col[img+shift.col], nrow=nrow(img))), 
-		xleft=fc[1], xright=fc[2], ybottom=fc[3], ytop=fc[4], xpd=xpd)
+		xleft=fc[1], xright=fc[2], ybottom=fc[3], ytop=fc[4], xpd=xpd, interpolate=interpolate)
 	if(!'bty' %in% names(parlist)){
 		if(add==TRUE){
 			parlist[['border']] <- parlist[['col']]
@@ -2422,10 +2493,14 @@ plot_image <- function(img, type='image',
 #' @param ylim y-limits for the plot.
 #' @param zlim z-limits for the plot.
 #' @param col Color for the  contour lines and labels.
-#' @param color a list of colors such as that generated by 
-#' \code{\link[grDevices]{rainbow}}, \code{\link[grDevices]{heat.colors}}
+#' @param color The color scheme to use for plots. One of "topo", "heat", 
+#' "cm", "terrain", "gray" or "bw". Or a list of colors such as that 
+#' generated by \code{\link[grDevices]{rainbow}}, 
+#' \code{\link[grDevices]{heat.colors}}
 #' \code{\link[grDevices]{colors}}, \code{\link[grDevices]{topo.colors}}, 
 #' \code{\link[grDevices]{terrain.colors}} or similar functions.
+#' Alternatively a vector with some colors can be provided for a custom 
+#' color palette.
 #' @param ci.col Two-value vector with colors for the lower CI contour lines 
 #' and for the upper CI contour lines.
 #' @param nCol The number of colors to use in color schemes.
@@ -2478,7 +2553,7 @@ plot_image <- function(img, type='image',
 plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 	main=NULL, xlab=NULL, ylab=NULL, 
 	xlim=NULL, ylim=NULL, zlim=NULL,
-	col=NULL, color=topo.colors(50), ci.col =c('red','green'), nCol=50,
+	col=NULL, color=topo.colors(50), ci.col =c('green', 'red'), nCol=50,
 	add.color.legend=TRUE, dec=NULL, ...){
 	xval <- c()
 	yval <- c()
@@ -2488,7 +2563,8 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 	# check input:
 	# 1. check data:
 	if(is.null(data)){
-		if(is.list(data)){
+		stop("No data provided. Please provide data and view predictors.")
+	}else if(is.list(data)){
 			# 2a. check view
 			if(is.numeric(view)){
 				if(view[1] <= length(data)){
@@ -2541,21 +2617,19 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 					}
 				}
 			}
-			if(!is.matrix(zval)){
-				stop('z-values should be provided as matrix. Alternatively, provide data frame with x values, y values, and z values (and optionally CI values). See examples.')
-			}
+			
 			# 4a. check CI
 			if(!is.null(valCI)){
 				if(is.numeric(valCI)){
 					if(length(data) >= valCI[1]){
-						cival.l <- cival.u <- data[[valCI[1]]]
+						cival.l <- cival.u <- names(data)[valCI[1]]
 					}else{
 						stop(sprintf("Value of valCI incorrect: data has only %d elements.", length(data)))
 					}
 					if(length(valCI)>1){
 						valCI <- valCI[1:2]
 						if(length(data) >= valCI[2]){
-							cival.u <- data[[valCI[2]]]
+							cival.u <- names(data)[valCI[2]]
 						}else{
 							warning(sprintf("Value of second valCI incorrect: data has only %d elements. First valCI is also used for upper limit.", length(data)))
 						}
@@ -2563,112 +2637,45 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 				}else{
 					cn <- names(data)
 					if(valCI[1] %in% cn){
-						cival.l <- cival.u <- data[[valCI[1]]]
+						cival.l <- cival.u <- valCI[1]
 					}else{
-						stop(sprintf("%s not available in data.", predictor))
+						stop(sprintf("%s not available in data.", valCI[1]))
 					}
 					if(length(valCI)>1){
 						valCI <- valCI[1:2]
 						if(valCI[2] %in% cn){
-							cival.u <- data[[valCI[2]]]
+							cival.u <- valCI[2]
 						}else{
 							warning(sprintf("Value of second valCI incorrect: %s not available in data. First valCI is also used for upper limit.", valCI[2]))
 						}
 					}
 				}
-			}
-		}else{
-			stop('Data is not a list or data frame.')
-		}
-	}else{
-		# 2b. check view
-		if(is.numeric(view)){
-			if(view[1] <= ncol(data)){
-				xval <- sort(unique( data[,view[1]] ))
-			}else{
-				stop(sprintf("First view element incorrect: data has only %d columns.", ncol(data)))
-			}
-			if(view[2] <= ncol(data)){
-				yval <- sort(unique( data[,view[2]] ))
-			}else{
-				stop(sprintf("Second view element incorrect: data has only %d columns.", ncol(data)))
-			}
-		}else{
-			cn <- colnames(data)
-			if(view[1] %in% cn){
-				xval <- sort(unique( data[,view[1]] ))
-			}else{
-				stop(sprintf("%s not available in data.", view[1]))
-			}
-			if(view[2] %in% cn){
-				yval <- sort(unique( data[,view[2]] ))
-			}else{
-				stop(sprintf("%s not available in data.", view[2]))
-			}
-		}
-		# 3b. check predictor
-		if(is.null(predictor)){
-			if(ncol(data)==3){
-				cn <- 1:3
-				if(!is.numeric(view)){
-					cn <- names(data)
-				}
-				predictor <- cn[!cn %in% view]
-			}else if("fit" %in% colnames(data)){
-				predictor <- "fit"
-			} else {
-				stop("Not sure which element of data should be plotted. Provide predictor.")
-			}
-		}else{
-			if(is.numeric(predictor)){
-				if(ncol(data) < predictor){
-					stop(sprintf("Value of predictor incorrect: data has only %d columns.", ncol(data)))
-				}
-			}else{
-				cn <- colnames(data)
-				if(!predictor %in% cn){
-					stop(sprintf("%s not available in data.", predictor))
-				}
-			}
-		}
-		# sort data:
-		data <- data[order(data[,view[1]], data[,view[2]]),]
-		zval <- matrix(data[, predictor], byrow=TRUE, 
-			nrow=length(xval),ncol=length(yval))
-		# 4b. check valCI
-		if(!is.null(valCI)){
-			if(is.numeric(valCI)){
-				if(ncol(data) < valCI[1]){
-					stop(sprintf("Value of valCI incorrect: data has only %d columns.", ncol(data)))
-				}
-				if(length(valCI)>1){
-					valCI <- valCI[1:2]
-					if(ncol(data) < valCI[2]){
-						valCI <- valCI[1]
-						warning(sprintf("Value of second valCI incorrect: data has only %d columns. First valCI is also used for upper limit.", ncol(data)))
-					}
-				}
-			}else{
-				cn <- colnames(data)
-				if(!valCI[1] %in% cn){
-					stop(sprintf("%s not available in data.", predictor))
-				}
-				if(length(valCI)>1){
-					valCI <- valCI[1:2]
-					if(!valCI[2] %in% cn){
-						warning(sprintf("Value of second valCI incorrect: %s not available in data. First valCI is also used for upper limit.", valCI[2]))
-						valCI <- valCI[1]
-					}
-				}
-			}
-			cival.l <- cival.u <- matrix(data[, valCI[1]], byrow=TRUE, 
-				nrow=length(xval),ncol=length(yval))
-			if(length(valCI)>1){
-				cival.u <- matrix(data[, valCI[2]], byrow=TRUE, 
+			} # end valCI
+			if(!is.matrix(zval)){
+				# sort data:
+				data <- as.data.frame(data)
+				data <- data[order(data[[view[1]]], data[[view[2]]]),]
+				xval <- sort(unique(xval))
+				yval <- sort(unique(yval))
+				zval <- matrix(data[, predictor], byrow=TRUE, 
 					nrow=length(xval),ncol=length(yval))
+				if(!is.null(cival.l)){
+					cival.l <- matrix(data[, cival.l], byrow=TRUE, 
+						nrow=length(xval),ncol=length(yval))
+					cival.u <- matrix(data[, cival.u], byrow=TRUE, 
+						nrow=length(xval),ncol=length(yval))
+				}
+				# warning('z-values should be provided as matrix. List is converted to data frame with x values, y values, and z values (and optionally CI values). See examples.')
+			}else{
+				if(!is.null(cival.l)){
+					cival.l <- data[[cival.l]]
+					cival.u <- data[[cival.u]]
+				}
 			}
-		}
+	}else{
+	 	stop('Data is not a list or data frame.')
 	}
+	
 	## Check plot settings
 	if(is.null(main)){
 		if(is.null(predictor)){
@@ -2701,8 +2708,7 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 	# colors:
     if(is.null(color)){
     	color <- alphaPalette('white', f.seq=c(0,0), n=nCol)
-    }
-    if (color[1] == "heat") {
+    } else if (color[1] == "heat") {
         color <- heat.colors(nCol)
         if(is.null(col)){
         	col <- 3
@@ -2736,6 +2742,14 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
     } else if (color[1] == "gray" || color[1] == "bw") {
         color <- gray(seq(0.1, 0.9, length = nCol))
         col <- 1
+    } else {
+        if( all(isColor(color)) ){
+        	if(length(color) < nCol){
+        		color <- colorRampPalette(color)(nCol)
+        	}
+        }else{
+            stop("color scheme not recognised")
+        }  
     } 
     if (is.null(col)){
     	col <- 'red'
@@ -2785,13 +2799,148 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 		eval(parse(text=sprintf("contour(xval, yval, zval-cival.l, col=ci.col[1], add=TRUE, lty=3, drawlabels=FALSE%s)",
 			cpar2)))
 		eval(parse(text=sprintf("contour(xval, yval, zval+cival.u, col=ci.col[2], add=TRUE, lty=3, drawlabels=FALSE%s)",
-			cpar2)))		
+			cpar2)))	
 	}
     if(add.color.legend){
         gradientLegend(zlim, n.seg=3, pos=.875, dec=dec,
             color=color)
     }
 	invisible(list(x=xval, y=yval, z=zval, ci.l = cival.l, ci.u = cival.u))
+}
+
+
+
+
+
+#' Creates a colored surface plot from data frame input.
+#'
+#' @export
+#' @import grDevices
+#' @import graphics
+#' @description This function uses \code{\link[graphics]{rasterImage}} to 
+#' indicate which points in the surface are not significantly different from 
+#' zero. Note that the shape of these non-significant regions depends on the 
+#' number of data points (often specified with \code{n.grid}).
+#'
+#' @param data Data frame with plot data. A data frame needs to have a 
+#' column with x values, a column with y values (specified in \code{view}), 
+#' a column with z values (\code{predictor}), and one or two columns with 
+#' CI values (\code{valCI}). 
+#' @param view A vector of length 2 with the names or numbers of the columns 
+#' to plot on the x axis and y axis respectively.
+#' @param predictor The name of the column in the data frame 
+#' \code{data} that provides the z-values. If data contains more than one 
+#' column besides the x- and y-values, the \code{predictor} should be provided.
+#' @param valCI The name of the column in the data frame 
+#' \code{data} that provides the CI-values. Alternatively, 
+#' two column names can be provided for the lower and upper CI respectively. 
+#' @param col Color for the nonsignificant areas.
+#' @param alpha Level of transparency, number between 0 (transparent) and 1 
+#' (no transparency)
+#' @param ... Optional parameters for \code{\link[graphics]{rasterImage}}
+#' @author Jacolien van Rij
+#' @seealso \code{\link[graphics]{rasterImage}}
+#' @examples
+#' # From the package graphics, see help(image):
+#' x <- 10*(1:nrow(volcano))
+#' y <- 10*(1:ncol(volcano))
+#' tmp <- data.frame(value = (as.vector(volcano) - 120), 
+#'     x = 10*rep(1:nrow(volcano), ncol(volcano)), 
+#'     y = 10*rep(1:ncol(volcano), each=nrow(volcano)),
+#'     CI = rep(20, nrow(volcano)*ncol(volcano)))
+#' plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
+#' plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI")
+#' 
+#' # change color:
+#' plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
+#' plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI", 
+#'     col="red")
+#' # or completely remove "nonsignificant" area:
+#' plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI", 
+#'     col="white", alpha=1)
+#' 
+# valCI: lower and upper CI
+plot_signifArea <- function(data, view, predictor=NULL, 
+	valCI, col=1, alpha=.5, ...){
+	# 1. check input: only list or data frames allowed
+	if(is.data.frame(data)){
+		# 2a. check view
+		if(is.numeric(view)){
+			if(view[1] > length(data)){
+				stop(sprintf("First view element incorrect: data has only %d elements.", length(data)))
+			}
+			if(view[2] > length(data)){
+				stop(sprintf("Second view element incorrect: data has only %d elements.", length(data)))
+			}
+			view = names(data)[view]
+		}else{
+			cn <- names(data)
+			if(!view[1] %in% cn){
+				stop(sprintf("%s not available in data.", view[1]))
+			}
+			if(!view[2] %in% cn){
+				stop(sprintf("%s not available in data.", view[2]))
+			}
+		}
+		# 3a. check predictor
+		if(is.null(predictor)){
+			if(length(data)==3){
+				cn <- 1:3
+				if(!is.numeric(view)){
+					cn <- names(data)
+				}
+				predictor = cn[!cn %in% view]
+			}else{
+				stop(sprintf("Not sure which element of %s should be plotted. Provide predictor.", deparse(substitute(data))))
+			}
+		}else{
+			if(is.numeric(predictor)){
+				if(length(data) < predictor){
+					stop(sprintf("Value of predictor incorrect: data has only %d elements.", length(data)))
+				}
+				predictor = names(data)[predictor]
+			}else{
+				cn <- names(data)
+				if(!predictor %in% cn){
+					stop(sprintf("%s not available in data.", predictor))
+				}
+			}
+		}
+		# 4a. check CI
+		if(length(valCI)==1){
+			valCI <- rep(valCI, 2)
+		}else if(length(valCI) > 2){
+			valCI <- valCI[1:2]
+		}
+		if(is.numeric(valCI)){
+			if((length(data) < valCI[1]) | (length(data) < valCI[2])){
+				stop(sprintf("Value of valCI incorrect: data has only %d elements.", length(data)))
+			}
+			valCI = names(data)[valCI]
+		}else{
+			cn <- names(data)
+			if(!valCI[1] %in% cn){
+				stop(sprintf("%s not available in data.", valCI[1]))
+			}
+			if(!valCI[2] %in% cn){
+				stop(sprintf("%s not available in data.", valCI[2]))
+			}
+		}
+	}else{
+		stop("Data should be a list or data frame.")
+	}
+	# order data:
+	data$sign <- ((data[,predictor]-data[,valCI[1]]) <= 0) & ((data[,predictor]+data[,valCI[2]]) >= 0)
+    data <- data[order(data[,view[1]], data[,view[2]]),]
+    sign.raster <- rep(alpha('white', f=0), nrow(data))
+    sign.raster[data$sign] <- alpha(col, f=alpha)
+    # raster images are row-first, in contrast to images...
+    n.grid1 <- length(unique(data[,view[1]]))
+    n.grid2 <- length(unique(data[,view[2]]))
+    sign.raster <- matrix(sign.raster, byrow=FALSE, nrow=n.grid2, ncol=n.grid1)
+    sign.raster <- as.raster(sign.raster[nrow(sign.raster):1,])
+    gfc <- getFigCoords('p')
+    rasterImage(sign.raster, xleft=gfc[1], xright=gfc[2], ybottom=gfc[3], ytop=gfc[4], ...)
 }
 
 

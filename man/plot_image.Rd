@@ -6,7 +6,7 @@
 \usage{
 plot_image(img, type = "image", col = NULL, show.axes = FALSE,
   xrange = c(0, 1), yrange = c(0, 1), fill.plotregion = FALSE,
-  replace.colors = NULL, add = FALSE, ...)
+  replace.colors = NULL, add = FALSE, interpolate = TRUE, ...)
 }
 \arguments{
 \item{img}{Matrix or image object (list with 'image', a matrix, and 'col', 
@@ -33,6 +33,9 @@ colors (in hexadecimal values), or regular expressions matching colors. The
 values are the replacements.}
 
 \item{add}{Logical: whether or not to add the plot to the current plot.}
+
+\item{interpolate}{Logical: a logical vector (or scalar) indicating whether 
+to apply linear interpolation to the image when drawing.}
 
 \item{...}{Other arguments for plotting, see \code{\link[graphics]{par}}.}
 }
@@ -70,7 +73,7 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{alphaPalette}}, \code{\link{alpha}},
   \code{\link{check_normaldist}},
   \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawArrows}}, \code{\link{emptyPlot}},
+  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
   \code{\link{errorBars}}, \code{\link{fill_area}},
   \code{\link{getCoords}}, \code{\link{getFigCoords}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},

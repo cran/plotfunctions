@@ -16,7 +16,9 @@
 #' and 2. the package \code{plotfunctions}, which contains more general plot 
 #' functions.
 #' 
-#'
+#' See \code{vignette(package="plotfunctions", "plotfunctions")} for an 
+#' overview with examples.
+#' 
 #' @section Basic functions:
 #' \itemize{
 #' \item \code{\link{emptyPlot}} generates an empty plot.
@@ -46,7 +48,7 @@
 #' function to make colors and palettes transparent.
 #' \item \code{\link{legend_margin}} adds a legend in the margins of a plot.
 #' \item \code{\link{gradientLegend}} adds a color legend to a plot.
-#' \item \code{\link{drawArrows}} for drawing arrows or lines between 
+#' \item \code{\link{drawDevArrows}} for drawing arrows or lines between 
 #' different panels.
 #' \item \code{\link{getFigCoords}} retrieve the cartesian coordinates 
 #' relative to the plot axes for given proportions of the plot region or given 

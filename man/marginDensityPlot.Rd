@@ -4,8 +4,8 @@
 \alias{marginDensityPlot}
 \title{Plot density of distribution in margins of the plot.}
 \usage{
-marginDensityPlot(x, y = NULL, side, from = 0, maxDensityValue = NULL,
-  allDensities = NULL, plot = TRUE, ...)
+marginDensityPlot(x, y = NULL, side, from = NULL, scale = 1,
+  maxDensityValue = NULL, allDensities = NULL, plot = TRUE, ...)
 }
 \arguments{
 \item{x}{Density object, or vector with x-values.}
@@ -16,9 +16,12 @@ provides the y-values to plot.}
 \item{side}{Number: 1 = bottom, 2 = left, 3 = top, 4 = left}
 
 \item{from}{A number indicating the starting position (bottom) of the 
-density plot. Defaults to 0, which is the border of the plot. 
-Measured in proportions of the margin area available. Note that  
-value could be negative (starting in the plot region).}
+density plot. Measured in plot coordinates. 
+Defaults to NULL, which indicate that the border of the plot 
+is taken as the base of the density plot.}
+
+\item{scale}{Scale of the density plot. By default set to 1, 
+which is the size of the margin region.}
 
 \item{maxDensityValue}{Number for scaling the density axis. 
 Default is NULL (automatic scaling fitting the d)}
@@ -70,11 +73,11 @@ marginDensityPlot(dens1, side=3, allDensities=list(dens1, dens2),
 	col=NA, border=alpha(1), lwd=2)
 marginDensityPlot(dens2, side=3, allDensities=list(dens1, dens2), 
 	col=NA, border=alpha('steelblue'), lwd=3)
-# adjust the starting point with argument from:
-marginDensityPlot(dens1, side=1, 
-	from=.5, lwd=2)
-marginDensityPlot(dens2, side=1, 
-	col='steelblue', from=-.90, lwd=2,
+# adjust the starting point with argument 'from' to bottom of plot:
+marginDensityPlot(dens1, side=3, 
+	from=getCoords(0, side=2), lwd=2)
+marginDensityPlot(dens2, side=3, 
+	col='steelblue', from=getCoords(0, side=2), lwd=2,
  maxDensityValue=2*max(dens2$y))
 
 legend(getFigCoords('p')[2], getFigCoords('p')[3],
@@ -97,7 +100,7 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{alphaPalette}}, \code{\link{alpha}},
   \code{\link{check_normaldist}},
   \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawArrows}}, \code{\link{emptyPlot}},
+  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
   \code{\link{errorBars}}, \code{\link{fill_area}},
   \code{\link{getCoords}}, \code{\link{getFigCoords}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},

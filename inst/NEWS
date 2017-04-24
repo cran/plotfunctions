@@ -1,0 +1,14 @@
+# plotfunctions 1.2
+
+## new features / functions:
+- new function plot_signifArea: indicates where a surface is not different from zero; to be used in combination with plotsurface().
+- new function getRatioCoords: utility function to support plot_image; the function calculates the plot coordinates given the height:width ratio of an image.
+- vignette plotfunctions is added with examples
+
+## Minor changes:
+- function drawArrows new implemented, easier to use
+
+# plotfunctions 1.1
+
+## Bug resolved: plotsurface now also allows to plot lists. Before and error was returned that the provided view argument was not found in the data.
+

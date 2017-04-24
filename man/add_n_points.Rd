@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.R
 \name{add_n_points}
 \alias{add_n_points}
-\title{Add rug to plot, based on model.}
+\title{Add groups of points to a plot}
 \usage{
 add_n_points(x, y, n, horiz = TRUE, width = 1, sep = 0.2, ...)
 }
@@ -26,7 +26,7 @@ more space.}
 \item{...}{Optional graphical parameters (see \code{\link[graphics]{par}}).}
 }
 \description{
-Add rug based on model data.
+Add groups of points to a plot
 }
 \examples{
 
@@ -61,7 +61,7 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{alphaPalette}},
   \code{\link{alpha}}, \code{\link{check_normaldist}},
   \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawArrows}}, \code{\link{emptyPlot}},
+  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
   \code{\link{errorBars}}, \code{\link{fill_area}},
   \code{\link{getCoords}}, \code{\link{getFigCoords}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},

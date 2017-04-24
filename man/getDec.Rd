@@ -23,8 +23,11 @@ Based on http://stackoverflow.com/questions/5173692/how-to-return-number-of-deci
 }
 \seealso{
 Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}}, \code{\link{getRange}},
-  \code{\link{group_sort}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{se}}
+  \code{\link{find_n_neighbors}},
+  \code{\link{getArrowPos}}, \code{\link{getRange}},
+  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
+  \code{\link{inch2coords}}, \code{\link{isColor}},
+  \code{\link{list2str}}, \code{\link{move_n_point}},
+  \code{\link{se}}
 }
 

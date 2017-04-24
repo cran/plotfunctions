@@ -38,8 +38,11 @@ Jacolien van Rij
 \code{\link[base]{sort.list}}
 
 Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}}, \code{\link{getDec}},
-  \code{\link{getRange}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{se}}
+  \code{\link{find_n_neighbors}},
+  \code{\link{getArrowPos}}, \code{\link{getDec}},
+  \code{\link{getRange}}, \code{\link{getRatioCoords}},
+  \code{\link{inch2coords}}, \code{\link{isColor}},
+  \code{\link{list2str}}, \code{\link{move_n_point}},
+  \code{\link{se}}
 }
 
