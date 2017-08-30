@@ -62,9 +62,6 @@ points(1:6, avg, pch=21, type='o', lty=3, lwd=2,
 errorBars(10, 1, 1.2, horiz=TRUE, col='red')
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{add_n_points}},
@@ -78,6 +75,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

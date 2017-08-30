@@ -30,9 +30,6 @@ legend_margin("topleft", legend=c("points"), pch=16)
 # compare with default legend:
 legend("topleft", legend=c("points"), pch=16)
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{add_n_points}},
@@ -45,6 +42,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

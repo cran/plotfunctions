@@ -30,6 +30,7 @@ On Linux \code{\link{x11}} devices may not support transparency.
 In that case, a solution might be to write the plots immediately to a file 
 using functions such as \code{\link{pdf}}, or \code{\link{png}}.
 }
+
 \examples{
 # a palette of 5 white transparent colors:
 alphaPalette('white', f.seq=1:5/5)
@@ -49,9 +50,6 @@ rect(center[1]-center[1]*(1.1-i), center[2]-center[2]*(1.1-i),
     col=fillcol, border=linecol, lty=1, lwd=1, xpd=TRUE)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link[grDevices]{palette}}, \code{\link[grDevices]{colorRampPalette}},
 \code{\link[grDevices]{adjustcolor}}, \code{\link[grDevices]{convertColor}}
@@ -67,6 +65,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

@@ -76,9 +76,6 @@ emptyPlot(range(x), range(y), h0=0)
 plot_error(x, y, s, shade=TRUE, lty=1, lwd=3, density=10, ci.lwd=3)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{add_n_points}},
@@ -91,6 +88,9 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
-  \code{\link{plot_image}}, \code{\link{plotsurface}}
+  \code{\link{plot_image}}, \code{\link{plotsurface}},
+  \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

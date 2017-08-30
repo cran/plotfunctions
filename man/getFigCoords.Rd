@@ -45,9 +45,6 @@ abline(v=getFigCoords('hp')[1], col='red', lty=3)
 abline(h=getFigCoords('hp')[2], col='red', lty=3)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link{getCoords}}, \code{\link{getProps}}
 
@@ -63,6 +60,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

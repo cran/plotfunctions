@@ -73,9 +73,6 @@ addInterval(1:6, b[3,], b[3,], horiz=FALSE, lwd=2, length=.1, lend=2)
 # reset
 par(mfrow=c(1,1))
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{add_bars}},
   \code{\link{add_n_points}}, \code{\link{alphaPalette}},
@@ -88,6 +85,8 @@ Other Functions for plotting: \code{\link{add_bars}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

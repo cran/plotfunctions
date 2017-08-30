@@ -77,11 +77,6 @@ avg$type <- c(1,1,2,2,2,1)
 dotplot_error(avg$count.x, se.val=avg$count.y, groups=avg$type, labels=avg$spray) 
 
 }
-\author{
-This function is a slightly adjusted version of the function 
-\code{\link[graphics]{dotchart}} of the package \code{\link{graphics}} 
-version 3.1.1
-}
 \seealso{
 \code{\link[graphics]{dotchart}}
 
@@ -97,6 +92,10 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+This function is a slightly adjusted version of the function 
+\code{\link[graphics]{dotchart}} of the package \code{\link{graphics}} 
+version 3.1.1
+}

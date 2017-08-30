@@ -20,4 +20,3 @@ https://nl.wikipedia.org/wiki/Bestand:Blank_map_of_the_Netherlands.svg
 Jacolien van Rij
 }
 \keyword{datasets}
-

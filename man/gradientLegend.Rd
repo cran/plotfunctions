@@ -6,7 +6,8 @@
 \usage{
 gradientLegend(valRange, color = "topo", nCol = 30, pos = 0.5, side = 4,
   length = 0.25, depth = 0.05, inside = TRUE, coords = FALSE,
-  pos.num = NULL, n.seg = 3, border.col = "black", dec = NULL)
+  pos.num = NULL, n.seg = 3, border.col = "black", dec = NULL,
+  fit.margin = TRUE)
 }
 \arguments{
 \item{valRange}{Range of the values that is represented by the color 
@@ -60,6 +61,9 @@ respect to the tick marks. 1=bottom, 2=left, 3=top, 4=right.}
 
 \item{dec}{Number of decimals for rounding the numbers, set to NULL on 
 default (no rounding).}
+
+\item{fit.margin}{Logical: whether the labels of the gradient legend 
+should be forced to fit in the margin or not.}
 }
 \description{
 Add a gradient legend to a contour plot (or other plot) to 
@@ -69,18 +73,39 @@ indicate the range of values represented by the color palette.
 # empty plot:
 emptyPlot(1,1, main="Test plot")
 gradientLegend(valRange=c(-14,14),pos=.5, side=3)
+
+# This produces a warning, as there is no space for labels here:
+\dontrun{
 gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
+}
+# Following options to fix this:
+## a. put labels on other side of legend -
+## not a good option, as the labels will overlap with the plot
+gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, pos.num=2)
+## b. put the legend in the plot region
+emptyPlot(1,1, main="Test plot")
+gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=TRUE)
+## c. Increase the margins:
+oldmar = par()$mar
+par(mar=oldmar+c(0,0,0,1))
+emptyPlot(1,1, main="Test plot")
+gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
+par(mar=oldmar)
+## d. the last option is not a fix, but avoid warnings: 
+## set fit.margin to FALSE
+emptyPlot(1,1, main="Test plot")
+gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, fit.margin=FALSE)
+
+# change border color (and font color too!)
 gradientLegend(valRange=c(-14,14),pos=.75, length=.5,
-color=alphaPalette('white', f.seq=seq(0,1, by=.1)), border.col='white')
+color=alphaPalette('white', f.seq=seq(0,1, by=.1)), border.col=alpha('gray'))
 
 # when defining custom points, it is still important to specify side:
-gradientLegend(valRange=c(-14,14), pos=c(500,-5,1250,-4), coords=TRUE, 
+
+gradientLegend(valRange=c(-14,14), pos=c(.5,.25,.7,-.05), coords=TRUE, 
 border.col='red', side=1)
 
 
-}
-\author{
-Jacolien van Rij
 }
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
@@ -94,6 +119,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{getProps}}, \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

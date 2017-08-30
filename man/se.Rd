@@ -4,10 +4,13 @@
 \alias{se}
 \title{Calculate standard error of the mean.}
 \usage{
-se(x)
+se(x, na.rm = FALSE)
 }
 \arguments{
 \item{x}{A vector.}
+
+\item{na.rm}{Logical: whether or not to remove NA values (default set to 
+FALSE - including NAs).}
 }
 \value{
 Standard Error of the mean.
@@ -40,10 +43,10 @@ text(getCoords(.5), mean(avg)+se(avg),
 \seealso{
 Other Utility functions: \code{\link{findAbsMin}},
   \code{\link{find_n_neighbors}},
-  \code{\link{getArrowPos}}, \code{\link{getDec}},
-  \code{\link{getRange}}, \code{\link{getRatioCoords}},
-  \code{\link{group_sort}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}
+  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
+  \code{\link{getDec}}, \code{\link{getRange}},
+  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
+  \code{\link{inch2coords}}, \code{\link{isColor}},
+  \code{\link{list2str}}, \code{\link{move_n_point}},
+  \code{\link{orderBoxplot}}, \code{\link{sortGroups}}
 }
-

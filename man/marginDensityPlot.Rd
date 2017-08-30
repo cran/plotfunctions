@@ -89,9 +89,6 @@ legend(getFigCoords('p')[2], getFigCoords('p')[3],
 
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link{check_normaldist}}
 
@@ -105,6 +102,9 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{getCoords}}, \code{\link{getFigCoords}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},
   \code{\link{legend_margin}}, \code{\link{plot_error}},
-  \code{\link{plot_image}}, \code{\link{plotsurface}}
+  \code{\link{plot_image}}, \code{\link{plotsurface}},
+  \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

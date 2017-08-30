@@ -57,10 +57,9 @@ plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI",
     col="white", alpha=1)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link[graphics]{rasterImage}}
 }
-
+\author{
+Jacolien van Rij
+}

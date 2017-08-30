@@ -34,15 +34,16 @@ emptyPlot(c(-10,1000), c(-1,1), h0=0, v0=indOutliers)
 points(fn3, rep(.5, length(fn3)), pch='*')
 points(fn20, rep(-.5, length(fn20)), pch='*')
 }
+\seealso{
+Other Utility functions: \code{\link{findAbsMin}},
+  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
+  \code{\link{getDec}}, \code{\link{getRange}},
+  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
+  \code{\link{inch2coords}}, \code{\link{isColor}},
+  \code{\link{list2str}}, \code{\link{move_n_point}},
+  \code{\link{orderBoxplot}}, \code{\link{se}},
+  \code{\link{sortGroups}}
+}
 \author{
 Jacolien van Rij
 }
-\seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{getArrowPos}}, \code{\link{getDec}},
-  \code{\link{getRange}}, \code{\link{getRatioCoords}},
-  \code{\link{group_sort}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{se}}
-}
-

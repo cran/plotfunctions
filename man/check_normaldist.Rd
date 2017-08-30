@@ -28,6 +28,7 @@ Compare distribution of data with normal distribution.
 
 Assumes centered data as input.
 }
+
 \examples{
 set.seed(123)
 # normal distribution:
@@ -48,9 +49,6 @@ check_normaldist(test)
 test <- rbinom(1000, 100, .3)
 check_normaldist(test)
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{add_n_points}},
@@ -63,6 +61,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

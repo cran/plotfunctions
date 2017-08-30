@@ -1,3 +1,211 @@
+#' Replacing separators (for example, decimal and thousand separators).
+#' 
+#' @export
+#' @param filename String: filename (including path if necessary) of input file.
+#' @param symbol1 String: symbol to replace by \code{newsymbol1}, for example 
+#' decimal separator. 
+#' @param symbol2 String: second symbol to replace by \code{newsymbol2}, 
+#' for example thousand separator.  
+#' @param newsymbol1 String: symbol to replace \code{symbol1}. 
+#' @param newsymbol2 String: symbol to replace \code{symbol2}.
+#' @param sep String: column separator. Could be also used to replace symbols 
+#' in the header and data by \code{newsep}, regardless of columns.  
+#' @param newsep String: symbol to replace \code{sep}. 
+#' Only possible when \code{columns} is set to NULL.
+#' @param header Logical: whether or not there is header line. \code{symbol1} 
+#' and \code{symbol2} are not replaced in the header line. Default set to TRUE.
+#' @param columns Vector with numerical values: indices of columns in which 
+#' symbols need to be replaced.
+#' @param outputfile String: name of outputfile.
+#' @param fixed.s1 Logical: whether or not to treat \code{symbol1} as fixed 
+#' text instead of regular expression. Default is set to TRUE 
+#' (no regular expression).
+#' @param fixed.s2 Logical: whether or not to treat \code{symbol2} as fixed 
+#' text instead of regular expression. Default is set to TRUE 
+#' (no regular expression).
+#' @param fixed.sep Logical: whether or not to treat \code{sep} as fixed 
+#' text instead of regular expression. Default is set to TRUE 
+#' (no regular expression).
+#' @param ... Additional parameters for \code{\link[utils]{read.table}} and 
+#' \code{\link[utils]{write.table}}.
+#' @author Jacolien van Rij
+#' @examples
+#' \dontrun{
+#' # normally, the function call would look something like this:
+#' convertFile("example1.csv", symbol1=",", symbol2=".", sep="\t", 
+#'     newsymbol1=".", newsymbol2="")
+#' # But as we are not sure that the file example1.csv is available,
+#' # we need to do something a little more complicated to point to 
+#' # the file "example1.csv" that comes with the package:
+#' 
+#' # finding one of the example files from the package:
+#' file1 <- system.file("extdata", "example1.csv", package = "plotfunctions")
+#' 
+#' # example 1: 
+#' system.time({
+#'     convertFile(file1, symbol1=",", symbol2=".", 
+#'     newsymbol1=".", newsymbol2="", outputfile="example1_new.csv")
+#' })
+#' # example 2: type 'yes' to overwrite the previous output file, 
+#' # or specify a different filename in outputfile.
+#' system.time({
+#'     convertFile(file1, symbol1=",", symbol2=".", sep="\t", 
+#'     newsymbol1=".", newsymbol2="", columns=1:2, outputfile="example1_new.csv")
+#' })
+#' # Example 1 takes less  time, as it does not use read.table, 
+#' # but just reads the file as text lines. However, the column 
+#' # version could be useful when symbols should be replaced only 
+#' # in specific columns.
+#' # Note that Example 2 writes the output with quotes, but this is 
+#' # not a problem for read.table:
+#' dat <- read.table("example1_new.csv", header=TRUE, sep="\t", 
+#'     stringsAsFactors=FALSE)
+#' }
+convertFile <- function(filename, 
+	symbol1=NULL, symbol2=NULL,
+	newsymbol1="", newsymbol2="",
+	sep=";", newsep=NULL, 
+	header=TRUE,
+	columns = NULL,
+	outputfile=gsub("^(.*)(\\.)([^\\.]*)$", "\\1_new.\\3",filename),
+	fixed.s1 = TRUE, fixed.s2 = TRUE, fixed.sep = TRUE,
+	...){
+	# some checks:
+	if(filename == outputfile){
+		stop("Filename has no extension, please provide name for outputfile to avoid the original file to get overwritten.")
+	}
+	if(!is.null(columns)){
+		if(!is.numeric(columns)){
+			stop("Argument columns needs to be a vector with numeric values.")
+		}
+	}
+	if(file.exists(outputfile)){
+		ans = "" 
+		while (! tolower(ans) %in% c("yes", "no", "y", "n")){
+			ans <- readline(sprintf("File %s already exists. Do you want to overwrite? [yes/no] ", outputfile))
+		}
+		if(ans %in% c("no", "n")){
+			stop("Please provide a new name for the outputfile.")
+		}
+	}
+	rs1    <- tempfile(pattern = "&", tmpdir = "", fileext = "")
+	rs2    <- tempfile(pattern = "&", tmpdir = "", fileext = "")
+	rsep   <- tempfile(pattern = "&", tmpdir = "", fileext = "")
+	# first read in the data as text strings
+	tmp <- readLines(filename, n=-1)
+	colnames <- NULL
+	if(header){
+		colnames <- tmp[1]
+		tmp <- tmp[2:length(tmp)]
+	}
+	# Only specific columns:
+	if(!is.null(columns)){
+		
+		if("colClasses" %in% names(list(...))){
+			tmp <- read.table(file=filename, header=header, sep=sep, ...)
+		}else{
+			tmp <- read.table(file=filename, header=header, sep=sep,
+				colClasses = "character", ...)
+		}
+		
+		# conversion stage 1:
+		if(!is.null(symbol1)){
+			if(!is.null(symbol2)){
+				if(symbol1 == symbol2){
+					warning("symbol1 equals symbol2. The string will be replaced by newsymbol1.")
+				}
+			}
+			if(!is.null(sep)){
+				if(symbol1 == sep){
+					warning("symbol1 equals sep. The string will be replaced by newsymbol1.")
+				}
+			}
+			for(c in columns){
+				tmp[,c] <- gsub(symbol1, rs1, tmp[,c], fixed=fixed.s1)
+			}
+		}
+		if(!is.null(symbol2)){
+			if(!is.null(sep)){
+				if(symbol2 == sep){
+					warning("symbol2 equals sep. The string will be replaced by newsymbol2.")
+				}
+			}
+			for(c in columns){
+				tmp[,c] <- gsub(symbol2, rs2, tmp[,c], fixed=fixed.s2)
+			}
+		}
+		# conversion stage 2:
+		if(!is.null(symbol1)){
+			for(c in columns){
+				tmp[,c] <- gsub(rs1, newsymbol1, tmp[,c], fixed=fixed.s1)
+			}
+		}
+		if(!is.null(symbol2)){
+			for(c in columns){
+				tmp[,c] <- gsub(rs2, newsymbol2, tmp[,c], fixed=fixed.s2)
+			}
+		}
+		
+		write.table(tmp, file=outputfile, append=FALSE, sep=ifelse(is.null(newsep), sep, newsep),
+			row.names=FALSE, col.names = ifelse(header, TRUE, FALSE), ...)
+	# In all columns (faster):
+	}else{
+		# conversion stage 1:
+		if(!is.null(symbol1)){
+			if(!is.null(symbol2)){
+				if(symbol1 == symbol2){
+					warning("symbol1 equals symbol2. The string will be replaced by newsymbol1.")
+				}
+			}
+			if(!is.null(sep)){
+				if(symbol1 == sep){
+					warning("symbol1 equals sep. The string will be replaced by newsymbol1.")
+				}
+			}
+			tmp <- gsub(symbol1, rs1, tmp, fixed=fixed.s1)
+		}
+		if(!is.null(symbol2)){
+			if(!is.null(sep)){
+				if(symbol2 == sep){
+					warning("symbol2 equals sep. The string will be replaced by newsymbol2.")
+				}
+			}
+			tmp <- gsub(symbol2, rs2, tmp, fixed=fixed.s2)
+		}
+		if(!is.null(newsep)){
+			if(header){
+				colnames <- gsub(sep, rsep, colnames, fixed=fixed.sep)
+			}
+			tmp <- gsub(sep, rsep, tmp, fixed=fixed.sep)
+		}
+		# conversion stage 2:
+		if(!is.null(symbol1)){
+			tmp <- gsub(rs1, newsymbol1, tmp, fixed=fixed.s1)
+		}
+		if(!is.null(symbol2)){
+			tmp <- gsub(rs2, newsymbol2, tmp, fixed=fixed.s2)
+		}
+		if(!is.null(newsep)){
+			if(header){
+				colnames <- gsub(rsep, newsep, colnames, fixed=fixed.sep)
+			}
+			tmp <- gsub(rsep, newsep, tmp, fixed=fixed.sep)
+		}
+		# write file:
+		newfile <- file(outputfile, "w") 
+		if(header){
+			cat(colnames, tmp, sep="\n", file=newfile)
+		}else{
+			cat(tmp, sep="\n")
+		}
+		close(newfile)
+	}
+}
+
+
+
+
+
 #' Return n neighbors around given indices.
 #' 
 #' @export
@@ -64,6 +272,22 @@ findAbsMin <- function(x, element = FALSE) {
     } else {
         return(x[el])
     }
+}
+
+
+
+
+
+#' Capitalize first letter of a string.
+#' 
+#' @export
+#' @param x Text string
+#' @return Text string
+#' @family Utility functions
+firstLetterCap <- function(x){
+  s <- strsplit(x, split="")
+  s <- unlist( lapply(s, function(y){ y[1] = toupper(y[1]); return(paste(y, collapse="")) }) )
+  return(s)
 }
 
 
@@ -663,6 +887,8 @@ move_n_point <- function(x, n = 1, na_value = NA) {
 #' @import utils
 #' @export
 #' @param x A vector.
+#' @param na.rm Logical: whether or not to remove NA values (default set to 
+#' FALSE - including NAs).
 #' @return Standard Error of the mean.
 #' @family Utility functions
 #' @examples
@@ -686,7 +912,10 @@ move_n_point <- function(x, n = 1, na_value = NA) {
 #' # Note that SE makes more sense for experiments with 
 #' # different groups or participants.
 #' 
-se <- function(x){
+se <- function(x, na.rm=FALSE){
+	if(na.rm==TRUE){
+		x <- x[!is.na(x)]
+	}
     s <- sd(x)
     if (is.na(s)){
         warning("Problem in calculating SD.")

@@ -7,7 +7,8 @@
 plotsurface(data, view, predictor = NULL, valCI = NULL, main = NULL,
   xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, zlim = NULL,
   col = NULL, color = topo.colors(50), ci.col = c("green", "red"),
-  nCol = 50, add.color.legend = TRUE, dec = NULL, ...)
+  nCol = 50, add.color.legend = TRUE, dec = NULL, fit.margin = TRUE,
+  ...)
 }
 \arguments{
 \item{data}{Data frame or list with plot data. A data frame needs to have a 
@@ -65,6 +66,9 @@ When NULL (default), no rounding. If -1 (default), automatically determined.
 Note: if value = -1 (default), rounding will be applied also when 
 \code{zlim} is provided.}
 
+\item{fit.margin}{Logical: whether the labels of the gradient legend 
+should be forced to fit in the margin or not.}
+
 \item{...}{Optional parameters for \code{\link[graphics]{image}}
 and \code{\link[graphics]{contour}}.}
 }
@@ -108,9 +112,6 @@ plotsurface(tmp, view=c('x', "y"), predictor='value',
     color=NULL, col=1, add.color.legend=FALSE)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link[graphics]{image}}, \code{\link[graphics]{contour}}, 
 \code{\link{color_contour}}
@@ -126,6 +127,9 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}}
+  \code{\link{plot_error}}, \code{\link{plot_image}},
+  \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

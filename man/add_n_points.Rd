@@ -53,9 +53,6 @@ emptyPlot(range(d),range(as.numeric(names(s))),
 add_n_points(d, as.numeric(names(s)), s, horiz=FALSE) 
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{alphaPalette}},
@@ -68,6 +65,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

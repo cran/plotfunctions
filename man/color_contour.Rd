@@ -73,9 +73,6 @@ color_contour(z=volcano, color='terrain', lwd=0, drawlabels=FALSE)
 # without background:
 color_contour(z=volcano, color=NULL, add.color.legend=FALSE)
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link[graphics]{image}}, \code{\link[graphics]{contour}},
 \code{\link[graphics]{filled.contour}}. See \code{\link{plotsurface}}
@@ -95,6 +92,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

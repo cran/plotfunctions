@@ -94,9 +94,6 @@ emptyPlot(1,1,axes=FALSE)
 emptyPlot(1,1, bty='o')
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Use \code{\link[graphics]{title}} and 
 \code{\link[graphics]{mtext}}  for drawing labels and titles; 
@@ -117,6 +114,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

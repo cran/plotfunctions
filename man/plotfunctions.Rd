@@ -69,6 +69,7 @@ proportions of the figure.
 \code{help(package="itsadug")}.
 }
 }
+
 \author{
 Jacolien van Rij
 
@@ -76,4 +77,3 @@ Maintainer: Jacolien van Rij (\email{vanrij.jacolien@gmail.com})
 
 University of Groningen, The Netherlands & University of Tuebingen, Germany
 }
-

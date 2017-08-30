@@ -38,9 +38,6 @@ rect(xleft=c(p1[1],p2[1], p3[1], p1m[1], p2m[1], p3m[1])-xdist,
     col=rep(c("red", NA, "lightblue"),2), xpd=TRUE )
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link{getCoords}}, \code{\link{getFigCoords}}
 
@@ -56,6 +53,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

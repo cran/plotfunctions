@@ -55,9 +55,6 @@ b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, with=.9, col='
 add_bars(b+.2, newd$Adults.Freq+.2, y0=.2, width=.9, col=alpha('black', f=.2), border=NA, xpd=TRUE)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_n_points}}, \code{\link{alphaPalette}},
@@ -70,6 +67,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

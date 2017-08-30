@@ -19,6 +19,7 @@ Wrapper around \code{\link[grDevices]{adjustcolor}}.
  
 Does not always work for x11 panels.
 }
+
 \examples{
 emptyPlot(100,100, h=50, v=50)
 rect(25,25,75,75, col=alpha('red',f=1))
@@ -51,6 +52,5 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-

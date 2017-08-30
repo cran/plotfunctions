@@ -50,9 +50,6 @@ legend(x=getCoords(0,side=1, input='f'), y=getCoords(1, side=2, input='f'),
     legend=c("points"), pch=16, xpd=TRUE)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link{getFigCoords}}, \code{\link{getProps}}
 
@@ -68,6 +65,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

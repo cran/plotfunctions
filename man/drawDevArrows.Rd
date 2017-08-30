@@ -210,9 +210,6 @@ drawDevArrows(start=a, end=c, arrows="none",
 drawDevArrows(start=b, end=d2, arrows="none", 
     col=alphaPalette('pink', f.seq=c(1,.1), n=n))
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{add_n_points}},
@@ -226,6 +223,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

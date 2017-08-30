@@ -1768,27 +1768,60 @@ getProps <- function(pos, side=1, output='p'){
 #' @param border.col Color of the border and the ticks.
 #' @param dec Number of decimals for rounding the numbers, set to NULL on 
 #' default (no rounding). 
+#' @param fit.margin Logical: whether the labels of the gradient legend 
+#' should be forced to fit in the margin or not. 
 #' @author Jacolien van Rij
 #' @examples
 #' # empty plot:
 #' emptyPlot(1,1, main="Test plot")
 #' gradientLegend(valRange=c(-14,14),pos=.5, side=3)
+#' 
+#' # This produces a warning, as there is no space for labels here:
+#' \dontrun{
 #' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
+#' }
+#' # Following options to fix this:
+#' ## a. put labels on other side of legend -
+#' ## not a good option, as the labels will overlap with the plot
+#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, pos.num=2)
+#' ## b. put the legend in the plot region
+#' emptyPlot(1,1, main="Test plot")
+#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=TRUE)
+#' ## c. Increase the margins:
+#' oldmar = par()$mar
+#' par(mar=oldmar+c(0,0,0,1))
+#' emptyPlot(1,1, main="Test plot")
+#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
+#' par(mar=oldmar)
+#' ## d. the last option is not a fix, but avoid warnings: 
+#' ## set fit.margin to FALSE
+#' emptyPlot(1,1, main="Test plot")
+#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, fit.margin=FALSE)
+#' 
+#' # change border color (and font color too!)
 #' gradientLegend(valRange=c(-14,14),pos=.75, length=.5,
-#' color=alphaPalette('white', f.seq=seq(0,1, by=.1)), border.col='white')
+#' color=alphaPalette('white', f.seq=seq(0,1, by=.1)), border.col=alpha('gray'))
 #' 
 #' # when defining custom points, it is still important to specify side:
-#' gradientLegend(valRange=c(-14,14), pos=c(500,-5,1250,-4), coords=TRUE, 
+#' 
+#' gradientLegend(valRange=c(-14,14), pos=c(.5,.25,.7,-.05), coords=TRUE, 
 #' border.col='red', side=1)
-#'
+#' 
 #' 
 #' @family Functions for plotting
 gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side = 4, 
     length = 0.25, depth = 0.05, inside = TRUE, coords = FALSE, pos.num=NULL,
-    n.seg = 3, border.col = "black", dec = NULL) 
+    n.seg = 3, border.col = "black", dec = NULL, fit.margin=TRUE) 
 {
+    # xl, yb, xr, yt:
     loc <- c(0, 0, 0, 0)
-    sides <- c(0, 0, 0, 0)
+    if(is.null(pos.num)){
+        if(side %in% c(1,3)){
+            pos.num = 3
+        }else{
+            pos.num = side
+        }
+    }
     if (length(pos) == 1) {
         pos.other <- ifelse(side > 2, 1, 0)
         if (side %in% c(1, 3)) {
@@ -1806,20 +1839,17 @@ gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side
                 0.5 * length, pos.other + (1 - switch) * depth, 
                 pos + 0.5 * length), side = c(1, side, 1, side))
         }
-    }
-    else if (length(pos) == 4) {
+    } else if (length(pos) == 4) {
         if (coords) {
             loc <- pos
-        }
-        else {
+        } else {
             loc <- getCoords(pos, side = c(1, 2, 1, 2))
         }
     }
     mycolors <- c()
     if (length(color) > 1) {
         mycolors <- color
-    }
-    else if (!is.null(nCol)) {
+    } else if (!is.null(nCol)) {
         if (color == "topo") {
             mycolors <- topo.colors(nCol)
         }
@@ -1836,8 +1866,7 @@ gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side
             warning("Color %s not recognized. A palette of topo.colors is used instead.")
             mycolors <- topo.colors(nCol)
         }
-    }
-    else {
+    } else {
         stop("No color palette provided.")
     }
     vals <- seq(min(valRange), max(valRange), length = length(mycolors))
@@ -1845,39 +1874,121 @@ gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side
         vals <- round(vals, dec[1])
     }
     im <- as.raster(mycolors[matrix(1:length(mycolors), ncol = 1)])
+    ticks <- c()
     if (side%%2 == 1) {
         rasterImage(t(im), loc[1], loc[2], loc[3], loc[4], col = mycolors, 
             xpd = T)
         rect(loc[1], loc[2], loc[3], loc[4], border = border.col, 
             xpd = T)
         ticks <- seq(loc[1], loc[3], length = n.seg)
-        text(y = loc[4], x = ticks, labels = seq(min(valRange), 
-            max(valRange), length = n.seg), 
-            pos = ifelse(is.null(pos.num),3, pos.num), cex = 0.8, 
-            xpd = T)
         segments(x0 = ticks, x1 = ticks, y0 = rep(loc[2], n.seg), 
-            y1 = rep(loc[4], n.seg), col = border.col, xpd = TRUE)
-    }
-    else {
+            y1 = rep(loc[4], n.seg), col = border.col, xpd = TRUE)        
+    } else {
         rasterImage(rev(im), loc[1], loc[2], loc[3], loc[4], 
             col = mycolors, xpd = T)
         rect(loc[1], loc[2], loc[3], loc[4], border = border.col, 
             xpd = T)
         ticks <- seq(loc[2], loc[4], length = n.seg)
-        if (is.null(dec)) {
-            text(y = ticks, x = loc[3], labels = seq(min(valRange), 
-                max(valRange), length = n.seg), 
-                pos = ifelse(is.null(pos.num),4, pos.num), cex = 0.8, 
-                xpd = T)
-        }
-        else {
-            text(y = ticks, x = loc[3], labels = round(seq(min(valRange), 
-                max(valRange), length = n.seg), dec[1]), 
-                pos = ifelse(side==4,4,2), 
-                cex = 0.8, xpd = T)
-        }
         segments(x0 = rep(loc[1], n.seg), x1 = rep(loc[3], n.seg), 
             y0 = ticks, y1 = ticks, col = border.col, xpd = TRUE)
+    }
+    determineDec <- function(x){
+        out = max(unlist( lapply( strsplit(x, split="\\."), function(y){
+            return( ifelse(length(y)>1, nchar( gsub("^([^0]*)([0]+)$", "\\1", as.character(y[2])) ), 0) )
+        }) ))
+        return(out)
+    }
+    labels = sprintf("%f", seq(min(valRange), 
+            max(valRange), length = n.seg) )
+    if(is.null(dec)){
+        dec <- min(c(6, determineDec(labels)))
+    }
+    eval(parse(text=sprintf("labels = sprintf('%s', round(seq(min(valRange), max(valRange), length = n.seg), dec) )",
+                        paste("%.", dec, "f", sep=""))))
+    
+    if(pos.num == 1){
+        # check label height:
+        if(fit.margin){
+            lab.height  = max(strheight(labels)) * 0.8
+            max.pos    = getFigCoords()[3]
+            if ((max.pos - loc[2]) < lab.height){
+                warning("Increase bottom margin, because labels for legend do not fit.")
+            }          
+        }
+        text(y = loc[2], x = ticks, labels = seq(min(valRange), 
+            max(valRange), length = n.seg), col=border.col, 
+            pos = 1, cex = 0.8, xpd = T)
+    }else if (pos.num == 2){
+        # check label width:
+        if(fit.margin){
+            checkagain = TRUE
+            while (checkagain==TRUE){
+                lab.width  = ( max(strwidth(labels)) + 0.5*par()$cxy[1] )*0.8
+                min.pos    = getFigCoords()[1]
+                if ((loc[1] - min.pos) < lab.width){
+                    if(!is.null(dec)){
+                        dec = max(c(0,dec-1))
+                        if(dec == 0){
+                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
+                            checkagain = FALSE
+                        }
+                    }else{
+                        tmp = max(unlist( lapply(strsplit(labels, split="\\."), function(x){ return(ifelse(length(x)>1, nchar(x[2]), 0)) }) ))
+                        dec = max(c(0,tmp-1))
+                        if(dec == 0){
+                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
+                            checkagain = FALSE
+                        }
+                    }
+                    eval(parse(text=sprintf("labels = sprintf('%s', round(seq(min(valRange), max(valRange), length = n.seg), dec) )",
+                        paste("%.", dec, "f", sep=""))))
+                }else{
+                    checkagain = FALSE
+                }
+            }
+        }
+        text(y = ticks, x = loc[1], labels = labels, pos = 2, cex = 0.8, col=border.col, xpd = T)
+    }else if (pos.num == 3){
+        if(fit.margin){        
+            lab.height  = max(strheight(labels)) * 0.8
+            max.pos    = getFigCoords()[4]
+            if ((max.pos - loc[4]) < lab.height){
+                warning("Increase top margin, because labels for legend do not fit.")
+            }
+        }
+        text(y = loc[4], x = ticks, labels = seq(min(valRange), 
+            max(valRange), length = n.seg), col=border.col, 
+            pos = 3, cex = 0.8, xpd = T)
+    }else if (pos.num == 4){
+        # check label width:
+        if(fit.margin){
+            checkagain = TRUE
+            while (checkagain==TRUE){
+                lab.width  = ( max(strwidth(labels)) + 0.5*par()$cxy[1] )*0.8
+                max.pos    = getFigCoords()[2]
+                if ((max.pos - loc[3]) < lab.width){
+                    if(!is.null(dec)){
+                        dec = max(c(0,dec-1))
+                        if(dec == 0){
+                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
+                            checkagain = FALSE
+                        }
+                    }else{
+                        tmp = max(unlist( lapply(strsplit(labels, split="\\."), function(x){ return(ifelse(length(x)>1, nchar(x[2]), 0)) }) ))
+                        dec = max(c(0,tmp-1))
+                        if(dec == 0){
+                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
+                            checkagain = FALSE
+                        }
+                    }
+                    eval(parse(text=sprintf("labels = sprintf('%s', round(seq(min(valRange), max(valRange), length = n.seg), dec) )",
+                        paste("%.", dec, "f", sep=""))))
+                }else{
+                    checkagain = FALSE
+                }
+            }
+        }
+        text(y = ticks, x = loc[3], labels = labels, pos = 4, col=border.col, cex = 0.8, xpd = T)
     }
 }
 
@@ -2511,6 +2622,8 @@ plot_image <- function(img, type='image',
 #' When NULL (default), no rounding. If -1 (default), automatically determined. 
 #' Note: if value = -1 (default), rounding will be applied also when 
 #' \code{zlim} is provided.
+#' @param fit.margin  Logical: whether the labels of the gradient legend 
+#' should be forced to fit in the margin or not. 
 #' @param ... Optional parameters for \code{\link[graphics]{image}}
 #' and \code{\link[graphics]{contour}}.
 #' @author Jacolien van Rij
@@ -2554,7 +2667,7 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 	main=NULL, xlab=NULL, ylab=NULL, 
 	xlim=NULL, ylim=NULL, zlim=NULL,
 	col=NULL, color=topo.colors(50), ci.col =c('green', 'red'), nCol=50,
-	add.color.legend=TRUE, dec=NULL, ...){
+	add.color.legend=TRUE, dec=NULL, fit.margin=TRUE, ...){
 	xval <- c()
 	yval <- c()
 	zval <- c()
@@ -2803,7 +2916,7 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 	}
     if(add.color.legend){
         gradientLegend(zlim, n.seg=3, pos=.875, dec=dec,
-            color=color)
+            color=color, fit.margin=fit.margin)
     }
 	invisible(list(x=xval, y=yval, z=zval, ci.l = cival.l, ci.u = cival.u))
 }
@@ -2941,6 +3054,151 @@ plot_signifArea <- function(data, view, predictor=NULL,
     sign.raster <- as.raster(sign.raster[nrow(sign.raster):1,])
     gfc <- getFigCoords('p')
     rasterImage(sign.raster, xleft=gfc[1], xright=gfc[2], ybottom=gfc[3], ytop=gfc[4], ...)
+}
+
+
+
+
+
+#' Sort groups based on a function such as mean value or deviation.
+#' 
+#' @export
+#' @import stats
+#' @param formula Formula for splitting the data
+#' @param FUN Function to apply to each group
+#' @param decreasing Logical: sort groups on decreasing values or not 
+#' (default is FALSE, sorting on increasing values).
+#' @param ... Additional arguments for the function 
+#' \code{\link[stats]{aggregate}}.
+#' @return The order of levels.
+#' @examples
+#' head(ToothGrowth)
+#' # sort on basis of mean length:
+#' sortGroups(len ~ dose:supp, data = ToothGrowth)
+#' labels = levels(interaction(ToothGrowth$dose, ToothGrowth$supp))
+#' labels[sortGroups(len ~ dose:supp, data = ToothGrowth)]
+#' @author Jacolien van Rij
+#' @family Utility functions
+#' 
+sortGroups <- function(formula, FUN='mean', decreasing=FALSE, ...){
+	tmp <- aggregate(formula, FUN=FUN, ...)
+	idx <- sort.int(tmp[,ncol(tmp)], index.return=TRUE, decreasing=decreasing)
+	return(idx$ix)
+}
+#' Order boxplot stats following a given ordering.
+#' 
+#' @export
+#' @import stats
+#' @param stats List with information produced by a box-and-whisker plot.
+#' @param idx Order of group levels.
+#' @return The ordered stats.
+#' @examples
+#' head(ToothGrowth)
+#' # sort on basis of mean length:
+#' bp <- boxplot(len ~ dose:supp, data = ToothGrowth, plot=FALSE)
+#' idx <- sortGroups(len ~ dose:supp, data = ToothGrowth)
+#' bp2 <- orderBoxplot(bp, idx)
+#' # compare:
+#' bp$names
+#' bp2$names
+#' @author Jacolien van Rij
+#' @family Utility functions
+#' 
+orderBoxplot <- function(stats, idx){
+	for( i in c("stats", "n", "conf", "names")){
+		if(is.null( dim(stats[[i]]) ) ){
+			stats[[i]] <- stats[[i]][idx]
+		}else if ( length( dim(stats[[i]]) ) == 2  ){
+			stats[[i]] <- stats[[i]][,idx]
+		}
+	}
+	if(!is.null(stats$group) & length(stats$group) > 0){
+		tmp <- 1:length(stats[['names']])
+		names(tmp) <- idx
+		stats[['group']] <- as.vector( tmp[as.character(stats[['group']])] )
+	}
+	return(stats)
+}
+#' Produce box-and-whisker plot(s) ordered by function such as 
+#' mean or median.
+#' 
+#' @description Produce box-and-whisker plot(s) ordered by function such as 
+#' mean or median. Wrapper around \code{\link[graphics]{boxplot}}.
+#' @export
+#' @import stats
+#' @param formula a formula, such as 'y ~ Condition', where 'y' is a numeric vector
+#' of data values to be split into groups according to the
+#' grouping variable 'Condition' (usually a factor).
+#' @param data a data.frame from which the variables in 'formula'
+#' should be taken.
+#' @param decreasing Logical:  Indicating whether the sort should be 
+#' increasing or decreasing.
+#' @param FUN a function to compute the summary statistics which can be
+#' applied to all data subsets.
+#' @param idx Numeric vector providing the ordering of groups instead of 
+#' specifying a function in \code{FUN}. Only is used when \code{FUN} is set 
+#' to NULL.
+#' @param col Fill color of the boxplots. Alias for \code{boxfill}.
+#' @param ... Other parameters to adjust the layout of the boxplots. 
+#' See \code{\link[graphics]{bxp}}.
+#' @return The ordered stats.
+#' @examples
+#' head(ToothGrowth)
+#' # sort on basis of mean length:
+#' sortBoxplot(len ~ dose:supp, data = ToothGrowth)
+#' # sort on basis of median length:
+#' sortBoxplot(len ~ dose:supp, data = ToothGrowth, decreasing=FALSE)
+#' # on the basis of variation (sd):
+#' sortBoxplot(len ~ dose:supp, data = ToothGrowth, FUN='sd', col=alpha(2))
+#' @author Jacolien van Rij
+#' @family Functions for plotting
+#' 
+sortBoxplot <- function(formula, data=NULL, 
+	decreasing=TRUE, FUN = "median", idx=NULL, 
+	col = "gray", ...){
+	bps <- boxplot(formula, data=data, FUN=FUN, plot=FALSE, ...)
+	additional <- par(...)
+	# determine order:
+	if(is.null(idx)){
+		if(FUN %in% c("median", "min", "max", "lower.hinge", "upper.hinge", "n", "group.names")){
+			if(FUN=="median"){
+				sorti <- sort.int(bps$stats[3,], decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}else if(FUN=="min"){
+				sorti <- sort.int(bps$stats[1,], decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}else if(FUN=="max"){
+				sorti <- sort.int(bps$stats[5,], decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}else if(FUN=="lower.hinge"){
+				sorti <- sort.int(bps$stats[2,], decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}else if(FUN=="upper.hinge"){
+				sorti <- sort.int(bps$stats[4,], decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}else if(FUN=="n"){
+				sorti <- sort.int(bps$n, decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}else if(FUN=="group.names"){
+				sorti <- sort.int(bps$names, decreasing = decreasing, index.return=TRUE)
+				idx <- sorti$ix
+			}
+		}else{
+			idx <- sortGroups(formula, data=data, FUN=FUN, decreasing=decreasing)
+			
+		}
+	}
+	# order:
+	bps <- orderBoxplot(bps, idx)
+	# plot boxplots:
+	par <- list(...)
+	if(!"boxfill" %in% names(par)){
+		par[['boxfill']] <- col
+	}
+	bp.args <- list2str(names(par), par)
+	eval(parse(text=sprintf("bxp(bps, %s)",bp.args)))
+	
+	invisible(bps)
 }
 
 

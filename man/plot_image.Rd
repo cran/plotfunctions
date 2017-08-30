@@ -64,9 +64,6 @@ plot_image(img=myimg, xrange=c(0.125,.375), yrange=c(.5,.875), add=TRUE)
 points(runif(10,0,1), runif(10,0,1), type='o')
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{add_bars}}, \code{\link{add_n_points}},
@@ -79,6 +76,9 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{getProps}}, \code{\link{gradientLegend}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plotsurface}}
+  \code{\link{plot_error}}, \code{\link{plotsurface}},
+  \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}

@@ -48,9 +48,6 @@ fill_area(test$x, test$y, from=.2, col='blue', density=10, lwd=3)
 lines(test$x, test$y, lwd=2)
 
 }
-\author{
-Jacolien van Rij
-}
 \seealso{
 \code{\link{check_normaldist}}
 
@@ -66,6 +63,8 @@ Other Functions for plotting: \code{\link{addInterval}},
   \code{\link{legend_margin}},
   \code{\link{marginDensityPlot}},
   \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
 }
-
+\author{
+Jacolien van Rij
+}
