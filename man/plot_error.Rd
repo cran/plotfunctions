@@ -4,9 +4,20 @@
 \alias{plot_error}
 \title{Utility function}
 \usage{
-plot_error(x, fit, se.fit, se.fit2 = NULL, shade = FALSE, f = 1,
-  col = "black", ci.lty = NULL, ci.lwd = NULL, border = FALSE,
-  alpha = 0.25, ...)
+plot_error(
+  x,
+  fit,
+  se.fit,
+  se.fit2 = NULL,
+  shade = FALSE,
+  f = 1,
+  col = "black",
+  ci.lty = NULL,
+  ci.lwd = NULL,
+  border = FALSE,
+  alpha = 0.25,
+  ...
+)
 }
 \arguments{
 \item{x}{Vector with values on x-axis.}
@@ -77,20 +88,30 @@ plot_error(x, y, s, shade=TRUE, lty=1, lwd=3, density=10, ci.lwd=3)
 
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_image}}, \code{\link{plotsurface}},
-  \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

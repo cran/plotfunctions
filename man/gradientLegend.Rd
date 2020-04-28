@@ -4,10 +4,24 @@
 \alias{gradientLegend}
 \title{Add a gradient legend to a plot.}
 \usage{
-gradientLegend(valRange, color = "topo", nCol = 30, pos = 0.5, side = 4,
-  length = 0.25, depth = 0.05, inside = TRUE, coords = FALSE,
-  pos.num = NULL, n.seg = 3, border.col = "black", dec = NULL,
-  fit.margin = TRUE)
+gradientLegend(
+  valRange,
+  color = "terrain",
+  nCol = 30,
+  pos = 0.875,
+  side = 4,
+  dec = NULL,
+  length = 0.25,
+  depth = 0.05,
+  inside = FALSE,
+  coords = FALSE,
+  pos.num = NULL,
+  n.seg = 1,
+  border.col = "black",
+  tick.col = NULL,
+  fit.margin = TRUE,
+  ...
+)
 }
 \arguments{
 \item{valRange}{Range of the values that is represented by the color 
@@ -33,6 +47,9 @@ the plot. Note: \code{coords} is only considered for 4-number vectors of
 \item{side}{Which axis to choose: 1=bottom, 2=left, 3=top, 4=right.
 Default is 4.}
 
+\item{dec}{Number of decimals for rounding the numbers, set to NULL on 
+default (no rounding).}
+
 \item{length}{Number, indicating the width of the legend as proportion with 
 respect to the axis indicated by \code{side}. 
 Note: when \code{pos} is defined by 4 numbers, \code{length} is ignored.}
@@ -45,25 +62,27 @@ Note: when \code{pos} is defined by 4 numbers, \code{depth} is ignored.}
 the plot area.
 Note: when \code{pos} is defined by 4 numbers, \code{inside} is ignored.}
 
-\item{coords}{Logical: whether or not \code{pos} is defined as coordinates. 
+\item{coords}{Logical: whether or not \code{pos} (and optionally 
+\code{n.seg}) is defined as coordinates. 
 When FALSE, the default, \code{pos} is defined in proportions. 
-Note: when \code{pos} is defined by 1 number, \code{inside} is ignored.
-#' @param color Name of color palette to use ('topo', 'terrain', 'heat', 
-'rainbow'). Custom color palettes can also be provided, but then the 
-argument \code{nCol} is ignored.}
+Note: when \code{pos} is defined by 1 number, \code{inside} is ignored.}
 
 \item{pos.num}{Numeric value, indicating the position of the numbers with 
 respect to the tick marks. 1=bottom, 2=left, 3=top, 4=right.}
 
-\item{n.seg}{Number of ticks and markers on the scale.}
+\item{n.seg}{Number of ticks and markers on the scale. Defaults to 1. 
+If vector is provided instead of number, all numbers are considered as 
+marker values on the scale provided by \code{valRange}.}
 
-\item{border.col}{Color of the border and the ticks.}
+\item{border.col}{Color of the border (if NA border is omitted).}
 
-\item{dec}{Number of decimals for rounding the numbers, set to NULL on 
-default (no rounding).}
+\item{tick.col}{Color of the tick marks. Defaults to \code{border.col} value.}
 
 \item{fit.margin}{Logical: whether the labels of the gradient legend 
 should be forced to fit in the margin or not.}
+
+\item{...}{Other parameters for the marker labels
+(see \code{\link[graphics]{text}}).}
 }
 \description{
 Add a gradient legend to a contour plot (or other plot) to 
@@ -71,56 +90,102 @@ indicate the range of values represented by the color palette.
 }
 \examples{
 # empty plot:
-emptyPlot(1,1, main="Test plot")
-gradientLegend(valRange=c(-14,14),pos=.5, side=3)
+emptyPlot(1,1, main='Test plot', axes=FALSE)
+box()
+# legend on outside of plotregion:
+gradientLegend(valRange=c(-14,14), pos=.5, side=1)
+gradientLegend(valRange=c(-14,14), pos=.5, side=2)
+gradientLegend(valRange=c(-14,14), pos=.5, side=3)
+gradientLegend(valRange=c(-14,14), pos=.5, side=4)
+
+# legend on inside of plotregion:
+gradientLegend(valRange=c(-14,14), pos=.5, side=1, inside=TRUE)
+gradientLegend(valRange=c(-14,14), pos=.5, side=2, inside=TRUE)
+gradientLegend(valRange=c(-14,14), pos=.5, side=3, inside=TRUE)
+gradientLegend(valRange=c(-14,14), pos=.5, side=4, inside=TRUE)
+
+# empty plot:
+emptyPlot(1,1, main='Test plot', axes=FALSE)
+box()
+# number of segments:
+gradientLegend(valRange=c(-14,14), n.seg=3, pos=.5, side=1)
+gradientLegend(valRange=c(-14,14), n.seg=c(-3,5), pos=.5, side=1, 
+    inside=TRUE)
 
 # This produces a warning, as there is no space for labels here:
 \dontrun{
-gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
+    gradientLegend(valRange=c(-14.235,14.2), pos=.5, 
+        n.seg = c(-7,0), side=4)
 }
-# Following options to fix this:
-## a. put labels on other side of legend -
-## not a good option, as the labels will overlap with the plot
-gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, pos.num=2)
-## b. put the legend in the plot region
-emptyPlot(1,1, main="Test plot")
-gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=TRUE)
-## c. Increase the margins:
-oldmar = par()$mar
-par(mar=oldmar+c(0,0,0,1))
-emptyPlot(1,1, main="Test plot")
-gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
-par(mar=oldmar)
-## d. the last option is not a fix, but avoid warnings: 
-## set fit.margin to FALSE
-emptyPlot(1,1, main="Test plot")
-gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, fit.margin=FALSE)
+# different solutions:
+# 1. adjust range (make sure also to adjust the range in the plot, 
+#    for example by changing zlim)
+emptyPlot(1,1, main='Test plot')
+gradientLegend(valRange=c(-14,14), n.seg = c(-7,0), side=4)
+# 2. reduce number of decimals:
+emptyPlot(1,1, main='Test plot')
+gradientLegend(valRange=c(-14.235,14.2), n.seg = c(-7,0), dec=1, side=4)
+# 3. change labels to inside plot window:
+emptyPlot(1,1, main='Test plot')
+gradientLegend(valRange=c(-14.235,14.2), n.seg = c(-7,0), 
+    dec=1, side=4, inside=TRUE)
+# 4. increase right margin:
+oldmar <- par()$mar
+par(mar=c(5.1,3.1,4.1,4.1))
+emptyPlot(1,1, main='Test plot')
+gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+    n.seg = c(-7,0), side=4)
+par(mar=oldmar) # return old values
+# 5. change label position:
+emptyPlot(1,1, main='Test plot')
+gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+    n.seg = c(-7,0), side=4, pos.num=2)
+gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+    n.seg = c(-7,0), side=4, pos.num=1, pos=.5)
+# 6. change legend position and length:
+emptyPlot(1,1, main='Test plot')
+gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+    n.seg = c(-7,0), side=3, length=.5, pos=.75)
 
 # change border color (and font color too!)
 gradientLegend(valRange=c(-14,14),pos=.75, length=.5,
-color=alphaPalette('white', f.seq=seq(0,1, by=.1)), border.col=alpha('gray'))
+color=alphaPalette('white', f.seq=seq(0,1, by=.1)), 
+border.col=alpha('gray'))
 
 # when defining custom points, it is still important to specify side:
 
 gradientLegend(valRange=c(-14,14), pos=c(.5,.25,.7,-.05), coords=TRUE, 
-border.col='red', side=1)
+    border.col='red', side=1)
+gradientLegend(valRange=c(-14,14), pos=c(.5,.25,.7,-.05), coords=TRUE, 
+    border.col='red', side=2)
 
 
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

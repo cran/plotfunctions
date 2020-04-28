@@ -4,8 +4,12 @@
 \alias{getArrowPos}
 \title{Converts coordinates in current plot region to device positions (in inch).}
 \usage{
-getArrowPos(x, y, units = c("coords", "prop"), dev = c("plot", "figure",
-  "panel"))
+getArrowPos(
+  x,
+  y,
+  units = c("coords", "prop"),
+  dev = c("plot", "figure", "panel")
+)
 }
 \arguments{
 \item{x}{Numeric: x coordinate(s)}
@@ -25,12 +29,21 @@ list
 Converts coordinates in current plot region to device positions (in inch).
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getDec}},
-  \code{\link{getRange}}, \code{\link{getRatioCoords}},
-  \code{\link{group_sort}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
+\concept{Utility functions}

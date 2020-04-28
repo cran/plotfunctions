@@ -4,8 +4,13 @@
 \alias{getRatioCoords}
 \title{Move a vector n elements forward or backward.}
 \usage{
-getRatioCoords(ratio, width = NULL, height = NULL, input = c("coords",
-  "prop"), ...)
+getRatioCoords(
+  ratio,
+  width = NULL,
+  height = NULL,
+  input = c("coords", "prop"),
+  ...
+)
 }
 \arguments{
 \item{ratio}{Numeric, height : width ratio. If \code{ratio} > 1, the width is 
@@ -20,8 +25,8 @@ the maximal width fitting in the plot region is returned.}
 If not specified (NULL), 
 the maximal height fitting in the plot region is returned.}
 
-\item{input}{Unit of input width and height, "coords" (plot coordinates, default),
-or "prop" (proportions of plot region).}
+\item{input}{Unit of input width and height, 'coords' (plot coordinates, default),
+or 'prop' (proportions of plot region).}
 
 \item{...}{Optional arguments: \code{xcenter}, \code{xleft}, or 
 \code{xright}, and \code{ycenter}, \code{ybottom}, or 
@@ -52,44 +57,53 @@ p <- getRatioCoords(ratio=im.r, width=20)
 # inspect p:
 p
 # No position specified, so centered:
-plot_image(img, type="image", add=TRUE,
+plot_image(img, type='image', add=TRUE,
     xrange=p$x, yrange=p$y)
 # ... or we could provide a position:
 p <- getRatioCoords(ratio=im.r, width=20,
     xleft=20, ybottom=60)
-plot_image(img, type="image", add=TRUE,
+plot_image(img, type='image', add=TRUE,
     xrange=p$x, yrange=p$y)
 
 # Using proportions of plot region:
 p <- getRatioCoords(ratio=im.r, height=.5,
-    xleft=0, ytop=1, input="prop")
-plot_image(img, type="image", add=TRUE,
+    xleft=0, ytop=1, input='prop')
+plot_image(img, type='image', add=TRUE,
     xrange=p$x, yrange=p$y)
 
 # Changing the ratio to square:
 p <- getRatioCoords(ratio=1, height=.5,
-    xright=1, ybottom=0, input="prop")
-plot_image(img, type="image", add=TRUE,
+    xright=1, ybottom=0, input='prop')
+plot_image(img, type='image', add=TRUE,
     xrange=p$x, yrange=p$y)
 # ... and to a long rectangle:
 p <- getRatioCoords(ratio=.5, height=1,
-    xright=1, ybottom=0, input="prop")
-plot_image(img, type="image", add=TRUE,
+    xright=1, ybottom=0, input='prop')
+plot_image(img, type='image', add=TRUE,
     xrange=p$x, yrange=p$y, 
-    replace.colors=list("#B.+"="#FF000033"),
+    replace.colors=list('#B.+'='#FF000033'),
     border='red')
 
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRange}},
-  \code{\link{group_sort}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Utility functions}

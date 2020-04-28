@@ -36,7 +36,7 @@ points(rep(0.5,length(p1)), p1, pch=16, xpd=TRUE)
 # add legend outside plot region, in upper-right corner of figure:
 legend(x=getCoords(1,side=1, input='f'), y=getCoords(1, side=2, input='f'),
     xjust=1, yjust=1,
-    legend=c("points"), pch=16, xpd=TRUE)
+    legend=c('points'), pch=16, xpd=TRUE)
 # Note: this can easier be achieved with function getFigCoords
 
 # PLOT 2: y-range is 25 to 37
@@ -47,26 +47,36 @@ points(rep(0.5,length(p1)), p1, pch=16, xpd=TRUE)
 # add legend outside plot region, in upper-left corner of figure:
 legend(x=getCoords(0,side=1, input='f'), y=getCoords(1, side=2, input='f'),
     xjust=0, yjust=1,
-    legend=c("points"), pch=16, xpd=TRUE)
+    legend=c('points'), pch=16, xpd=TRUE)
 
 }
 \seealso{
 \code{\link{getFigCoords}}, \code{\link{getProps}}
 
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

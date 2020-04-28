@@ -4,8 +4,14 @@
 \alias{check_normaldist}
 \title{Compare distribution of data with normal distribution.}
 \usage{
-check_normaldist(res, col = "red", col.normal = "black",
-  legend.pos = "topright", legend.label = "data", ...)
+check_normaldist(
+  res,
+  col = "red",
+  col.normal = "black",
+  legend.pos = "topright",
+  legend.label = "data",
+  ...
+)
 }
 \arguments{
 \item{res}{Vector with residuals or other data for which the distribution .}
@@ -50,19 +56,30 @@ test <- rbinom(1000, 100, .3)
 check_normaldist(test)
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

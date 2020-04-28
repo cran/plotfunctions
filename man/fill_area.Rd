@@ -4,8 +4,18 @@
 \alias{fill_area}
 \title{Utility function}
 \usage{
-fill_area(x, y, from = 0, col = "black", alpha = 0.25, border = NA,
-  na.rm = TRUE, horiz = TRUE, outline = FALSE, ...)
+fill_area(
+  x,
+  y,
+  from = 0,
+  col = "black",
+  alpha = 0.25,
+  border = NA,
+  na.rm = TRUE,
+  horiz = TRUE,
+  outline = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{Vector with values on x-axis.}
@@ -51,20 +61,30 @@ lines(test$x, test$y, lwd=2)
 \seealso{
 \code{\link{check_normaldist}}
 
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{getCoords}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

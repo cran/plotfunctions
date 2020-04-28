@@ -31,15 +31,24 @@ labels = levels(interaction(ToothGrowth$dose, ToothGrowth$supp))
 labels[sortGroups(len ~ dose:supp, data = ToothGrowth)]
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRange}},
-  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
-  \code{\link{inch2coords}}, \code{\link{isColor}},
-  \code{\link{list2str}}, \code{\link{move_n_point}},
-  \code{\link{orderBoxplot}}, \code{\link{se}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Utility functions}

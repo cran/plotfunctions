@@ -10,7 +10,7 @@ isColor(x, return.colors = FALSE)
 \item{x}{Vector of any of the three kinds of R color specifications, 
 i.e., either a color name (as listed by 
 \code{\link[grDevices]{palette}colors()}), a hexadecimal string of the form 
-"#rrggbb" or "#rrggbbaa" (see rgb), or a positive integer i meaning 
+'#rrggbb' or '#rrggbbaa' (see rgb), or a positive integer i meaning 
 \code{\link[grDevices]{palette}()[i]}.}
 
 \item{return.colors}{Logical: logical values (FALSE, default) or 
@@ -25,33 +25,42 @@ actual colors.
 }
 \examples{
 # correct color definitions:
-isColor(c("#FF0000FF", "#00FF00FF", "#0000FFFF"))
-isColor(c('red', 'steelblue', "green3"))
+isColor(c('#FF0000FF', '#00FF00FF', '#0000FFFF'))
+isColor(c('red', 'steelblue', 'green3'))
 isColor(c(1,7,28))
 # mixtures are possible too:
-isColor(c("#FF0000FF", "red", 1, "#FF0000", rgb(.1,0,0)))
+isColor(c('#FF0000FF', 'red', 1, '#FF0000', rgb(.1,0,0)))
 
 # return colors:
 # note that 28 is converted to 4...
 isColor(c(1,7,28), return.colors=TRUE) 
-isColor(c("#FF0000CC", "red", 1, "#FF0000"), return.colors=TRUE)
+isColor(c('#FF0000CC', 'red', 1, '#FF0000'), return.colors=TRUE)
 
 # 4 incorrect colors, 1 correct:
-test <- c("#FH0000", 3, "#FF00991", "lavendel", "#AABBCCFFF")
+test <- c('#FH0000', 3, '#FF00991', 'lavendel', '#AABBCCFFF')
 isColor(test)
 isColor(test, return.colors=TRUE)
 
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRange}},
-  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
-  \code{\link{inch2coords}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Utility functions}

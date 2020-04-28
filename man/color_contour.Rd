@@ -4,10 +4,22 @@
 \alias{color_contour}
 \title{Creates a contour plot with colored background.}
 \usage{
-color_contour(x = seq(0, 1, length.out = nrow(z)), y = seq(0, 1, length.out
-  = ncol(z)), z, main = NULL, xlab = NULL, ylab = NULL, xlim = NULL,
-  ylim = NULL, zlim = NULL, col = NULL, color = topo.colors(50),
-  nCol = 50, add.color.legend = TRUE, ...)
+color_contour(
+  x = seq(0, 1, length.out = nrow(z)),
+  y = seq(0, 1, length.out = ncol(z)),
+  z,
+  main = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  zlim = NULL,
+  col = NULL,
+  color = topo.colors(50),
+  nCol = 50,
+  add.color.legend = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Locations of grid lines at which the values in z are measured. 
@@ -51,7 +63,7 @@ and \code{\link[graphics]{contour}}.}
 }
 \description{
 This function is a wrapper around \code{\link[graphics]{image}}
-and \code{\link[graphics]{contour}}. See \code{vignette("plotfunctions")} 
+and \code{\link[graphics]{contour}}. See \code{vignette('plotfunctions')} 
 for an example of how you could use \code{\link[graphics]{image}} and 
 \code{\link[graphics]{contour}}.
 }
@@ -80,20 +92,30 @@ for plotting model predictions using \code{color_contour}.
 
 \code{\link{plotsurface}}
 
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{dotplot_error}}, \code{\link{drawDevArrows}},
-  \code{\link{emptyPlot}}, \code{\link{errorBars}},
-  \code{\link{fill_area}}, \code{\link{getCoords}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

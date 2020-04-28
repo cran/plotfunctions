@@ -4,8 +4,15 @@
 \alias{addInterval}
 \title{Draw intervals or arrows on plots.}
 \usage{
-addInterval(pos, lowVals, highVals, horiz = TRUE, minmax = NULL,
-  length = 0.05, ...)
+addInterval(
+  pos,
+  lowVals,
+  highVals,
+  horiz = TRUE,
+  minmax = NULL,
+  length = 0.05,
+  ...
+)
 }
 \arguments{
 \item{pos}{Vector with x- or y-values (depending on \code{horizontal}).}
@@ -74,19 +81,30 @@ addInterval(1:6, b[3,], b[3,], horiz=FALSE, lwd=2, length=.1, lend=2)
 par(mfrow=c(1,1))
 }
 \seealso{
-Other Functions for plotting: \code{\link{add_bars}},
-  \code{\link{add_n_points}}, \code{\link{alphaPalette}},
-  \code{\link{alpha}}, \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

@@ -4,8 +4,17 @@
 \alias{marginDensityPlot}
 \title{Plot density of distribution in margins of the plot.}
 \usage{
-marginDensityPlot(x, y = NULL, side, from = NULL, scale = 1,
-  maxDensityValue = NULL, allDensities = NULL, plot = TRUE, ...)
+marginDensityPlot(
+  x,
+  y = NULL,
+  side,
+  from = NULL,
+  scale = 1,
+  maxDensityValue = NULL,
+  allDensities = NULL,
+  plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{Density object, or vector with x-values.}
@@ -52,7 +61,7 @@ par(mar=oldmar + c(0,0,0,4))
 
 # plot qqnorm
 qqnorm(val2, main='t distribution',
-       pch="*", col='steelblue',
+       pch='*', col='steelblue',
        xlim=c(-3,3),
        bty='n')
 qqline(val1)
@@ -61,50 +70,58 @@ abline(v=0, col=alpha('gray'))
 
 # filled distribution in right margin:
 marginDensityPlot(dens2, side=4, allDensities=list(dens1, dens2),
-	col='steelblue',lwd=2)
+    col='steelblue',lwd=2)
 # add lines:
 marginDensityPlot(dens2, side=4, allDensities=list(dens1, dens2),
-	col='steelblue',density=25, lwd=2)
+    col='steelblue',density=25, lwd=2)
 # compare to normal:
 marginDensityPlot(dens1, side=4, allDensities=list(dens1, dens2), 
-	col=NA, border=1)
+    col=NA, border=1)
 # Other sides are also possible:
 marginDensityPlot(dens1, side=3, allDensities=list(dens1, dens2), 
-	col=NA, border=alpha(1), lwd=2)
+    col=NA, border=alpha(1), lwd=2)
 marginDensityPlot(dens2, side=3, allDensities=list(dens1, dens2), 
-	col=NA, border=alpha('steelblue'), lwd=3)
+    col=NA, border=alpha('steelblue'), lwd=3)
 # adjust the starting point with argument 'from' to bottom of plot:
 marginDensityPlot(dens1, side=3, 
-	from=getCoords(0, side=2), lwd=2)
+    from=getCoords(0, side=2), lwd=2)
 marginDensityPlot(dens2, side=3, 
-	col='steelblue', from=getCoords(0, side=2), lwd=2,
+    col='steelblue', from=getCoords(0, side=2), lwd=2,
  maxDensityValue=2*max(dens2$y))
 
 legend(getFigCoords('p')[2], getFigCoords('p')[3],
-	yjust=0,
-	legend=c("t distribution", "Gaussian"),
-	fill=c("steelblue", 'black'),
-	cex=.75,
-	xpd=TRUE, bty='n')
-
+    yjust=0, legend=c('t distribution', 'Gaussian'),
+    fill=c('steelblue', 'black'),
+    cex=.75, xpd=TRUE, bty='n')
 
 }
 \seealso{
 \code{\link{check_normaldist}}
 
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}}, \code{\link{plot_error}},
-  \code{\link{plot_image}}, \code{\link{plotsurface}},
-  \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

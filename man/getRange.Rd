@@ -46,15 +46,24 @@ getRange(zlim, n.seg=5, step=1, dec=0)
 
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRatioCoords}},
-  \code{\link{group_sort}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Utility functions}

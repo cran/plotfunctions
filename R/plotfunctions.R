@@ -16,7 +16,7 @@
 #' and 2. the package \code{plotfunctions}, which contains more general plot 
 #' functions.
 #' 
-#' See \code{vignette(package="plotfunctions", "plotfunctions")} for an 
+#' See \code{vignette(package='plotfunctions', 'plotfunctions')} for an 
 #' overview with examples.
 #' 
 #' @section Basic functions:
@@ -54,7 +54,7 @@
 #' relative to the plot axes for given proportions of the plot region or given 
 #' proportions of the figure. 
 #' #' \item A list of all available functions is provided in 
-#' \code{help(package="itsadug")}.
+#' \code{help(package='itsadug')}.
 #' }
 #'
 #' @author

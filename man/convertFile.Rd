@@ -4,11 +4,22 @@
 \alias{convertFile}
 \title{Replacing separators (for example, decimal and thousand separators).}
 \usage{
-convertFile(filename, symbol1 = NULL, symbol2 = NULL, newsymbol1 = "",
-  newsymbol2 = "", sep = ";", newsep = NULL, header = TRUE,
-  columns = NULL, outputfile = gsub("^(.*)(\\\\.)([^\\\\.]*)$",
-  "\\\\1_new.\\\\3", filename), fixed.s1 = TRUE, fixed.s2 = TRUE,
-  fixed.sep = TRUE, ...)
+convertFile(
+  filename,
+  symbol1 = NULL,
+  symbol2 = NULL,
+  newsymbol1 = "",
+  newsymbol2 = "",
+  sep = ";",
+  newsep = NULL,
+  header = TRUE,
+  columns = NULL,
+  outputfile = gsub("^(.*)(\\\\.)([^\\\\.]*)$", "\\\\1_new.\\\\3", filename),
+  fixed.s1 = TRUE,
+  fixed.s2 = TRUE,
+  fixed.sep = TRUE,
+  ...
+)
 }
 \arguments{
 \item{filename}{String: filename (including path if necessary) of input file.}
@@ -58,25 +69,25 @@ Replacing separators (for example, decimal and thousand separators).
 \examples{
 \dontrun{
 # normally, the function call would look something like this:
-convertFile("example1.csv", symbol1=",", symbol2=".", sep="\\t", 
-    newsymbol1=".", newsymbol2="")
+convertFile('example1.csv', symbol1=',', symbol2='.', sep='\t', 
+    newsymbol1='.', newsymbol2='')
 # But as we are not sure that the file example1.csv is available,
 # we need to do something a little more complicated to point to 
-# the file "example1.csv" that comes with the package:
+# the file 'example1.csv' that comes with the package:
 
 # finding one of the example files from the package:
-file1 <- system.file("extdata", "example1.csv", package = "plotfunctions")
+file1 <- system.file('extdata', 'example1.csv', package = 'plotfunctions')
 
 # example 1: 
 system.time({
-    convertFile(file1, symbol1=",", symbol2=".", 
-    newsymbol1=".", newsymbol2="", outputfile="example1_new.csv")
+    convertFile(file1, symbol1=',', symbol2='.', 
+    newsymbol1='.', newsymbol2='', outputfile='example1_new.csv')
 })
 # example 2: type 'yes' to overwrite the previous output file, 
 # or specify a different filename in outputfile.
 system.time({
-    convertFile(file1, symbol1=",", symbol2=".", sep="\\t", 
-    newsymbol1=".", newsymbol2="", columns=1:2, outputfile="example1_new.csv")
+    convertFile(file1, symbol1=',', symbol2='.', sep='\t', 
+    newsymbol1='.', newsymbol2='', columns=1:2, outputfile='example1_new.csv')
 })
 # Example 1 takes less  time, as it does not use read.table, 
 # but just reads the file as text lines. However, the column 
@@ -84,7 +95,7 @@ system.time({
 # in specific columns.
 # Note that Example 2 writes the output with quotes, but this is 
 # not a problem for read.table:
-dat <- read.table("example1_new.csv", header=TRUE, sep="\\t", 
+dat <- read.table('example1_new.csv', header=TRUE, sep='\t', 
     stringsAsFactors=FALSE)
 }
 }

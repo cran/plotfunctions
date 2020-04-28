@@ -6,12 +6,13 @@
 #' @param x Numeric vector with x-positions of bars.
 #' @param y Numeric vector with height of the bars.
 #' @param y0 Optional numeric value or vector with the onset(s) of the bars. 
-#' When \code{y0} is not specified, the lowest value of the y-axis is used.
+#' When \\code{y0} is not specified, the lowest value of the y-axis is used.
 #' @param width Numeric value, determining the width of the bars in units of 
 #' the x-axis.
 #' @param horiz Logical value: whether or not to plot horizontal bars. 
 #' Defaults to FALSE.
-#' @param ... Other arguments for plotting, see \code{\link[graphics]{par}}.
+#' @param ... Other arguments for plotting, see 
+#' \\code{\\link[graphics]{par}}.
 #' @author Jacolien van Rij
 #' @examples
 #' # hypothetical experiment:
@@ -20,72 +21,82 @@
 #' newd <- data.frame(Adults = table( factor(adults, levels=0:15) ),
 #'     Children = table( factor(children, levels=0:15) ) )
 #' newd <- newd[,c(1,2,4)]
-#' names(newd)[1] <- "value"
+#' names(newd)[1] <- 'value'
 #' 
 #' # barplot of Adults:
-#' b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, border=NA, ylim=c(0,30))
+#' b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, 
+#'     border=NA, ylim=c(0,30))
 #' # overlay Children measures:
 #' add_bars(b, newd$Children.Freq, col='red', density=25, xpd=TRUE)
 #' 
 #' # variants:
-#' b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, border=NA, ylim=c(0,30))
-#' add_bars(b+.1, newd$Children.Freq, width=.85, col=alpha('red'), border=NA, xpd=TRUE)
+#' b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, 
+#'     border=NA, ylim=c(0,30))
+#' add_bars(b+.1, newd$Children.Freq, width=.85, col=alpha('red'), 
+#'     border=NA, xpd=TRUE)
 #' 
-#' emptyPlot(c(-30,30), c(0,15), v0=0, ylab="Condition")
-#' add_bars(-1*newd$Children.Freq, 0:15, y0=0, col=alpha("blue"), 
-#'     border="blue", horiz=TRUE)
-#' add_bars(newd$Adults.Freq, 0:15, y0=0, col=alpha("red"), 
-#'     border="red", horiz=TRUE)
-#' mtext(c("Children", "Adults"), side=3, at=c(-15,15), line=1, cex=1.25, font=2)
+#' emptyPlot(c(-30,30), c(0,15), v0=0, ylab='Condition')
+#' add_bars(-1*newd$Children.Freq, 0:15, y0=0, col=alpha('blue'), 
+#'     border='blue', horiz=TRUE)
+#' add_bars(newd$Adults.Freq, 0:15, y0=0, col=alpha('red'), 
+#'     border='red', horiz=TRUE)
+#' mtext(c('Children', 'Adults'), side=3, at=c(-15,15), line=1, cex=1.25, 
+#'     font=2)
 #' 
 #' # adding shadow:
-#' b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, with=.9, col='black', border=NA)
-#' add_bars(b+.2, newd$Adults.Freq+.2, y0=.2, width=.9, col=alpha('black', f=.2), border=NA, xpd=TRUE)
+#' b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, 
+#'     width=.9, 
+#'     col='black', border=NA)
+#' add_bars(b+.2, newd$Adults.Freq+.2, y0=.2, width=.9, 
+#'     col=alpha('black', f=.2), border=NA, xpd=TRUE)
 #' 
 #' @family Functions for plotting
-add_bars <- function(x, y, y0=NULL, width=1, horiz=FALSE, ...){
-	# make sure x and y are vectors:
-	x = as.vector(x)
-	y = as.vector(y)
-	if(length(x) != length(y)){
-		stop("Different lengths of x and y.")
-	}
-	gpc <- getFigCoords('p')
-	par = list(...)
-	col = NULL
-	if(!'col' %in% names(par)){
-		par[['col']] <- 1
-	}
-	if(is.null(y0)){
-		min.y <- findAbsMin(c(0,gpc[3]))
-		y0 = rep(min.y, length(y))
-		if(horiz==TRUE){
-			min.y <- findAbsMin(c(0,gpc[1]))
-			y0 = rep(min.y, length(y))
-		}
-	}else{
-		if(length(y0)==1){
-			y0 = rep(y0,length(y))
-		}else if(length(y0) != length(y)){
-			warning("Length y0 does not equal length y. The first element of y0 will be used.")
-			y0 = rep(y0[1], length(y))
-		}
-	}
-	if(length(width)==1){
-		width = rep(width, length(x))
-	}else if(length(width) != length(x)){
-		warning("Length of width does not equal length x. The first element of width will be used.")
-		width = rep(width[1], length(x))
-	}
-	addargs <- list2str(names(par), par)
-	if(horiz==TRUE){
-		eval(parse(text=sprintf("rect(xleft=x, xright=y0,
-			ybottom=y-.5*width, ytop=y+.5*width,%s)", addargs) ))
-	}else{
-		eval(parse(text=sprintf("rect(xleft=x-0.5*width, xright=x+0.5*width,
-			ybottom=y0, ytop=y,%s)", addargs) ))
-	}
-	
+#' 
+add_bars <- function(x, y, y0 = NULL, width = 1, horiz = FALSE, ...) {
+    # make sure x and y are vectors:
+    x = as.vector(x)
+    y = as.vector(y)
+    if (length(x) != length(y)) {
+        stop("Different lengths of x and y.")
+    }
+    gpc <- getFigCoords("p")
+    par = list(...)
+    col = NULL
+    if (!"col" %in% names(par)) {
+        par[["col"]] <- 1
+    }
+    if (is.null(y0)) {
+        min.y <- findAbsMin(c(0, gpc[3]))
+        y0 = rep(min.y, length(y))
+        if (horiz == TRUE) {
+            min.y <- findAbsMin(c(0, gpc[1]))
+            y0 = rep(min.y, length(y))
+        }
+    } else {
+        if (length(y0) == 1) {
+            y0 = rep(y0, length(y))
+        } else if (length(y0) != length(y)) {
+            warning("Length y0 does not equal length y. The first element of y0 will be used.")
+            y0 = rep(y0[1], length(y))
+        }
+    }
+    if (length(width) == 1) {
+        width = rep(width, length(x))
+    } else if (length(width) != length(x)) {
+        warning("Length of width does not equal length x. The first element of width will be used.")
+        width = rep(width[1], length(x))
+    }
+    addargs <- list2str(names(par), par)
+    if (horiz == TRUE) {
+        eval(parse(text = sprintf("rect(xleft=x, xright=y0,
+\t\t\tybottom=y-.5*width, ytop=y+.5*width,%s)", 
+            addargs)))
+    } else {
+        eval(parse(text = sprintf("rect(xleft=x-0.5*width, xright=x+0.5*width,
+\t\t\tybottom=y0, ytop=y,%s)", 
+            addargs)))
+    }
+    
 }
 
 
@@ -101,7 +112,7 @@ add_bars <- function(x, y, y0=NULL, width=1, horiz=FALSE, ...){
 #' 
 #' @param x average X position of points to plot,
 #' @param y average Y position of points to plot,
-#' @param n number of points to plot.
+#' @param n number of points to plot (integer).
 #' @param horiz Logical: whether or not to plot the sequence of point in 
 #' horizontal direction (x-axis). Defaults to TRUE, the points are plotted in 
 #' horizontal direction.
@@ -109,6 +120,9 @@ add_bars <- function(x, y, y0=NULL, width=1, horiz=FALSE, ...){
 #' @param sep Numeric value: separation between sequences of points. 
 #' Separation reduces the width. If the value is smaller, the sequences take 
 #' more space.
+#' @param plot Logical: whether or not to add the points to the plot. 
+#' Defaults to true. If set to false, the x- and y-coordinates of the points 
+#' are returned in a list.
 #' @param ... Optional graphical parameters (see \code{\link[graphics]{par}}).
 #' @author Jacolien van Rij
 #' @examples
@@ -117,41 +131,65 @@ add_bars <- function(x, y, y0=NULL, width=1, horiz=FALSE, ...){
 #' d <- tapply(cars$dist, list(cars$speed), mean)
 #' 
 #' emptyPlot(range(as.numeric(names(s))), range(d), 
-#'     xlab="dist", ylab="mean speed")
-#' add_n_points(as.numeric(names(s)), d, s)
+#'     xlab='dist', ylab='mean speed')
+#' add_n_points(as.numeric(names(s)), d, s, pch='*')
 #' 
 #' # decrease space between groups of points:
 #' emptyPlot(range(as.numeric(names(s))), range(d), 
-#'     xlab="dist", ylab="mean speed")
+#'     xlab='dist', ylab='mean speed')
 #' add_n_points(as.numeric(names(s)), d, s, sep=0)
 #' 
 #' # decrease width of groups of points:
 #' emptyPlot(range(as.numeric(names(s))), range(d), 
-#'     xlab="dist", ylab="mean speed")
+#'     xlab='dist', ylab='mean speed')
 #' add_n_points(as.numeric(names(s)), d, s, width=0.8)
 #' 
 #' # horizontal vs vertical:
 #' emptyPlot(range(d),range(as.numeric(names(s))),  
-#'     ylab="dist", xlab="mean speed")
+#'     ylab='dist', xlab='mean speed')
 #' add_n_points(d, as.numeric(names(s)), s, horiz=FALSE) 
 #' 
 #' @family Functions for plotting
-add_n_points <- function(x, y, n, horiz=TRUE, width=1, sep=.2, ...){
-  max.n <- max(n, na.rm=TRUE)
-  d <- diff(seq(-1*(width-(sep))/2,  (width-(sep))/2, length=max.n)[1:2])
-  if(horiz==TRUE){
-  	x.new <- unlist(mapply(function(a, b){
-    	xpos = scale(1:b, center=TRUE, scale=FALSE)*d + a
-  	}, as.list(x), as.list(n)))
-  	y.new <- rep(y, n)
-  	points(x.new, y.new, ...)
-  }else{
-  	y.new <- unlist(mapply(function(a, b){
-    	ypos = scale(1:b, center=TRUE, scale=FALSE)*d + a
-  	}, as.list(y), as.list(n)))
-  	x.new <- rep(x, n)
-  	points(x.new, y.new, ...)  	
-  }
+add_n_points <- function(x, y, n, horiz = TRUE, width = NULL, sep = NULL, plot = TRUE, ...) {
+    max.n <- max(n, na.rm = TRUE)
+    
+    if (horiz == TRUE) {
+        if (is.null(width)) {
+            width <- min(diff(sort(unique(x)))) * 0.9
+        }
+        if (is.null(sep)) {
+            sep <- 0.1 * width
+        }
+    } else {
+        if (is.null(width)) {
+            width <- min(diff(sort(unique(y)))) * 0.9
+        }
+        if (is.null(sep)) {
+            sep <- 0.1 * width
+        }
+    }
+    d <- diff(seq(-1 * (width - (sep))/2, (width - (sep))/2, length = max.n)[1:2])
+    x.new <- y.new <- NA
+    if (horiz == TRUE) {
+        x.new <- unlist(mapply(function(a, b) {
+            xpos = scale(1:b, center = TRUE, scale = FALSE) * d + a
+            xpos <- jitter(xpos)
+        }, as.list(x), as.list(n)))
+        y.new <- rep(y, n)
+        
+    } else {
+        y.new <- unlist(mapply(function(a, b) {
+            ypos = scale(1:b, center = TRUE, scale = FALSE) * d + a
+        }, as.list(y), as.list(n)))
+        x.new <- rep(x, n)
+    }
+    
+    if (plot) {
+        points(x.new, y.new, ...)
+        invisible(list(x = x.new, y = y.new))
+    } else {
+        return(list(x = x.new, y = y.new))
+    }
 }
 
 
@@ -221,86 +259,85 @@ add_n_points <- function(x, y, n, horiz=TRUE, width=1, sep=.2, ...){
 #' # reset
 #' par(mfrow=c(1,1))
 #' @family Functions for plotting
-addInterval <- function(pos, lowVals, highVals, horiz=TRUE, minmax=NULL, length=.05,...){
-    convert2num <- function(x){  
-        if(!any(c("numeric", "integer") %in% class(x))){
-            if("factor" %in% class(x)){
-                return( as.numeric( as.character(x)) )
-            }else{
-                return( as.vector(unlist(x)) )
+addInterval <- function(pos, lowVals, highVals, horiz = TRUE, minmax = NULL, length = 0.05, ...) {
+    convert2num <- function(x) {
+        if (!any(c("numeric", "integer") %in% class(x))) {
+            if ("factor" %in% class(x)) {
+                return(as.numeric(as.character(x)))
+            } else {
+                return(as.vector(unlist(x)))
             }
-        }else{
+        } else {
             return(x)
         }
     }
     pos <- convert2num(pos)
     lowVals <- convert2num(lowVals)
     highVals <- convert2num(highVals)
-    if(!is.null(minmax)){
+    if (!is.null(minmax)) {
         lowVals[!is.na(lowVals) & lowVals < minmax[1]] <- minmax[1]
         highVals[!is.na(highVals) & highVals > minmax[2]] <- minmax[2]
     }
-    if(length(lowVals) != length(highVals)){
-        if(length(lowVals)==1){
+    if (length(lowVals) != length(highVals)) {
+        if (length(lowVals) == 1) {
             lowVals <- rep(lowVals, length(highVals))
-        }else if(length(highVals)==1){
-            highVals <- rep(highVals, length(lowVals))          
-        }else{
-            stop('Vectors lowVals and highVals do not have same length.')
+        } else if (length(highVals) == 1) {
+            highVals <- rep(highVals, length(lowVals))
+        } else {
+            stop("Vectors lowVals and highVals do not have same length.")
         }
     }
-    if(length(pos)==1){
+    if (length(pos) == 1) {
         pos <- rep(pos, length(lowVals))
-    }else if(length(pos) != length(lowVals)){
-        stop('Vector pos should be of the same length as lowVals and highVals.')
+    } else if (length(pos) != length(lowVals)) {
+        stop("Vector pos should be of the same length as lowVals and highVals.")
     }
     dnm <- names(list(...))
     pars <- list()
-    if(!"angle" %in% dnm){
+    if (!"angle" %in% dnm) {
         pars[["angle"]] <- 90
     }
-    if(!"code" %in% dnm){
+    if (!"code" %in% dnm) {
         pars[["code"]] <- 3
     }
-    if(length(pars) > 0){
-        pars <- paste(paste(names(pars),pars, sep='='), collapse=',')
-    }else{
+    if (length(pars) > 0) {
+        pars <- paste(paste(names(pars), pars, sep = "="), collapse = ",")
+    } else {
         pars <- NULL
     }
     len.check <- highVals - lowVals
     len.check <- which(len.check == 0)
-    if(length(len.check)>0){
+    if (length(len.check) > 0) {
         usr <- par()$usr
         pin <- par()$pin
         
-        if(horiz){
-            len <- ((usr[4]-usr[3])*length) / pin[2]
-            segments(x0=lowVals[len.check], x1=lowVals[len.check], y0=pos-len, y1=pos+len, ...)
-        }else{
-            len <- ((usr[2]-usr[1])*length) / pin[1]
-            segments(y0=lowVals[len.check], y1=lowVals[len.check], x0=pos-len, x1=pos+len, ...)
+        if (horiz) {
+            len <- ((usr[4] - usr[3]) * length)/pin[2]
+            segments(x0 = lowVals[len.check], x1 = lowVals[len.check], y0 = pos - len, y1 = pos + len, ...)
+        } else {
+            len <- ((usr[2] - usr[1]) * length)/pin[1]
+            segments(y0 = lowVals[len.check], y1 = lowVals[len.check], x0 = pos - len, x1 = pos + len, ...)
         }
-        # pos <- pos[-len.check]
-        # lowVals <- lowVals[-len.check]
-        # highVals <- highVals[-len.check]
-        # set of warnings
-        options(warn=-1)
+        # pos <- pos[-len.check] lowVals <- lowVals[-len.check] highVals <- highVals[-len.check] set of warnings
+        options(warn = -1)
     }
-    if(horiz){
-        if(is.null(pars)){
-            arrows(x0=lowVals, x1=highVals, y0=pos, y1=pos, length=length, ...)
-        }else{
-            eval(parse(text=paste('arrows(x0=lowVals, x1=highVals, y0=pos, y1=pos,length=length,', pars ,',...)', sep='')))
+    if (horiz) {
+        if (is.null(pars)) {
+            arrows(x0 = lowVals, x1 = highVals, y0 = pos, y1 = pos, length = length, ...)
+        } else {
+            eval(parse(text = paste("arrows(x0=lowVals, x1=highVals, y0=pos, y1=pos,length=length,", pars, 
+                ",...)", sep = "")))
         }
-    }else{
-        if(is.null(pars)){
-            arrows(y0=lowVals, y1=highVals, x0=pos, x1=pos, length=length, ...)
-        }else{
-            eval(parse(text=paste('arrows(y0=lowVals, y1=highVals, x0=pos, x1=pos, length=length,', pars ,',...)', sep='')))
-        }        
+    } else {
+        if (is.null(pars)) {
+            arrows(y0 = lowVals, y1 = highVals, x0 = pos, x1 = pos, length = length, ...)
+        } else {
+            eval(parse(text = paste("arrows(y0=lowVals, y1=highVals, x0=pos, x1=pos, length=length,", pars, 
+                ",...)", sep = "")))
+        }
     }
-    if(length(len.check)>0){
-        options(warn=0)
+    if (length(len.check) > 0) {
+        options(warn = 0)
     }
 }
 
@@ -328,9 +365,9 @@ addInterval <- function(pos, lowVals, highVals, horiz=TRUE, minmax=NULL, length=
 #' rect(35,41,63,81, col=alpha(rgb(0,1,.5),f=.25), 
 #'    border=alpha(rgb(0,1,.5), f=.65), lwd=4)
 #' 
-#' emptyPlot(1,1, axes=FALSE, main="Tunnel of 11 squares")
+#' emptyPlot(1,1, axes=FALSE, main='Tunnel of 11 squares')
 #' center <- c(.75, .25)
-#' mycol <- "steelblue"
+#' mycol <- 'steelblue'
 #' for(i in seq(0,1,by=.1)){
 #'     rect(center[1]-center[1]*(1.1-i), center[2]-center[2]*(1.1-i), 
 #'         center[1]+(1-center[1])*(1.1-i), center[2]+(1-center[2])*(1.1-i), 
@@ -342,10 +379,10 @@ addInterval <- function(pos, lowVals, highVals, horiz=TRUE, minmax=NULL, length=
 #' 
 #' @family Functions for plotting
 alpha <- function(x, f = 0.5) {
-    if(f > 1 | f < 0){
+    if (f > 1 | f < 0) {
         stop("Transparency value should be in range 0 to 1.")
-    }else{
-        return( adjustcolor(x, alpha.f = f) )
+    } else {
+        return(adjustcolor(x, alpha.f = f))
     }
 }
 
@@ -383,39 +420,39 @@ alpha <- function(x, f = 0.5) {
 #' # the same palette:
 #' alphaPalette('white', f.seq=c(.2,1), n=5)
 #' # a palette with 10 colors blue, yellow and red, that differ in transparency
-#' alphaPalette(c('blue', "yellow", "red"), f.seq=c(0.1,.8), n=10)
+#' alphaPalette(c('blue', 'yellow', 'red'), f.seq=c(0.1,.8), n=10)
 #' 
-#' emptyPlot(1,1, axes=FALSE, main="Tunnel of 11 squares")
-#' mycol <- "steelblue"
+#' emptyPlot(1,1, axes=FALSE, main='Tunnel of 11 squares')
+#' mycol <- 'steelblue'
 #' center <- c(.75, .25)
 #' i = seq(0,1,by=.1)
-#' fillcol <- alphaPalette(c(mycol, "black"), f.seq=i)
+#' fillcol <- alphaPalette(c(mycol, 'black'), f.seq=i)
 #' linecol <- alphaPalette(mycol, f.seq=1-i)
 #' rect(center[1]-center[1]*(1.1-i), center[2]-center[2]*(1.1-i), 
 #'     center[1]+(1-center[1])*(1.1-i), center[2]+(1-center[2])*(1.1-i), 
 #'     col=fillcol, border=linecol, lty=1, lwd=1, xpd=TRUE)
 #'
 #' @family Functions for plotting
-alphaPalette <- function(x, f.seq, n=NULL) {
+alphaPalette <- function(x, f.seq, n = NULL) {
     out <- c()
-    if(!is.null(n)){
-        if(n[1]>1 & length(f.seq) == 2){
-            f.seq <- seq(min(max(c(f.seq[1],0)),1), min(max(c(f.seq[2],0)),1), length=n)
-        } else if(n[1]>1 & length(f.seq) > 2){
-            f.seq <- seq(min(f.seq), max(f.seq), length=n)
+    if (!is.null(n)) {
+        if (n[1] > 1 & length(f.seq) == 2) {
+            f.seq <- seq(min(max(c(f.seq[1], 0)), 1), min(max(c(f.seq[2], 0)), 1), length = n)
+        } else if (n[1] > 1 & length(f.seq) > 2) {
+            f.seq <- seq(min(f.seq), max(f.seq), length = n)
             warning("N values between the min and max of f.seq are selected.")
-        }else{
+        } else {
             n <- length(f.seq)
             warning("Argument n will be ignored.")
         }
-    }else{
-    	n <- length(f.seq)
+    } else {
+        n <- length(f.seq)
     }
     if (length(x) == length(f.seq)) {
         out <- x
-    } else if(length(x) == 1){
+    } else if (length(x) == 1) {
         out <- rep(x[1], length(f.seq))
-    }else{
+    } else {
         x <- colorRampPalette(x)(n)
         out <- x
     }
@@ -464,30 +501,26 @@ alphaPalette <- function(x, f.seq, n=NULL) {
 #' check_normaldist(test)
 #' @family Functions for plotting
 #' @author Jacolien van Rij
-check_normaldist <- function(res, col='red', col.normal='black', 
-	legend.pos='topright', legend.label='data', ...){
+check_normaldist <- function(res, col = "red", col.normal = "black", legend.pos = "topright", legend.label = "data", 
+    ...) {
     x <- sort(res[!is.na(res)])
     sd.x <- sd(x)
     d <- density(x)
-    d.norm <- dnorm(d$x, mean=mean(x), sd=sd.x)
+    d.norm <- dnorm(d$x, mean = mean(x), sd = sd.x)
     parlist <- list(...)
-    emptyPlot(range(d$x), range(c(d$y, d.norm)),
-        main='Density', xlab=deparse(substitute(res)))
-    fill_area(d$x, d.norm, col=col.normal)
-    lines(d$x, d.norm, col=col.normal)
-    if('lwd' %in% names(parlist)){
+    emptyPlot(range(d$x), range(c(d$y, d.norm)), main = "Density", xlab = deparse(substitute(res)))
+    fill_area(d$x, d.norm, col = col.normal)
+    lines(d$x, d.norm, col = col.normal)
+    if ("lwd" %in% names(parlist)) {
         lwd <- NULL
-        lines(d$x, d$y, col=col, ...)
-    }else{
-        lines(d$x, d$y, col=col, lwd=2, ...)
+        lines(d$x, d$y, col = col, ...)
+    } else {
+        lines(d$x, d$y, col = col, lwd = 2, ...)
     }
     
-    if(!is.null(legend.pos)){
-        legend(legend.pos, 
-            legend=legend.label,
-            col=c(col, col.normal), seg.len=1,
-            lwd=c(ifelse('lwd' %in% names(parlist), parlist[['lwd']], 2), 1),
-            bty='n')
+    if (!is.null(legend.pos)) {
+        legend(legend.pos, legend = legend.label, col = c(col, col.normal), seg.len = 1, lwd = c(ifelse("lwd" %in% 
+            names(parlist), parlist[["lwd"]], 2), 1), bty = "n")
     }
 }
 
@@ -498,7 +531,7 @@ check_normaldist <- function(res, col='red', col.normal='black',
 #' Creates a contour plot with colored background.
 #'
 #' @description This function is a wrapper around \code{\link[graphics]{image}}
-#' and \code{\link[graphics]{contour}}. See \code{vignette("plotfunctions")} 
+#' and \code{\link[graphics]{contour}}. See \code{vignette('plotfunctions')} 
 #' for an example of how you could use \code{\link[graphics]{image}} and 
 #' \code{\link[graphics]{contour}}.
 #'
@@ -553,71 +586,67 @@ check_normaldist <- function(res, col='red', col.normal='black',
 #' color_contour(z=volcano, color=NULL, add.color.legend=FALSE)
 #' @family Functions for plotting
 #' @seealso \code{\link{plotsurface}}
-color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
-    y = seq(0, 1, length.out = ncol(z)),
-    z,
-    main=NULL, xlab=NULL, ylab=NULL, 
-    xlim=NULL, ylim=NULL, zlim=NULL,
-    col=NULL, color=topo.colors(50), nCol=50,
-    add.color.legend=TRUE, ...){
+color_contour <- function(x = seq(0, 1, length.out = nrow(z)), y = seq(0, 1, length.out = ncol(z)), z, main = NULL, 
+    xlab = NULL, ylab = NULL, xlim = NULL, ylim = NULL, zlim = NULL, col = NULL, color = topo.colors(50), 
+    nCol = 50, add.color.legend = TRUE, ...) {
     # check input:
-    if(is.null(dim(z))){
-        stop('z should be a matrix.')
+    if (is.null(dim(z))) {
+        stop("z should be a matrix.")
     }
-    if(length(x) != nrow(z)){
-        stop(sprintf('x should have %d values, because z has %d rows.', nrow(z), nrow(z)))
+    if (length(x) != nrow(z)) {
+        stop(sprintf("x should have %d values, because z has %d rows.", nrow(z), nrow(z)))
     }
-    if(length(y) != ncol(z)){
-        stop(sprintf('y should have %d values, because z has %d columns.', ncol(z), ncol(z)))
+    if (length(y) != ncol(z)) {
+        stop(sprintf("y should have %d values, because z has %d columns.", ncol(z), ncol(z)))
     }
-        
+    
     ## Check plot settings
-    if(is.null(main)){
-        main=""
+    if (is.null(main)) {
+        main = ""
     }
-    if(is.null(xlab)){
-        xlab=""
+    if (is.null(xlab)) {
+        xlab = ""
     }
-    if(is.null(ylab)){
-        ylab=""
+    if (is.null(ylab)) {
+        ylab = ""
     }
-    if(is.null(xlim)){
-        xlim=range(x)
+    if (is.null(xlim)) {
+        xlim = range(x)
     }
-    if(is.null(ylim)){
-        ylim=range(y)
-    }   
-    if(is.null(zlim)){
-        zlim=range(z)
-    }   
+    if (is.null(ylim)) {
+        ylim = range(y)
+    }
+    if (is.null(zlim)) {
+        zlim = range(z)
+    }
     # colors:
-    if(is.null(color)){
-        color <- alphaPalette('white', f.seq=c(0,0), n=nCol)
+    if (is.null(color)) {
+        color <- alphaPalette("white", f.seq = c(0, 0), n = nCol)
     }
     if (color[1] == "heat") {
         color <- heat.colors(nCol)
-        if(is.null(col)){
+        if (is.null(col)) {
             col <- 3
         }
     } else if (color[1] == "topo") {
         color <- topo.colors(nCol)
-        if(is.null(col)){
+        if (is.null(col)) {
             col <- 2
         }
     } else if (color[1] == "cm") {
         color <- cm.colors(nCol)
-        if(is.null(col)){
+        if (is.null(col)) {
             col <- 1
         }
     } else if (color[1] == "terrain") {
         color <- terrain.colors(nCol)
-        if(is.null(col)){
+        if (is.null(col)) {
             col <- 2
         }
     } else if (color[1] == "bpy") {
         if (requireNamespace("sp", quietly = TRUE)) {
             color <- sp::bpy.colors(nCol)
-            if(is.null(col)){
+            if (is.null(col)) {
                 col <- 3
             }
         } else {
@@ -628,30 +657,30 @@ color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
     } else if (color[1] == "gray" || color[1] == "bw") {
         color <- gray(seq(0.1, 0.9, length = nCol))
         col <- 1
-    }else {
-            if( all(isColor(color)) ){
-                color <- colorRampPalette(color)(nCol)
-            }else{
-                stop("color scheme not recognised")
-            }  
+    } else {
+        if (all(isColor(color))) {
+            color <- colorRampPalette(color)(nCol)
+        } else {
+            stop("color scheme not recognised")
+        }
     }
-    if (is.null(col)){
-        col <- 'black'
-    } 
+    if (is.null(col)) {
+        col <- "black"
+    }
     dnm <- list(...)
     parlist <- names(dnm)
-    type2string <- function(x){
+    type2string <- function(x) {
         out <- ""
-        if(length(x)>1){
-            if(is.character(x)){
-                out <- sprintf("c(%s)", paste(sprintf("'%s'", x), collapse=','))
-            }else{
-                out <- sprintf("c(%s)", paste(x, collapse=','))
+        if (length(x) > 1) {
+            if (is.character(x)) {
+                out <- sprintf("c(%s)", paste(sprintf("'%s'", x), collapse = ","))
+            } else {
+                out <- sprintf("c(%s)", paste(x, collapse = ","))
             }
-        }else{
-            if(is.character(x)){
+        } else {
+            if (is.character(x)) {
                 out <- sprintf("'%s'", x)
-            }else{
+            } else {
                 out <- sprintf("%s", x)
             }
         }
@@ -659,29 +688,28 @@ color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
     }
     # check contour input:
     cpar <- c()
-    contourarg <- c('nlevels', 'levels', 'labels', 'labcex', 'drawlabels', 'method', 'lty', 'lwd')
-    for(i in parlist[parlist %in% contourarg] ){
+    contourarg <- c("nlevels", "levels", "labels", "labcex", "drawlabels", "method", "lty", "lwd")
+    for (i in parlist[parlist %in% contourarg]) {
         cpar <- c(cpar, sprintf("%s=%s", i, type2string(dnm[[i]])))
     }
-    cpar <- paste(",", paste(cpar, collapse=','))
+    cpar <- paste(",", paste(cpar, collapse = ","))
     cpar2 <- c()
-    for(i in parlist[parlist %in% c('nlevels', 'levels', 'method')] ){
+    for (i in parlist[parlist %in% c("nlevels", "levels", "method")]) {
         cpar2 <- c(cpar2, sprintf("%s=%s", i, type2string(dnm[[i]])))
     }
-    cpar2 <- paste(",", paste(cpar2, collapse=','))
+    cpar2 <- paste(",", paste(cpar2, collapse = ","))
     # check image input:
     ipar <- c()
-    contourarg <- c('nlevels', 'levels', 'labels', 'labcex', 'drawlabels', 'method', 'lty', 'lwd')
-    for(i in parlist[!parlist %in% contourarg] ){
+    contourarg <- c("nlevels", "levels", "labels", "labcex", "drawlabels", "method", "lty", "lwd")
+    for (i in parlist[!parlist %in% contourarg]) {
         ipar <- c(ipar, sprintf("%s=%s", i, type2string(dnm[[i]])))
     }
-    ipar <- paste(",", paste(ipar, collapse=','))
-    eval(parse(text=sprintf("image(x, y, z, col=color, xlim=xlim, ylim=ylim, zlim=zlim, main=main, xlab=xlab, ylab=ylab, add=FALSE%s)", ipar)))
-    eval(parse(text=sprintf("contour(x, y, z, col=col, add=TRUE%s)",
-        cpar)))
-    if(add.color.legend){
-        gradientLegend(round(zlim, 3), n.seg=3, pos=.875, 
-            color=color)
+    ipar <- paste(",", paste(ipar, collapse = ","))
+    eval(parse(text = sprintf("image(x, y, z, col=color, xlim=xlim, ylim=ylim, zlim=zlim, main=main, xlab=xlab, ylab=ylab, add=FALSE%s)", 
+        ipar)))
+    eval(parse(text = sprintf("contour(x, y, z, col=col, add=TRUE%s)", cpar)))
+    if (add.color.legend) {
+        gradientLegend(round(zlim, 3), n.seg = 3, pos = 0.875, color = color)
     }
 }
 
@@ -715,7 +743,7 @@ color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
 #' as the median or mean of each group.
 #' @param cex the character size to be used. Setting cex to a value smaller
 #' than one can be a useful way of avoiding label overlap. Unlike many other 
-#' graphics functions, this sets the actual size, not a multiple of par("cex").
+#' graphics functions, this sets the actual size, not a multiple of par('cex').
 #' @param pch the plotting character or symbol to be used.
 #' @param gpch the plotting character or symbol to be used for group values.
 #' @param bg  the background color of plotting characters or symbols to be 
@@ -739,7 +767,7 @@ color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
 #' avg <- aggregate(count ~ spray, data=InsectSprays, mean)
 #' avg <- merge(avg, 
 #'     aggregate(count ~ spray, data=InsectSprays, sd),
-#'     by="spray", all=TRUE)
+#'     by='spray', all=TRUE)
 #' 
 #' dotplot_error(avg$count.x, se.val=avg$count.y, labels=avg$spray)
 #' 
@@ -749,20 +777,17 @@ color_contour <- function(x = seq(0, 1, length.out = nrow(z)),
 #' 
 #' @seealso \code{\link[graphics]{dotchart}}
 #' @family Functions for plotting
-dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL, 
-    gdata = NULL, cex = par("cex"), 
-    pch = 21, gpch = 21, bg = "black", color = par("fg"), gcolor = par("fg"), 
-    lcolor = "gray", xlim = NULL, main = NULL, 
-    xlab = NULL, ylab = NULL, lwd=1, ...) 
-{
+dotplot_error <- function(x, se.val = NULL, labels = NULL, groups = NULL, gdata = NULL, cex = par("cex"), 
+    pch = 21, gpch = 21, bg = "black", color = par("fg"), gcolor = par("fg"), lcolor = "gray", xlim = NULL, 
+    main = NULL, xlab = NULL, ylab = NULL, lwd = 1, ...) {
     opar <- par("mai", "mar", "cex", "yaxs")
     on.exit(par(opar))
     par(cex = cex, yaxs = "i")
     if (!is.numeric(x)) 
         stop("'x' must be a numeric vector or matrix")
     n <- length(x)
-    if(!is.null(se.val)){
-        if(length(x) != length(se.val)){
+    if (!is.null(se.val)) {
+        if (length(x) != length(se.val)) {
             warning("se.val not equal in length as x. se.val will be ignored.")
             se.val <- NULL
         }
@@ -776,8 +801,7 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
         if (is.null(groups)) 
             groups <- col(x, as.factor = TRUE)
         glabels <- levels(groups)
-    }
-    else {
+    } else {
         if (is.null(labels)) 
             labels <- names(x)
         glabels <- if (!is.null(groups)) 
@@ -786,35 +810,32 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
             warning("'x' is neither a vector nor a matrix: using as.numeric(x)")
             x <- as.numeric(x)
         }
-        if(! is.null(se.val)){
+        if (!is.null(se.val)) {
             if (!is.vector(se.val)) {
                 warning("'se.val' is neither a vector nor a matrix: using as.numeric(se.val)")
                 se.val <- as.numeric(se.val)
             }
         }
     }
-    if(is.null(xlim)){
+    if (is.null(xlim)) {
         xlim <- range(x[is.finite(x)])
-        if(!is.null(se.val)){
-            xlim <- range(c(x[is.finite(x)]-se.val[is.finite(se.val)], x[is.finite(x)]+se.val[is.finite(se.val)]))
+        if (!is.null(se.val)) {
+            xlim <- range(c(x[is.finite(x)] - se.val[is.finite(se.val)], x[is.finite(x)] + se.val[is.finite(se.val)]))
         }
     }
     plot.new()
     linch <- if (!is.null(labels)) 
-        max(strwidth(labels, "inch"), na.rm = TRUE)
-    else 0
+        max(strwidth(labels, "inch"), na.rm = TRUE) else 0
     if (is.null(glabels)) {
         ginch <- 0
         goffset <- 0
-    }
-    else {
+    } else {
         ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
         goffset <- 0.4
     }
     if (!(is.null(labels) && is.null(glabels))) {
         nmai <- par("mai")
-        nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) + 
-            0.1
+        nmai[2L] <- nmai[4L] + max(linch + goffset, ginch) + 0.1
         par(mai = nmai)
     }
     if (is.null(groups)) {
@@ -822,11 +843,10 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
         x <- x[o]
         y <- 1L:n
         ylim <- c(0, n + 1)
-    }
-    else {
-        o <- group_sort(x, group=groups, decreasing = TRUE)
+    } else {
+        o <- group_sort(x, group = groups, decreasing = TRUE)
         x <- x[o]
-        if(!is.null(se.val)){
+        if (!is.null(se.val)) {
             se.val <- se.val[o]
         }
         groups <- groups[o]
@@ -843,25 +863,21 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
         linch <- max(strwidth(labels, "inch"), na.rm = TRUE)
         loffset <- (linch + 0.1)/lheight
         labs <- labels[o]
-        mtext(labs, side = 2, line = loffset, at = y, adj = 0, 
-            col = color, las = 2, cex = cex, ...)
+        mtext(labs, side = 2, line = loffset, at = y, adj = 0, col = color, las = 2, cex = cex, ...)
     }
     abline(h = y, lty = "dotted", col = lcolor)
-    if(!is.null(se.val)){
-        segments(x0=x-se.val, x1=x+se.val, y0=y, y1=y, col=color, lwd=lwd)
+    if (!is.null(se.val)) {
+        segments(x0 = x - se.val, x1 = x + se.val, y0 = y, y1 = y, col = color, lwd = lwd)
     }
     points(x, y, pch = pch, col = color, bg = bg)
     if (!is.null(groups)) {
-        gpos <- rev(cumsum(rev(tapply(groups, groups, length)) + 
-            2) - 1)
+        gpos <- rev(cumsum(rev(tapply(groups, groups, length)) + 2) - 1)
         ginch <- max(strwidth(glabels, "inch"), na.rm = TRUE)
         goffset <- (max(linch + 0.2, ginch, na.rm = TRUE) + 0.1)/lheight
-        mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0, 
-            col = gcolor, las = 2, cex = cex, ...)
+        mtext(glabels, side = 2, line = goffset, at = gpos, adj = 0, col = gcolor, las = 2, cex = cex, ...)
         if (!is.null(gdata)) {
             abline(h = gpos, lty = "dotted")
-            points(gdata, gpos, pch = gpch, col = gcolor, bg = bg, 
-                ...)
+            points(gdata, gpos, pch = gpch, col = gcolor, bg = bg, ...)
         }
     }
     axis(1)
@@ -890,9 +906,9 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #' the end points of the arrow(s), specified in a 
 #' list with x and y slots.
 #' @param arrows On which end of the line to draw arrows: 
-#' "end" (default), "start", "both", "none".
+#' 'end' (default), 'start', 'both', 'none'.
 #' @param units Units in which x- and y-coordinates are provided:
-#' "inch" (default), "prop" (proportion), "coords". "inch" and "prop" are 
+#' 'inch' (default), 'prop' (proportion), 'coords'. 'inch' and 'prop' are 
 #' with respect to device region.
 #' @param ... graphical parameters and parameters provided for 
 #' \code{\link[graphics]{arrows}}.
@@ -911,40 +927,40 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #' # PLOT 1: two points
 #' #------------------
 #' 
-#' plot(0.5, 0.5, main="1", 
-#' 	pch=21, lwd=3, col='red', bg='white', cex=1.2)
-#' points(.5, .375, pch=22, lwd=3, col="blue", cex=1.2)
+#' plot(0.5, 0.5, main='1', 
+#'     pch=21, lwd=3, col='red', bg='white', cex=1.2)
+#' points(.5, .375, pch=22, lwd=3, col='blue', cex=1.2)
 #' 
 #' # Draw an error between the two points:
 #' drawDevArrows(start=c(.5,.5), end=c(.5,.375), 
-#' 	units="coords", arrows="start", length=.1, lty=1)
+#'     units='coords', arrows='start', length=.1, lty=1)
 #' # ... which is the same as using arrows:
 #' arrows(x0=.5, x1=.5, y0=.5, y1=.375, code=1, length=.1, lty=1)
 #' 
 #' # ... but these arrows can also be clipped to the device 
 #' # instead of the plot region (see leftbottom corner):
 #' drawDevArrows(start=c(.5,.5), end=c(.5,.375), 
-#' 	units="dev", arrows="start", length=.1, lty=1)
+#'     units='dev', arrows='start', length=.1, lty=1)
 #' 
 #' # The function getArrowPos converts coordinates to device coordinates:
-#' x1 <- getArrowPos(x=0.5, y=0.5, units="coords")
-#' x2 <- getArrowPos(x=0.5, y=0.375, units="coords")
-#' drawDevArrows(x1, x2, col="purple",
-#' 	arrows="start", length=.1, lty=2, lwd=2)
+#' x1 <- getArrowPos(x=0.5, y=0.5, units='coords')
+#' x2 <- getArrowPos(x=0.5, y=0.375, units='coords')
+#' drawDevArrows(x1, x2, col='purple',
+#'     arrows='start', length=.1, lty=2, lwd=2)
 #' 
 #' 
 #' # Setup 4 arrows with the same starting points, 
 #' # but defined differently:
-#' a1 <- getArrowPos(x=0.5, y=0.375, units="coords")
-#' a2 <- getArrowPos(x=0.5, y=0.21, units="prop")
-#' a3 <- getArrowPos(x=0.55, y=0.36, units="prop", dev="fig")
-#' a4 <- getArrowPos(x=0.5*0.55, y=.5*0.36+.5, units="prop", dev="dev")
+#' a1 <- getArrowPos(x=0.5, y=0.375, units='coords')
+#' a2 <- getArrowPos(x=0.5, y=0.21, units='prop')
+#' a3 <- getArrowPos(x=0.55, y=0.36, units='prop', dev='fig')
+#' a4 <- getArrowPos(x=0.5*0.55, y=.5*0.36+.5, units='prop', dev='dev')
 #' 
 #' # Setup 3 arrows with the same x and y values, 
 #' # which define different starting points in practice:
-#' b1 <- getArrowPos(x=.5, y=.5, units="prop", dev="plot")
-#' b2 <- getArrowPos(x=.5, y=.5, units="prop", dev="fig")
-#' b3 <- getArrowPos(x=.5, y=.5, units="prop", dev="dev")
+#' b1 <- getArrowPos(x=.5, y=.5, units='prop', dev='plot')
+#' b2 <- getArrowPos(x=.5, y=.5, units='prop', dev='fig')
+#' b3 <- getArrowPos(x=.5, y=.5, units='prop', dev='dev')
 #' 
 #' 
 #' #------------------
@@ -958,7 +974,7 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #' b <- getArrowPos(x=15, y=.8)
 #' 
 #' # Draw arrow b1:
-#' drawDevArrows(start=b1, end=b, arrows="start", length=.1, lty=1)
+#' drawDevArrows(start=b1, end=b, arrows='start', length=.1, lty=1)
 #' 
 #' 
 #' #------------------
@@ -980,12 +996,12 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #' a.start <- list(x=c(a1$x, a2$x, a3$x, a4$x), y=c(a1$y, a2$y, a3$y, a4$y))
 #' # Define end points on the line:
 #' a.end <- getArrowPos(x=x, y=y)
-#' drawDevArrows(start=a.start, end=a.end, arrows="none", lty=3)
+#' drawDevArrows(start=a.start, end=a.end, arrows='none', lty=3)
 #' 
 #' # Note that these four coordinates are actually referring 
 #' # to the same starting point!
 #' # So instead we could have written:
-#' drawDevArrows(start=a1, end=a.end, arrows="none", col=alpha("red"), lwd=2)
+#' drawDevArrows(start=a1, end=a.end, arrows='none', col=alpha('red'), lwd=2)
 #' 
 #' 
 #' #------------------
@@ -994,14 +1010,14 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #' 
 #' # Arrows could be constructed when the plot is not yet called, 
 #' # as they are clipped to the device:
-#' drawDevArrows(start=c(0,7), end=c(7,0), col='gray', lwd=4, lty=3, arrows="none")
+#' drawDevArrows(start=c(0,7), end=c(7,0), col='gray', lwd=4, lty=3, arrows='none')
 #' 
 #' # Add the plot:
-#' plot(1,1, bg="green")
+#' plot(1,1, bg='green')
 #' 
 #' # Finish b2 and b3: same x and y, but different coordinates
-#' drawDevArrows(start=b2, end=b, arrows="start", length=.1, lty=2)
-#' drawDevArrows(start=b3, end=b, arrows="start", length=.1, lty=3)
+#' drawDevArrows(start=b2, end=b, arrows='start', length=.1, lty=2)
+#' drawDevArrows(start=b3, end=b, arrows='start', length=.1, lty=3)
 #' 
 #' 
 #' 
@@ -1071,84 +1087,83 @@ dotplot_error <- function (x, se.val=NULL, labels = NULL, groups = NULL,
 #' # DRAW ARROWS
 #' #------------------
 #' 
-#' drawDevArrows(start=a, end=b, arrows="none", col='gray')
-#' drawDevArrows(start=c, end=d1, arrows="none", col='gray')
+#' drawDevArrows(start=a, end=b, arrows='none', col='gray')
+#' drawDevArrows(start=c, end=d1, arrows='none', col='gray')
 #' 
-#' drawDevArrows(start=a, end=c, arrows="none", 
+#' drawDevArrows(start=a, end=c, arrows='none', 
 #'     col=alphaPalette(c('green', 'blue'), f.seq=c(0,1), n=n))
-#' drawDevArrows(start=b, end=d2, arrows="none", 
+#' drawDevArrows(start=b, end=d2, arrows='none', 
 #'     col=alphaPalette('pink', f.seq=c(1,.1), n=n))
-drawDevArrows <- function(start, end=NULL, 
-	arrows = c("end", "start", "both", "none"),
-	units=c("inch", "prop", "coords"),
-	...
-	){
-	# process input 
-	arrows = tolower(arrows[1])
-	if(!arrows %in% c("end", "start", "both", "none")){
-		warning(sprintf("Incorrect arrow type '%s'. Must be 'end', 'start', 'both', or 'none'. By default 'end' is selected.", arrows))
-		arrows="end"
-	}
-	units = tolower(units[1])
-	if(!units %in% c("coords", "c", "prop", "inch", "proportions", "inches", 'p', 'i')){
-		warning(sprintf("Incorrect units '%s'. Must be 'coords'/'c' (coordinates of current plot region), 'prop'/'p' (proportions), or 'inch'/'i'. By default 'inch' is selected.", units))
-		units="inch"
-	}else{
-		if(tolower(substr(units,1,1))=="p"){
-			units="prop"
-		}else if(tolower(substr(units,1,1))=="i"){
-			units="inch"
-		}else if(tolower(substr(units,1,1))=="c"){
-			units="coords"
-		}
-	}
-	# x and y:
-	x0 <- x1 <- NULL
-	y0 <- y1 <- NULL
-	if(!is.null(dim(start))){
-		if(dim(start)[2] < 2){
-			stop("Start should have two columns, for x and y coordinates respectively.")
-		}
-		x0 <- start[,1]
-		y0 <- start[,2]
-	}else if(is.list(start)){
-		x0 <- start$x
-		y0 <- start$y
-	}else{
-		x0 <- start[1]
-		y0 <- start[2]
-	}
-	if(!is.null(dim(end))){
-		if(dim(end)[2] < 2){
-			stop("End should have two columns, for x and y coordinates respectively.")
-		}
-		x1 <- end[,1]
-		y1 <- end[,2]
-	}else if(is.list(end)){
-		x1 <- end$x
-		y1 <- end$y
-	}else{
-		x1 <- end[1]
-		y1 <- end[2]
-	}
-	pos0 <- list(x=x0, y=y0)
-	pos1 <- list(x=x1, y=y1)
-	# convert to coords:
-	if(units=="inch"){
-		pos0 <- inch2coords(x0, ypos=y0, simplify=FALSE)
-		pos1 <- inch2coords(x1, ypos=y1, simplify=FALSE)
-	}
-	
-	# draw lines:
-	if(arrows=="none"){
-		segments(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, ...)		
-	}else if(arrows=="start"){
-		arrows(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, code=1, ...)
-	}else if(arrows=="end"){
-		arrows(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, code=2, ...)
-	}else if(arrows=="both"){
-		arrows(x0=pos0$x, x1=pos1$x, y0=pos0$y, y1=pos1$y, xpd=NA, code=3, ...)
-	}
+drawDevArrows <- function(start, end = NULL, arrows = c("end", "start", "both", "none"), units = c("inch", 
+    "prop", "coords"), ...) {
+    # process input
+    arrows = tolower(arrows[1])
+    if (!arrows %in% c("end", "start", "both", "none")) {
+        warning(sprintf("Incorrect arrow type '%s'. Must be 'end', 'start', 'both', or 'none'. By default 'end' is selected.", 
+            arrows))
+        arrows = "end"
+    }
+    units = tolower(units[1])
+    if (!units %in% c("coords", "c", "prop", "inch", "proportions", "inches", "p", "i")) {
+        warning(sprintf("Incorrect units '%s'. Must be 'coords'/'c' (coordinates of current plot region), 'prop'/'p' (proportions), or 'inch'/'i'. By default 'inch' is selected.", 
+            units))
+        units = "inch"
+    } else {
+        if (tolower(substr(units, 1, 1)) == "p") {
+            units = "prop"
+        } else if (tolower(substr(units, 1, 1)) == "i") {
+            units = "inch"
+        } else if (tolower(substr(units, 1, 1)) == "c") {
+            units = "coords"
+        }
+    }
+    # x and y:
+    x0 <- x1 <- NULL
+    y0 <- y1 <- NULL
+    if (!is.null(dim(start))) {
+        if (dim(start)[2] < 2) {
+            stop("Start should have two columns, for x and y coordinates respectively.")
+        }
+        x0 <- start[, 1]
+        y0 <- start[, 2]
+    } else if (is.list(start)) {
+        x0 <- start$x
+        y0 <- start$y
+    } else {
+        x0 <- start[1]
+        y0 <- start[2]
+    }
+    if (!is.null(dim(end))) {
+        if (dim(end)[2] < 2) {
+            stop("End should have two columns, for x and y coordinates respectively.")
+        }
+        x1 <- end[, 1]
+        y1 <- end[, 2]
+    } else if (is.list(end)) {
+        x1 <- end$x
+        y1 <- end$y
+    } else {
+        x1 <- end[1]
+        y1 <- end[2]
+    }
+    pos0 <- list(x = x0, y = y0)
+    pos1 <- list(x = x1, y = y1)
+    # convert to coords:
+    if (units == "inch") {
+        pos0 <- inch2coords(x0, ypos = y0, simplify = FALSE)
+        pos1 <- inch2coords(x1, ypos = y1, simplify = FALSE)
+    }
+    
+    # draw lines:
+    if (arrows == "none") {
+        segments(x0 = pos0$x, x1 = pos1$x, y0 = pos0$y, y1 = pos1$y, xpd = NA, ...)
+    } else if (arrows == "start") {
+        arrows(x0 = pos0$x, x1 = pos1$x, y0 = pos0$y, y1 = pos1$y, xpd = NA, code = 1, ...)
+    } else if (arrows == "end") {
+        arrows(x0 = pos0$x, x1 = pos1$x, y0 = pos0$y, y1 = pos1$y, xpd = NA, code = 2, ...)
+    } else if (arrows == "both") {
+        arrows(x0 = pos0$x, x1 = pos1$x, y0 = pos0$y, y1 = pos1$y, xpd = NA, code = 3, ...)
+    }
 }
 
 
@@ -1180,13 +1195,19 @@ drawDevArrows <- function(start, end=NULL,
 #' @param v0 A vector indicating where to add dotted vertical lines for 
 #' reference. By default no values provided.
 #' @param bty A character string which determined the type of box which is 
-#' drawn about plots. If bty is one of "o", "l", "7", "c", "u", or "]" the 
+#' drawn about plots. If bty is one of 'o', 'l', '7', 'c', 'u', or ']' the 
 #' resulting box resembles the corresponding upper case letter. A value of 
-#' "n"  (the default) suppresses the box.
+#' 'n'  (the default) suppresses the box.
 #' @param eegAxis Logical: whether or not to reverse the y-axis, plotting the 
 #' negative amplitudes upwards as traditionally is done in EEG research.
 #' If eeg.axes is TRUE, labels for x- and y-axis are provided, when not 
 #' provided by the user. Default value is FALSE.
+#' @param xmark Numeric factor with x-axis tick marks and limits. 
+#' If NULL (default) R's default system is used. If TRUE, only the \code{xlim} 
+#' values are indicated.
+#' @param ymark Numeric factor with y-axis tick marks and limits.
+#' If NULL (default) R's default system is used. If TRUE, only the \code{ylim} 
+#' values are indicated.
 #' @param ... Other arguments for plotting, see \code{\link[graphics]{par}}.
 #' @return An empty plot window.
 #' @author Jacolien van Rij
@@ -1231,8 +1252,17 @@ drawDevArrows <- function(start, end=NULL,
 #' emptyPlot(1, 1, h0=.5, v0=.75)
 #' # eeg axis (note the axes labels):
 #' emptyPlot(c(-200,1000), c(-5,5),
-#'     main="EEG", v0=0, h0=0,
+#'     main='EEG', v0=0, h0=0,
 #'     eegAxis=TRUE)
+#' 
+#' # simplify axes:
+#' emptyPlot(c(-3.2,1.1), c(53,58),
+#'     xmark=TRUE, ymark=TRUE, las=1)
+#' # compare with R default:
+#' emptyPlot(c(-3.2,1.1), c(53,58), las=1)
+#' # also possible to specify values manually:
+#' emptyPlot(c(-3.2,1.1), c(53,58),
+#'     xmark=c(-3.2,0, 1.1), ymark=c(55,57), las=1)
 #' 
 #' # empty window:
 #' emptyPlot(1,1,axes=FALSE)
@@ -1240,85 +1270,97 @@ drawDevArrows <- function(start, end=NULL,
 #' emptyPlot(1,1, bty='o')
 #' 
 #' @family Functions for plotting
-emptyPlot <- function(xlim, ylim, 
-    main=NULL, xlab=NULL, ylab=NULL, h0=NULL, v0=NULL, 
-    bty='n', eegAxis=FALSE, ...){
+emptyPlot <- function(xlim, ylim, main = NULL, xlab = NULL, ylab = NULL, h0 = NULL, v0 = NULL, bty = "n", 
+    eegAxis = FALSE, xmark = NULL, ymark = NULL, ...) {
     xlabels <- NULL
     ylabels <- NULL
-    if(length(xlim)==1){
-        xlim <- sort(c(0,xlim))
-    }else if (length(xlim) == 2){
-        if(!is.numeric(xlim)){
+    if (length(xlim) == 1) {
+        xlim <- sort(c(0, xlim))
+    } else if (length(xlim) == 2) {
+        if (!is.numeric(xlim)) {
             xlabels = xlim
-            xlim=c(1,2)+c(-.1,.1)
+            xlim = c(1, 2) + c(-0.1, 0.1)
         }
-    }else if (length(xlim) > 2){
-        if(is.numeric(xlim)){
+    } else if (length(xlim) > 2) {
+        if (is.numeric(xlim)) {
             stop("xlim should be a 1 or 2 value numeric vector, indicating the range of values, or a vector with (ordered) category labels. If the categories are indicated by numbers, please convert to character first: as.character(xlim).")
         }
         xlabels = xlim
-        xlim = c(1,length(xlabels))+c(-.1,.1)*(length(xlabels)-1)
+        xlim = c(1, length(xlabels)) + c(-0.1, 0.1) * (length(xlabels) - 1)
     }
-    if(length(ylim)==1){
-        ylim <- sort(c(0,ylim))
-    }else if (length(ylim) == 2){
-        if(!is.numeric(ylim)){
+    if (length(ylim) == 1) {
+        ylim <- sort(c(0, ylim))
+    } else if (length(ylim) == 2) {
+        if (!is.numeric(ylim)) {
             ylabels = ylim
-            ylim=c(1,2)+c(-.1,.1)
+            ylim = c(1, 2) + c(-0.1, 0.1)
         }
-    }else if (length(ylim) > 2){
-        if(is.numeric(ylim)){
+    } else if (length(ylim) > 2) {
+        if (is.numeric(ylim)) {
             stop("ylim should be a 1 or 2 value numeric vector, indicating the range of values, or a vector with (ordered) category labels. If the categories are indicated by numbers, please convert to character first: as.character(ylim).")
         }
         ylabels = ylim
-        ylim = c(1,length(ylabels))+c(-.1,.1)*(length(ylabels)-1)
+        ylim = c(1, length(ylabels)) + c(-0.1, 0.1) * (length(ylabels) - 1)
     }
-    if(is.null(main)){
-        main=''
+    if (is.null(main)) {
+        main = ""
     }
-    if(eegAxis){
-        ylim <- sort(ylim, decreasing=T)
-        if(is.null(ylab)){
-            ylab=expression(paste('Amplitude (', mu, V,')', sep=''))
+    if (eegAxis) {
+        ylim <- sort(ylim, decreasing = T)
+        if (is.null(ylab)) {
+            ylab = expression(paste("Amplitude (", mu, V, ")", sep = ""))
         }
-        if(is.null(xlab)){
-            xlab="Time (ms)"
+        if (is.null(xlab)) {
+            xlab = "Time (ms)"
         }
-    }else{
-        if(is.null(ylab)){
-            ylab=''
+    } else {
+        if (is.null(ylab)) {
+            ylab = ""
         }
-        if(is.null(xlab)){
-            xlab=""
+        if (is.null(xlab)) {
+            xlab = ""
         }
     }
-    
-    if(!is.null(xlabels) | !is.null(ylabels)){
-        plot(range(xlim), range(ylim), type='n',
-            xlim=xlim, ylim=ylim, 
-            main=main, xlab=xlab, ylab=ylab,
-            bty=bty, axes=FALSE, ...)
-        if(!is.null(xlabels)){
-            axis(1, at=1:length(xlabels), labels=xlabels)
-        }else{
-            axis(1)
+    if (!is.null(xlabels) | !is.null(ylabels) | !is.null(xmark) | !is.null(ymark)) {
+        plot(range(xlim), range(ylim), type = "n", xlim = xlim, ylim = ylim, main = main, xlab = xlab, ylab = ylab, 
+            bty = bty, axes = FALSE, ...)
+        # x-axis:
+        if (!is.null(xlabels)) {
+            axis(1, at = 1:length(xlabels), labels = xlabels, ...)
+        } else if (!is.null(xmark)) {
+            if (length(xmark) == 1 & xmark[1] == TRUE) {
+                xmark = range(axTicks(1))
+                if (sort(xmark)[1] < 0 & sort(xmark)[2] > 0) {
+                  xmark <- c(xmark[1], 0, xmark[2])
+                }
+            }
+            axis(1, at = xmark, labels = xmark, ...)
+        } else {
+            axis(1, ...)
         }
-        if(!is.null(ylabels)){
-            axis(2, at=1:length(ylabels), labels=ylabels)
-        }else{
-            axis(2)
+        # y-axis:
+        if (!is.null(ylabels)) {
+            axis(2, at = 1:length(ylabels), labels = ylabels, ...)
+        } else if (!is.null(ymark)) {
+            if (length(ymark) == 1 & ymark[1] == TRUE) {
+                ymark = range(axTicks(2))
+                if (sort(ymark)[1] < 0 & sort(ymark)[2] > 0) {
+                  ymark <- c(ymark[1], 0, ymark[2])
+                }
+            }
+            axis(2, at = ymark, labels = ymark, ...)
+        } else {
+            axis(2, ...)
         }
-    }else{
-        plot(range(xlim), range(ylim), type='n',
-            xlim=xlim, ylim=ylim, 
-            main=main, xlab=xlab, ylab=ylab,
-            bty=bty, ...)
+    } else {
+        plot(range(xlim), range(ylim), type = "n", xlim = xlim, ylim = ylim, main = main, xlab = xlab, ylab = ylab, 
+            bty = bty, ...)
     }
-    if(!is.null(h0)){
-        abline(h=h0)
+    if (!is.null(h0)) {
+        abline(h = h0)
     }
-    if(!is.null(v0)){
-        abline(v=v0, lty=3)
+    if (!is.null(v0)) {
+        abline(v = v0, lty = 3)
     }
 }
 
@@ -1347,73 +1389,128 @@ emptyPlot <- function(xlim, ylim,
 #' bars are not corrected.
 #' @param horiz Logical: whether or not to plot horizontal error bars. 
 #' Defaults to FALSE (plotting vertical error bars).
+#' @param border Logical: whether or not to add a border around the error 
+#' bars. Defaults to FALSE (no border added). 
+#' Color and width of the borders can be adjusted using \code{border.col} and 
+#' \code{border.width}. (Basically all parameters that work for errorBars, 
+#' with \code{border.} added before.) See examples.
 #' @param ... Optional graphical parameters (see \code{\link[graphics]{par}}).
 #' @author Jacolien van Rij
 #' @examples
 #' 
 #' # example InsectSprays from R datasets
 #' 
-#' InsectSprays$type <- ifelse( InsectSprays$spray %in% c("A", "B", "F"), 1,2)
+#' InsectSprays$type <- ifelse( InsectSprays$spray %in% c('A', 'B', 'F'), 1,2)
 #' avg <- with(InsectSprays, tapply(count, list(spray), mean))
 #' sds <- with(InsectSprays, tapply(count, list(spray), sd))
 #' 
 #' 
 #' # barplot:
-#' b <- barplot(avg, besides=TRUE, main="Insect Sprays", ylim=c(0,20))
+#' b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20))
 #' errorBars(b, avg, sds, xpd=TRUE, length=.05)
 #' 
 #' # constrain error bars to max and min of plot:
-#' b <- barplot(avg, besides=TRUE, main="Insect Sprays", ylim=c(0,20))
+#' b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20))
 #' errorBars(b, avg, sds, minmax=c(0,20), xpd=TRUE, length=.05)                
 #' 
-#' # line plot:
-#' emptyPlot(toupper(letters[1:6]), 20, main="Averages", xlab="Spray")
+#' # add borders:
+#' b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20),
+#'      col=1, border=NA)
+#' errorBars(b, avg, sds, minmax=c(0,20), xpd=TRUE, length=.05, border=TRUE) 
 #' 
-#' # fake errors:
+#' # change layout:
+#' b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20),
+#'      col=1, border=NA)
+#' errorBars(b, avg, sds, minmax=c(0,20), xpd=TRUE, border=TRUE, 
+#'      length=.05, col='blue', # settings for error bars 
+#'      border.length=.1, border.col='yellow', border.lwd=5) # settings border
+#' 
+#' # line plot with asymmetric fake errors:
+#' emptyPlot(toupper(letters[1:6]), 20, main='Averages', xlab='Spray')
 #' ci.low <- abs(rnorm(6, mean=2))
 #' ci.high <-  abs(rnorm(6, mean=4))
 #' 
 #' errorBars(1:6, avg, ci.high, ci.l= ci.low, length=.05, lwd=2)
 #' points(1:6, avg, pch=21, type='o', lty=3, lwd=2,
-#'     bg="white", xpd=TRUE)
+#'     bg='white', xpd=TRUE)
 #' # also horizontal bars possible:
 #' errorBars(10, 1, 1.2, horiz=TRUE, col='red')
 #' 
 #' @family Functions for plotting
-errorBars <- function(x, mean, ci, ci.l=NULL, minmax=NULL, horiz=FALSE, ...){
-    cu <- mean+ci
-    cl <- mean-ci
-    if(!is.null(ci.l)){
-        cl <- mean-ci.l
+errorBars <- function(x, mean, ci, ci.l = NULL, minmax = NULL, horiz = FALSE, border = FALSE, ...) {
+    cu <- mean + ci
+    cl <- mean - ci
+    if (!is.null(ci.l)) {
+        cl <- mean - ci.l
     }
-    if(!is.null(minmax)){
-        cu[!is.na(cu) & cu>minmax[2]] <- minmax[2]
-        cl[!is.na(cl) & cl<minmax[1]] <- minmax[1]
+    if (!is.null(minmax)) {
+        cu[!is.na(cu) & cu > minmax[2]] <- minmax[2]
+        cl[!is.na(cl) & cl < minmax[1]] <- minmax[1]
     }
     dnm <- list(...)
-    if(!"length" %in% names(dnm)){
-        dnm[['length']] <- .1
+    bpar <- list()
+    for (i in names(dnm)) {
+        if (grepl("^border\\..+$", i)) {
+            j <- gsub("^(border\\.)(.+)$", "\\2", i)
+            bpar[[j]] <- dnm[[i]]
+            dnm[[i]] <- NULL
+        }
     }
-    if(!"angle" %in% names(dnm)){
+    if (!"length" %in% names(dnm)) {
+        dnm[["length"]] <- 0.1
+    }
+    if (!"angle" %in% names(dnm)) {
         dnm[["angle"]] <- 90
     }
-    if(!"code" %in% names(dnm)){
+    if (!"code" %in% names(dnm)) {
         dnm[["code"]] <- 3
     }
-    if(length(dnm) > 0){
+    if (!"lwd" %in% names(bpar)) {
+        lwd <- par()$lwd + 2
+        if ("lwd" %in% names(dnm)) {
+            lwd <- dnm[["lwd"]] + 2
+        }
+        bpar[["lwd"]] <- lwd
+    }
+    if (!"col" %in% names(bpar)) {
+        bpar[["col"]] <- "white"
+    }
+    diff <- names(dnm)[!names(dnm) %in% names(bpar)]
+    for (i in diff) {
+        bpar[[i]] <- dnm[[i]]
+    }
+    # border-error bars:
+    if (border == TRUE) {
+        if (length(bpar) > 0) {
+            pars <- list2str(names(bpar), bpar)
+            if (horiz == TRUE) {
+                eval(parse(text = paste("arrows(x0=cl, x1=cu, y0=x, y1=x,", pars, ")", sep = "")))
+            } else {
+                eval(parse(text = paste("arrows(x0=x, x1=x, y0=cl, y1=cu,", pars, ")", sep = "")))
+            }
+        } else {
+            if (horiz == TRUE) {
+                arrows(x0 = cl, x1 = cu, y0 = x, y1 = x, ...)
+            } else {
+                arrows(x0 = x, x1 = x, y0 = cl, y1 = cu, ...)
+            }
+        }
+    }
+    # error bars:
+    if (length(dnm) > 0) {
         pars <- list2str(names(dnm), dnm)
-        if(horiz==TRUE){
-            eval(parse(text=paste('arrows(x0=cl, x1=cu, y0=x, y1=x,', pars, ')', sep='')))
-        }else{
-            eval(parse(text=paste('arrows(x0=x, x1=x, y0=cl, y1=cu,', pars, ')', sep='')))
+        if (horiz == TRUE) {
+            eval(parse(text = paste("arrows(x0=cl, x1=cu, y0=x, y1=x,", pars, ")", sep = "")))
+        } else {
+            eval(parse(text = paste("arrows(x0=x, x1=x, y0=cl, y1=cu,", pars, ")", sep = "")))
         }
-    }else{
-        if(horiz==TRUE){
-            arrows(x0=cl, x1=cu, y0=x, y1=x,...)
-        }else{
-            arrows(x0=x, x1=x, y0=cl, y1=cu,...)
+    } else {
+        if (horiz == TRUE) {
+            arrows(x0 = cl, x1 = cu, y0 = x, y1 = x, ...)
+        } else {
+            arrows(x0 = x, x1 = x, y0 = cl, y1 = cu, ...)
         }
-    }        
+    }
 }
 
 
@@ -1456,55 +1553,64 @@ errorBars <- function(x, mean, ci, ci.l=NULL, minmax=NULL, horiz=FALSE, ...){
 #' 
 #' @seealso \code{\link{check_normaldist}}
 #' @family Functions for plotting
-fill_area <- function(x, y, from=0, col='black', alpha=.25,  border=NA, na.rm=TRUE, 
-    horiz=TRUE, outline=FALSE, ...){
+fill_area <- function(x, y, from = 0, col = "black", alpha = 0.25, border = NA, na.rm = TRUE, horiz = TRUE, 
+    outline = FALSE, ...) {
     el.narm <- c()
-    if(na.rm){
+    if (na.rm) {
         el.narm <- which(is.na(x) | is.na(y))
-        if(length(from)==length(x)){
-            from = from[!is.na(x) | !is.na(y)]
+        el <- 1:length(x)
+        el <- el[!el %in% el.narm]
+        if (length(from) == length(x)) {
+            from = from[el]
         }
-        x <- x[!is.na(x) | !is.na(y)]
-        y <- y[!is.na(x) | !is.na(y)]
+        x <- x[el]
+        y <- y[el]
     }
     xval <- c(x, rev(x))
     yval <- c()
-    if(length(from)==1){
+    if (length(from) == 1) {
         yval <- c(y, rep(from, length(y)))
-    }else if(length(from)==length(x)){
+    } else if (length(from) == length(x)) {
         yval <- c(y, rev(from))
-    }else{
+    } else {
         warning("Argument from has more than 1 element. Only first element being used.")
         yval <- c(y, rep(from, length(y)))
     }
-    if(names(dev.cur())[1] %in% c("X11", "postscript", "xfig", "pictex") ){
+    if (names(dev.cur())[1] %in% c("X11", "postscript", "xfig", "pictex")) {
         alpha = 1
     }
-    line.args <- list2str(x=c("type", "pch", "lty", "bg", "cex", "lwd", "lend", "ljoin", "lmitre"), inputlist=list(...))
-    fill.args <- list2str(x= c("density", "angle", "lty", "fillOddEven", "lwd", "lend", "ljoin", "lmitre"), inputlist=list(...))
+    line.args <- list2str(x = c("type", "pch", "lty", "bg", "cex", "lwd", "lend", "ljoin", "lmitre"), inputlist = list(...))
+    fill.args <- list2str(x = c("density", "angle", "lty", "fillOddEven", "lwd", "lend", "ljoin", "lmitre"), 
+        inputlist = list(...))
     
-    if(horiz){  
-        if(!is.na(border) ){
-            if( outline==TRUE){
-                eval(parse(text=sprintf("polygon(x=xval, y=yval, border=border, col=alpha(col, f=alpha), %s, xpd=TRUE)", fill.args )  ))
-            }else{
-                eval(parse(text=sprintf("polygon(x=xval, y=yval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", fill.args )  ))
-                eval(parse(text=sprintf("lines(x=x, y=y, col=border, %s, xpd=TRUE)", line.args )  ))
+    if (horiz) {
+        if (!is.na(border)) {
+            if (outline == TRUE) {
+                eval(parse(text = sprintf("polygon(x=xval, y=yval, border=border, col=alpha(col, f=alpha), %s, xpd=TRUE)", 
+                  fill.args)))
+            } else {
+                eval(parse(text = sprintf("polygon(x=xval, y=yval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", 
+                  fill.args)))
+                eval(parse(text = sprintf("lines(x=x, y=y, col=border, %s, xpd=TRUE)", line.args)))
             }
-        }else{
-            eval(parse(text=sprintf("polygon(x=xval, y=yval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", fill.args )  ))
+        } else {
+            eval(parse(text = sprintf("polygon(x=xval, y=yval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", 
+                fill.args)))
         }
-    }else{  
-        if(!is.na(border) ){
-            if( outline==TRUE){
-                eval(parse(text=sprintf("polygon(x=yval, y=xval, border=border, col=alpha(col, f=alpha), %s, xpd=TRUE)", fill.args )  ))
-            }else{
-                eval(parse(text=sprintf("polygon(x=yval, y=xval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", fill.args )  ))
-                eval(parse(text=sprintf("lines(x=y, y=x, col=border, %s, xpd=TRUE)", line.args )  ))
+    } else {
+        if (!is.na(border)) {
+            if (outline == TRUE) {
+                eval(parse(text = sprintf("polygon(x=yval, y=xval, border=border, col=alpha(col, f=alpha), %s, xpd=TRUE)", 
+                  fill.args)))
+            } else {
+                eval(parse(text = sprintf("polygon(x=yval, y=xval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", 
+                  fill.args)))
+                eval(parse(text = sprintf("lines(x=y, y=x, col=border, %s, xpd=TRUE)", line.args)))
             }
-        }else{
-            eval(parse(text=sprintf("polygon(x=yval, y=xval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", fill.args )  ))
-        }     
+        } else {
+            eval(parse(text = sprintf("polygon(x=yval, y=xval, border=NA, col=alpha(col, f=alpha), %s, xpd=TRUE)", 
+                fill.args)))
+        }
     }
 }
 
@@ -1542,7 +1648,7 @@ fill_area <- function(x, y, from=0, col='black', alpha=.25,  border=NA, na.rm=TR
 #' # add legend outside plot region, in upper-right corner of figure:
 #' legend(x=getCoords(1,side=1, input='f'), y=getCoords(1, side=2, input='f'),
 #'     xjust=1, yjust=1,
-#'     legend=c("points"), pch=16, xpd=TRUE)
+#'     legend=c('points'), pch=16, xpd=TRUE)
 #' # Note: this can easier be achieved with function getFigCoords
 #' 
 #' # PLOT 2: y-range is 25 to 37
@@ -1553,36 +1659,36 @@ fill_area <- function(x, y, from=0, col='black', alpha=.25,  border=NA, na.rm=TR
 #' # add legend outside plot region, in upper-left corner of figure:
 #' legend(x=getCoords(0,side=1, input='f'), y=getCoords(1, side=2, input='f'),
 #'     xjust=0, yjust=1,
-#'     legend=c("points"), pch=16, xpd=TRUE)
+#'     legend=c('points'), pch=16, xpd=TRUE)
 #'
 #' @seealso
 #' \code{\link{getFigCoords}}, \code{\link{getProps}}
 #' @family Functions for plotting
-getCoords <- function(pos = 1.1, side = 1, input='p') {
+getCoords <- function(pos = 1.1, side = 1, input = "p") {
     p <- par()
-    if(input=='p'){
+    if (input == "p") {
         x.width = p$usr[2] - p$usr[1]
         y.width = p$usr[4] - p$usr[3]
         out <- rep(NA, length(pos))
-        if(length(side)==1){
+        if (length(side) == 1) {
             side <- rep(side, length(pos))
         }
-        out[which(side %in% c(1,3))] <- pos[which(side %in% c(1,3))] * x.width + p$usr[1]
-        out[which(side %in% c(2,4))] <- pos[which(side %in% c(2,4))] * y.width + p$usr[3]
-        return(out)        
-    }else if(input=='f'){
-        gfc <- getFigCoords('f')
+        out[which(side %in% c(1, 3))] <- pos[which(side %in% c(1, 3))] * x.width + p$usr[1]
+        out[which(side %in% c(2, 4))] <- pos[which(side %in% c(2, 4))] * y.width + p$usr[3]
+        return(out)
+    } else if (input == "f") {
+        gfc <- getFigCoords("f")
         x.width = gfc[2] - gfc[1]
         y.width = gfc[4] - gfc[3]
         out <- rep(NA, length(pos))
-        if(length(side)==1){
+        if (length(side) == 1) {
             side <- rep(side, length(pos))
         }
-        out[which(side %in% c(1,3))] <- pos[which(side %in% c(1,3))] * x.width + gfc[1]
-        out[which(side %in% c(2,4))] <- pos[which(side %in% c(2,4))] * y.width + gfc[3]
-        return(out)                
+        out[which(side %in% c(1, 3))] <- pos[which(side %in% c(1, 3))] * x.width + gfc[1]
+        out[which(side %in% c(2, 4))] <- pos[which(side %in% c(2, 4))] * y.width + gfc[3]
+        return(out)
     }
-} 
+}
 
 
 
@@ -1627,28 +1733,25 @@ getCoords <- function(pos = 1.1, side = 1, input='p') {
 #' @seealso
 #' \code{\link{getCoords}}, \code{\link{getProps}}
 #' @family Functions for plotting
-getFigCoords <- function(input='f'){
+getFigCoords <- function(input = "f") {
     p <- par()
     x.width = p$usr[2] - p$usr[1]
     y.width = p$usr[4] - p$usr[3]
     x.w = p$plt[2] - p$plt[1]
-    y.w = p$plt[4] - p$plt[3]  
-    if(input=='f'){
-        return( c(p$usr[1]-p$plt[1]*x.width/x.w, # xmin
-            p$usr[2]+(1-p$plt[2])*x.width/x.w,   # xmax
-            p$usr[3]-p$plt[3]*y.width/y.w,       # ymin
-            p$usr[4]+(1-p$plt[4])*y.width/y.w    # ymax
-            ) )
-    }else if(input=='p'){
+    y.w = p$plt[4] - p$plt[3]
+    if (input == "f") {
+        # xmin, xmax, ymin, ymax
+        return(c(p$usr[1] - p$plt[1] * x.width/x.w, p$usr[2] + (1 - p$plt[2]) * x.width/x.w, p$usr[3] - p$plt[3] * 
+            y.width/y.w, p$usr[4] + (1 - p$plt[4]) * y.width/y.w))
+    } else if (input == "p") {
         return(p$usr)
-    }else if(input=='hp'){
-        return( c( 0.5*x.width + p$usr[1], # x
-            0.5*y.width + p$usr[3] ) )    # y
-    }else if(input=='hf'){
-        return( c( p$usr[1]+(0.5-p$plt[1])*(x.width / x.w), # x
-                   p$usr[3]+(0.5-p$plt[3])*(y.width / y.w)  # y
-                ))
-    }else{
+    } else if (input == "hp") {
+        # x, y
+        return(c(0.5 * x.width + p$usr[1], 0.5 * y.width + p$usr[3]))
+    } else if (input == "hf") {
+        # x, y
+        return(c(p$usr[1] + (0.5 - p$plt[1]) * (x.width/x.w), p$usr[3] + (0.5 - p$plt[3]) * (y.width/y.w)))
+    } else {
         return(NULL)
     }
 }
@@ -1686,34 +1789,34 @@ getFigCoords <- function(input='f'){
 #'     xright=c(p1[1],p2[1], p3[1], p1m[1], p2m[1], p3m[1])+xdist,
 #'     ybottom=c(p1[2],p2[2], p3[2], p1m[2], p2m[2], p3m[2])-ydist, 
 #'     ytop=c(p1[2],p2[2], p3[2], p1m[2], p2m[2], p3m[2])+ydist, 
-#'     col=rep(c("red", NA, "lightblue"),2), xpd=TRUE )
+#'     col=rep(c('red', NA, 'lightblue'),2), xpd=TRUE )
 #' 
 #' @seealso
 #' \code{\link{getCoords}}, \code{\link{getFigCoords}}
 #' @family Functions for plotting
-getProps <- function(pos, side=1, output='p'){
+getProps <- function(pos, side = 1, output = "p") {
     p <- par()
-    if(output=='p'){
+    if (output == "p") {
         x.width = p$usr[2] - p$usr[1]
         y.width = p$usr[4] - p$usr[3]
         out <- rep(NA, length(pos))
-        if(length(side)==1){
+        if (length(side) == 1) {
             side <- rep(side, length(pos))
         }
-        out[which(side %in% c(1,3))] <- (pos[which(side %in% c(1,3))] - p$usr[1]) / x.width
-        out[which(side %in% c(2,4))] <- (pos[which(side %in% c(2,4))] - p$usr[3]) / y.width 
-        return(out)        
-    }else if(output=='f'){
-        gfc <- getFigCoords('f')
+        out[which(side %in% c(1, 3))] <- (pos[which(side %in% c(1, 3))] - p$usr[1])/x.width
+        out[which(side %in% c(2, 4))] <- (pos[which(side %in% c(2, 4))] - p$usr[3])/y.width
+        return(out)
+    } else if (output == "f") {
+        gfc <- getFigCoords("f")
         x.width = gfc[2] - gfc[1]
         y.width = gfc[4] - gfc[3]
         out <- rep(NA, length(pos))
-        if(length(side)==1){
+        if (length(side) == 1) {
             side <- rep(side, length(pos))
         }
-        out[which(side %in% c(1,3))] <- (pos[which(side %in% c(1,3))] - gfc[1]) / x.width
-        out[which(side %in% c(2,4))] <- (pos[which(side %in% c(2,4))] - gfc[3]) / y.width 
-        return(out)                
+        out[which(side %in% c(1, 3))] <- (pos[which(side %in% c(1, 3))] - gfc[1])/x.width
+        out[which(side %in% c(2, 4))] <- (pos[which(side %in% c(2, 4))] - gfc[3])/y.width
+        return(out)
     }
 }
 
@@ -1757,239 +1860,284 @@ getProps <- function(pos, side=1, output='p'){
 #' @param inside Logical: whether or not to plot the legend inside or outside 
 #' the plot area.
 #' Note: when \code{pos} is defined by 4 numbers, \code{inside} is ignored.
-#' @param coords Logical: whether or not \code{pos} is defined as coordinates. 
+#' @param coords Logical: whether or not \code{pos} (and optionally 
+#' \code{n.seg}) is defined as coordinates. 
 #' When FALSE, the default, \code{pos} is defined in proportions. 
 #' Note: when \code{pos} is defined by 1 number, \code{inside} is ignored.
-#' #' @param color Name of color palette to use ('topo', 'terrain', 'heat', 
-#' 'rainbow'). Custom color palettes can also be provided, but then the 
-#' argument \code{nCol} is ignored.
 #' @param nCol Number of colors in the color palette.
-#' @param n.seg Number of ticks and markers on the scale.
-#' @param border.col Color of the border and the ticks.
-#' @param dec Number of decimals for rounding the numbers, set to NULL on 
-#' default (no rounding). 
+#' @param n.seg Number of ticks and markers on the scale. Defaults to 1. 
+#' If vector is provided instead of number, all numbers are considered as 
+#' marker values on the scale provided by \code{valRange}. 
+#' @param border.col Color of the border (if NA border is omitted).
+#' @param tick.col Color of the tick marks. Defaults to \code{border.col} value.
 #' @param fit.margin Logical: whether the labels of the gradient legend 
 #' should be forced to fit in the margin or not. 
+#' @param dec Number of decimals for rounding the numbers, set to NULL on 
+#' default (no rounding).
+#' @param ... Other parameters for the marker labels
+#' (see \code{\link[graphics]{text}}). 
 #' @author Jacolien van Rij
 #' @examples
 #' # empty plot:
-#' emptyPlot(1,1, main="Test plot")
-#' gradientLegend(valRange=c(-14,14),pos=.5, side=3)
+#' emptyPlot(1,1, main='Test plot', axes=FALSE)
+#' box()
+#' # legend on outside of plotregion:
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=1)
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=2)
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=3)
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=4)
+#' 
+#' # legend on inside of plotregion:
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=1, inside=TRUE)
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=2, inside=TRUE)
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=3, inside=TRUE)
+#' gradientLegend(valRange=c(-14,14), pos=.5, side=4, inside=TRUE)
+#' 
+#' # empty plot:
+#' emptyPlot(1,1, main='Test plot', axes=FALSE)
+#' box()
+#' # number of segments:
+#' gradientLegend(valRange=c(-14,14), n.seg=3, pos=.5, side=1)
+#' gradientLegend(valRange=c(-14,14), n.seg=c(-3,5), pos=.5, side=1, 
+#'     inside=TRUE)
 #' 
 #' # This produces a warning, as there is no space for labels here:
 #' \dontrun{
-#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
+#'     gradientLegend(valRange=c(-14.235,14.2), pos=.5, 
+#'         n.seg = c(-7,0), side=4)
 #' }
-#' # Following options to fix this:
-#' ## a. put labels on other side of legend -
-#' ## not a good option, as the labels will overlap with the plot
-#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, pos.num=2)
-#' ## b. put the legend in the plot region
-#' emptyPlot(1,1, main="Test plot")
-#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=TRUE)
-#' ## c. Increase the margins:
-#' oldmar = par()$mar
-#' par(mar=oldmar+c(0,0,0,1))
-#' emptyPlot(1,1, main="Test plot")
-#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE)
-#' par(mar=oldmar)
-#' ## d. the last option is not a fix, but avoid warnings: 
-#' ## set fit.margin to FALSE
-#' emptyPlot(1,1, main="Test plot")
-#' gradientLegend(valRange=c(-14,14),pos=.125, side=4, inside=FALSE, fit.margin=FALSE)
+#' # different solutions:
+#' # 1. adjust range (make sure also to adjust the range in the plot, 
+#' #    for example by changing zlim)
+#' emptyPlot(1,1, main='Test plot')
+#' gradientLegend(valRange=c(-14,14), n.seg = c(-7,0), side=4)
+#' # 2. reduce number of decimals:
+#' emptyPlot(1,1, main='Test plot')
+#' gradientLegend(valRange=c(-14.235,14.2), n.seg = c(-7,0), dec=1, side=4)
+#' # 3. change labels to inside plot window:
+#' emptyPlot(1,1, main='Test plot')
+#' gradientLegend(valRange=c(-14.235,14.2), n.seg = c(-7,0), 
+#'     dec=1, side=4, inside=TRUE)
+#' # 4. increase right margin:
+#' oldmar <- par()$mar
+#' par(mar=c(5.1,3.1,4.1,4.1))
+#' emptyPlot(1,1, main='Test plot')
+#' gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+#'     n.seg = c(-7,0), side=4)
+#' par(mar=oldmar) # return old values
+#' # 5. change label position:
+#' emptyPlot(1,1, main='Test plot')
+#' gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+#'     n.seg = c(-7,0), side=4, pos.num=2)
+#' gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+#'     n.seg = c(-7,0), side=4, pos.num=1, pos=.5)
+#' # 6. change legend position and length:
+#' emptyPlot(1,1, main='Test plot')
+#' gradientLegend(valRange=c(-14.235,14.2), dec=2, 
+#'     n.seg = c(-7,0), side=3, length=.5, pos=.75)
 #' 
 #' # change border color (and font color too!)
 #' gradientLegend(valRange=c(-14,14),pos=.75, length=.5,
-#' color=alphaPalette('white', f.seq=seq(0,1, by=.1)), border.col=alpha('gray'))
+#' color=alphaPalette('white', f.seq=seq(0,1, by=.1)), 
+#' border.col=alpha('gray'))
 #' 
 #' # when defining custom points, it is still important to specify side:
 #' 
 #' gradientLegend(valRange=c(-14,14), pos=c(.5,.25,.7,-.05), coords=TRUE, 
-#' border.col='red', side=1)
+#'     border.col='red', side=1)
+#' gradientLegend(valRange=c(-14,14), pos=c(.5,.25,.7,-.05), coords=TRUE, 
+#'     border.col='red', side=2)
 #' 
 #' 
 #' @family Functions for plotting
-gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side = 4, 
-    length = 0.25, depth = 0.05, inside = TRUE, coords = FALSE, pos.num=NULL,
-    n.seg = 3, border.col = "black", dec = NULL, fit.margin=TRUE) 
-{
+gradientLegend <- function(valRange, color = "terrain", nCol = 30, pos = 0.875, side = 4, dec = NULL, length = 0.25, 
+    depth = 0.05, inside = FALSE, coords = FALSE, pos.num = NULL, n.seg = 1, border.col = "black", tick.col = NULL, 
+    fit.margin = TRUE, ...) {
     # xl, yb, xr, yt:
     loc <- c(0, 0, 0, 0)
-    if(is.null(pos.num)){
-        if(side %in% c(1,3)){
-            pos.num = 3
-        }else{
-            pos.num = side
-        }
-    }
-    if (length(pos) == 1) {
-        pos.other <- ifelse(side > 2, 1, 0)
-        if (side %in% c(1, 3)) {
-            switch <- ifelse(inside, 0, 1)
-            switch <- ifelse(side > 2, 1 - switch, switch)
-            loc <- getCoords(c(pos - 0.5 * length, pos.other - 
-                switch * depth, pos + 0.5 * length, pos.other + 
-                (1 - switch) * depth), side = c(side, 2, side, 
-                2))
-        }
-        else if (side %in% c(2, 4)) {
-            switch <- ifelse(inside, 0, 1)
-            switch <- ifelse(side > 2, 1 - switch, switch)
-            loc <- getCoords(c(pos.other - switch * depth, pos - 
-                0.5 * length, pos.other + (1 - switch) * depth, 
-                pos + 0.5 * length), side = c(1, side, 1, side))
-        }
-    } else if (length(pos) == 4) {
-        if (coords) {
-            loc <- pos
-        } else {
-            loc <- getCoords(pos, side = c(1, 2, 1, 2))
-        }
-    }
-    mycolors <- c()
-    if (length(color) > 1) {
-        mycolors <- color
-    } else if (!is.null(nCol)) {
-        if (color == "topo") {
-            mycolors <- topo.colors(nCol)
-        }
-        else if (color == "heat") {
-            mycolors <- heat.colors(nCol)
-        }
-        else if (color == "terrain") {
-            mycolors <- terrain.colors(nCol)
-        }
-        else if (color == "rainbow") {
-            mycolors <- rainbow(nCol)
-        }
-        else {
-            warning("Color %s not recognized. A palette of topo.colors is used instead.")
-            mycolors <- topo.colors(nCol)
-        }
-    } else {
-        stop("No color palette provided.")
-    }
-    vals <- seq(min(valRange), max(valRange), length = length(mycolors))
-    if (!is.null(dec)) {
-        vals <- round(vals, dec[1])
-    }
-    im <- as.raster(mycolors[matrix(1:length(mycolors), ncol = 1)])
     ticks <- c()
-    if (side%%2 == 1) {
-        rasterImage(t(im), loc[1], loc[2], loc[3], loc[4], col = mycolors, 
-            xpd = T)
-        rect(loc[1], loc[2], loc[3], loc[4], border = border.col, 
-            xpd = T)
-        ticks <- seq(loc[1], loc[3], length = n.seg)
-        segments(x0 = ticks, x1 = ticks, y0 = rep(loc[2], n.seg), 
-            y1 = rep(loc[4], n.seg), col = border.col, xpd = TRUE)        
-    } else {
-        rasterImage(rev(im), loc[1], loc[2], loc[3], loc[4], 
-            col = mycolors, xpd = T)
-        rect(loc[1], loc[2], loc[3], loc[4], border = border.col, 
-            xpd = T)
-        ticks <- seq(loc[2], loc[4], length = n.seg)
-        segments(x0 = rep(loc[1], n.seg), x1 = rep(loc[3], n.seg), 
-            y0 = ticks, y1 = ticks, col = border.col, xpd = TRUE)
+    labels <- c()
+    
+    # calculate loc, ticks, and labels:
+    if (side %in% c(1, 3)) {
+        if (length(pos) == 1) {
+            pos.other <- ifelse(side > 2, 1, 0)
+            switch <- ifelse(inside, 0, 1)
+            switch <- ifelse(side > 2, 1 - switch, switch)
+            # xleft, ybottom, xright, ytop
+            loc <- getCoords(c(pos - 0.5 * length, pos.other - switch * depth, pos + 0.5 * length, pos.other + 
+                (1 - switch) * depth), side = c(side, 2, side, 2))
+        } else if (length(pos) == 4) {
+            if (coords) {
+                loc <- pos
+            } else {
+                loc <- getCoords(pos, side = c(1, 2, 1, 2))
+            }
+        }
+        ## debug: rect(loc[1], loc[2], loc[3], loc[4], border = border.col, xpd = T)
+        if (length(n.seg) == 1) {
+            ticks <- seq(loc[1], loc[3], length = n.seg + 2)
+            labels <- seq(min(valRange), max(valRange), length = n.seg + 2)
+        } else {
+            labels <- c(min(valRange), sort(n.seg[n.seg > min(valRange) & n.seg < max(valRange)], decreasing = FALSE), 
+                max(valRange))
+            b <- diff(loc[c(1, 3)])/diff(range(labels))
+            ticks <- (labels - min(labels)) * b + loc[1]
+        }
+    } else if (side %in% c(2, 4)) {
+        if (length(pos) == 1) {
+            pos.other <- ifelse(side > 2, 1, 0)
+            switch <- ifelse(inside, 0, 1)
+            switch <- ifelse(side > 2, 1 - switch, switch)
+            # xleft, ybottom, xright, ytop
+            loc <- getCoords(c(pos.other - switch * depth, pos - 0.5 * length, pos.other + (1 - switch) * 
+                depth, pos + 0.5 * length), side = c(1, side, 1, side))
+        } else if (length(pos) == 4) {
+            if (coords) {
+                loc <- pos
+            } else {
+                loc <- getCoords(pos, side = c(1, 2, 1, 2))
+            }
+        }
+        ## debug: rect(loc[1], loc[2], loc[3], loc[4], border = border.col, xpd = T)
+        if (length(n.seg) == 1) {
+            ticks <- seq(loc[2], loc[4], length = n.seg + 2)
+            labels <- seq(min(valRange), max(valRange), length = n.seg + 2)
+        } else {
+            labels <- c(min(valRange), sort(n.seg[n.seg > min(valRange) & n.seg < max(valRange)], decreasing = FALSE), 
+                max(valRange))
+            b <- diff(loc[c(2, 4)])/diff(range(labels))
+            ticks <- (labels - min(labels)) * b + loc[2]
+        }
     }
-    determineDec <- function(x){
-        out = max(unlist( lapply( strsplit(x, split="\\."), function(y){
-            return( ifelse(length(y)>1, nchar( gsub("^([^0]*)([0]+)$", "\\1", as.character(y[2])) ), 0) )
-        }) ))
+    # convert pos.num:
+    if (is.null(pos.num)) {
+        if (side %in% c(1, 3)) {
+            if (inside) {
+                pos.num <- ifelse(side == 1, 3, 1)
+            } else {
+                pos.num <- side
+            }
+        } else {
+            if (inside) {
+                pos.num <- ifelse(side == 2, 4, 2)
+            } else {
+                pos.num <- side
+            }
+        }
+    }
+    # graphical parameters: recognize color scheme:
+    getcol <- get_palette(color, nCol = nCol)
+    mycolors <- getcol[["color"]]
+    # if (length(color) > 1) { mycolors <- color } else if (!is.null(nCol)) { if (color == 'topo') { mycolors
+    # <- topo.colors(nCol) } else if (color == 'heat') { mycolors <- heat.colors(nCol) } else if (color ==
+    # 'terrain') { mycolors <- terrain.colors(nCol) } else if (color == 'rainbow') { mycolors <- rainbow(nCol)
+    # } else { warning('Color %s not recognized. A palette of topo.colors is used instead.') mycolors <-
+    # topo.colors(nCol) } } else { stop('No color palette provided.') }
+    if (is.null(tick.col)) {
+        tick.col = border.col
+    }
+    # create rasterImage:
+    vals <- seq(min(valRange), max(valRange), length = length(mycolors))
+    im <- as.raster(mycolors[matrix(1:length(mycolors), ncol = 1)])
+    n <- max(c(length(ticks) - 2, 0))
+    if (side%%2 == 1) {
+        im <- t(im)
+        rasterImage(im, loc[1], loc[2], loc[3], loc[4], col = mycolors, xpd = T)
+        segments(x0 = ticks, x1 = ticks, y0 = rep(loc[2], n), y1 = rep(loc[4], n), col = tick.col, xpd = TRUE)
+        rect(loc[1], loc[2], loc[3], loc[4], border = border.col, xpd = T)
+    } else {
+        im <- rev(im)
+        rasterImage(im, loc[1], loc[2], loc[3], loc[4], col = mycolors, xpd = T)
+        segments(x0 = rep(loc[1], n), x1 = rep(loc[3], n), y0 = ticks, y1 = ticks, col = tick.col, xpd = TRUE)
+        rect(loc[1], loc[2], loc[3], loc[4], border = border.col, xpd = T)
+    }
+    # label locations:
+    lab.loc.x <- lab.loc.y <- c()
+    if (side %in% c(1, 3)) {
+        lab.loc.x <- ticks
+        if (pos.num == 1) {
+            lab.loc.y <- rep(loc[2], length(lab.loc.x))
+        } else if (pos.num == 3) {
+            lab.loc.y <- rep(loc[4], length(lab.loc.x))
+        } else {
+            lab.loc.y <- rep((loc[2] + loc[4])/2, length(lab.loc.x))
+        }
+    } else if (side %in% c(2, 4)) {
+        lab.loc.y <- ticks
+        if (pos.num == 2) {
+            lab.loc.x <- rep(loc[1], length(lab.loc.y))
+        } else if (pos.num == 4) {
+            lab.loc.x <- rep(loc[3], length(lab.loc.y))
+        } else {
+            lab.loc.x <- rep((loc[1] + loc[3])/2, length(lab.loc.y))
+        }
+    }
+    # check labels:
+    determineDec <- function(x) {
+        out = max(unlist(lapply(strsplit(as.character(x), split = "\\."), function(y) {
+            return(ifelse(length(y) > 1, nchar(gsub("^([^0]*)([0]+)$", "\\1", as.character(y[2]))), 0))
+        })))
         return(out)
     }
-    labels = sprintf("%f", seq(min(valRange), 
-            max(valRange), length = n.seg) )
-    if(is.null(dec)){
+    if (is.null(dec)) {
         dec <- min(c(6, determineDec(labels)))
     }
-    eval(parse(text=sprintf("labels = sprintf('%s', round(seq(min(valRange), max(valRange), length = n.seg), dec) )",
-                        paste("%.", dec, "f", sep=""))))
+    eval(parse(text = sprintf("labels = sprintf('%s', round(labels, dec) )", paste("%.", dec, "f", sep = ""))))
+    labels <- gsub("^(\\-)(0)([\\.0]*)$", "\\2\\3", labels)
     
-    if(pos.num == 1){
-        # check label height:
-        if(fit.margin){
-            lab.height  = max(strheight(labels)) * 0.8
-            max.pos    = getFigCoords()[3]
-            if ((max.pos - loc[2]) < lab.height){
-                warning("Increase bottom margin, because labels for legend do not fit.")
-            }          
+    # check whether labels fit in margin:
+    if (fit.margin == TRUE & inside == FALSE) {
+        lab.height <- max(strheight(labels))
+        lab.width <- max(strwidth(labels))
+        # when pos is specified, this value gives the offset of the label from the specified coordinate in
+        # fractions of a character width.  correction for offset:
+        lab.cor <- strheight("0") * 0.5
+        
+        # Note: xL, xR, yB, yT
+        max.pos <- getFigCoords("f")
+        cex.f <- NA
+        change <- NA
+        
+        if (pos.num == 1) {
+            max.height = lab.loc.y[1] - max.pos[3]
+            cex.f = max.height/(lab.height + lab.cor)
+            change <- ifelse(cex.f < 0.8, (lab.height + lab.cor) * 0.8 - max.height, NA)
+        } else if (pos.num == 2) {
+            max.width = lab.loc.x[1] - max.pos[1]
+            cex.f = max.width/(lab.width + lab.cor)
+            change <- ifelse(cex.f < 0.8, (lab.width + lab.cor) * 0.8 - max.width, NA)
+        } else if (pos.num == 3) {
+            max.height = max.pos[4] - lab.loc.y[1]
+            cex.f = max.height/(lab.height + lab.cor)
+            change <- ifelse(cex.f < 0.8, (lab.height + lab.cor) * 0.8 - max.height, NA)
+        } else if (pos.num == 4) {
+            max.width = max.pos[2] - lab.loc.x[1]
+            cex.f = max.width/(lab.width + lab.cor)
+            change <- ifelse(cex.f < 0.8, (lab.width + lab.cor) * 0.8 - max.width, NA)
         }
-        text(y = loc[2], x = ticks, labels = seq(min(valRange), 
-            max(valRange), length = n.seg), col=border.col, 
-            pos = 1, cex = 0.8, xpd = T)
-    }else if (pos.num == 2){
-        # check label width:
-        if(fit.margin){
-            checkagain = TRUE
-            while (checkagain==TRUE){
-                lab.width  = ( max(strwidth(labels)) + 0.5*par()$cxy[1] )*0.8
-                min.pos    = getFigCoords()[1]
-                if ((loc[1] - min.pos) < lab.width){
-                    if(!is.null(dec)){
-                        dec = max(c(0,dec-1))
-                        if(dec == 0){
-                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
-                            checkagain = FALSE
-                        }
-                    }else{
-                        tmp = max(unlist( lapply(strsplit(labels, split="\\."), function(x){ return(ifelse(length(x)>1, nchar(x[2]), 0)) }) ))
-                        dec = max(c(0,tmp-1))
-                        if(dec == 0){
-                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
-                            checkagain = FALSE
-                        }
-                    }
-                    eval(parse(text=sprintf("labels = sprintf('%s', round(seq(min(valRange), max(valRange), length = n.seg), dec) )",
-                        paste("%.", dec, "f", sep=""))))
-                }else{
-                    checkagain = FALSE
-                }
-            }
+        if (cex.f < 0.8) {
+            margin <- c("bottom", "left", "top", "right")
+            warning(sprintf("Increase %s margin to fit labels or decrease the number of decimals, see help(gradientLegend).", 
+                margin[pos.num]))
         }
-        text(y = ticks, x = loc[1], labels = labels, pos = 2, cex = 0.8, col=border.col, xpd = T)
-    }else if (pos.num == 3){
-        if(fit.margin){        
-            lab.height  = max(strheight(labels)) * 0.8
-            max.pos    = getFigCoords()[4]
-            if ((max.pos - loc[4]) < lab.height){
-                warning("Increase top margin, because labels for legend do not fit.")
-            }
+        par <- list(...)
+        if ("cex" %in% names(par)) {
+            text(x = lab.loc.x, y = lab.loc.y, labels = labels, col = tick.col, pos = pos.num, xpd = T, ...)
+        } else {
+            text(x = lab.loc.x, y = lab.loc.y, labels = labels, col = tick.col, pos = pos.num, cex = min(c(0.8, 
+                cex.f)), xpd = T)
         }
-        text(y = loc[4], x = ticks, labels = seq(min(valRange), 
-            max(valRange), length = n.seg), col=border.col, 
-            pos = 3, cex = 0.8, xpd = T)
-    }else if (pos.num == 4){
-        # check label width:
-        if(fit.margin){
-            checkagain = TRUE
-            while (checkagain==TRUE){
-                lab.width  = ( max(strwidth(labels)) + 0.5*par()$cxy[1] )*0.8
-                max.pos    = getFigCoords()[2]
-                if ((max.pos - loc[3]) < lab.width){
-                    if(!is.null(dec)){
-                        dec = max(c(0,dec-1))
-                        if(dec == 0){
-                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
-                            checkagain = FALSE
-                        }
-                    }else{
-                        tmp = max(unlist( lapply(strsplit(labels, split="\\."), function(x){ return(ifelse(length(x)>1, nchar(x[2]), 0)) }) ))
-                        dec = max(c(0,tmp-1))
-                        if(dec == 0){
-                            warning("Decimal set to 0 (dec=0), but the labels still don't fit in the margin. You may want to add the color legend to another side, or increase the margin of the plot.")
-                            checkagain = FALSE
-                        }
-                    }
-                    eval(parse(text=sprintf("labels = sprintf('%s', round(seq(min(valRange), max(valRange), length = n.seg), dec) )",
-                        paste("%.", dec, "f", sep=""))))
-                }else{
-                    checkagain = FALSE
-                }
-            }
+    } else {
+        par <- list(...)
+        if ("cex" %in% names(par)) {
+            text(x = lab.loc.x, y = lab.loc.y, labels = labels, col = tick.col, pos = pos.num, xpd = T, ...)
+        } else {
+            text(x = lab.loc.x, y = lab.loc.y, labels = labels, col = tick.col, pos = pos.num, cex = 0.8, 
+                xpd = T)
         }
-        text(y = ticks, x = loc[3], labels = labels, pos = 4, col=border.col, cex = 0.8, xpd = T)
     }
+    invisible(list(loc = loc, ticks = ticks, labels = labels, im = im))
 }
 
 
@@ -2006,8 +2154,8 @@ gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side
 #' Wrapper around the function \code{\link[graphics]{legend}}.
 #' 
 #' @param x Text string, the location of the legend relative to the figure 
-#' region. Single keyword from the list "bottomright", "bottom", "bottomleft", 
-#' "left", "topleft", "top", "topright", "right" and "center". 
+#' region. Single keyword from the list 'bottomright', 'bottom', 'bottomleft', 
+#' 'left', 'topleft', 'top', 'topright', 'right' and 'center'. 
 #' @param legend Vector with text strings to appear in the legend.
 #' @param adj Numeric vector of length 1 or 2; the string adjustment for 
 #' legend text. 
@@ -2016,48 +2164,48 @@ gradientLegend <- function (valRange, color = "topo", nCol = 30, pos = 0.5, side
 #' @author Jacolien van Rij
 #' @examples
 #' plot(cars$speed, cars$dist, pch=16)
-#' legend_margin("topleft", legend=c("points"), pch=16)
+#' legend_margin('topleft', legend=c('points'), pch=16)
 #' # compare with default legend:
-#' legend("topleft", legend=c("points"), pch=16)
+#' legend('topleft', legend=c('points'), pch=16)
 #' @family Functions for plotting
-legend_margin <- function(x, legend, adj=NULL, ... ){
-  xloc <- getCoords(.5, side=1, input='f')
-  yloc <- getCoords(.5, side=2, input='f')
-  xadj <- 0.5
-  yadj <- 0.5
-  if(is.character(x)){
-    if(grepl("top", x)){
-      yloc <- getCoords(1, side=2, input='f')
-      yadj <- 1
-    }else if(grepl("bottom", x)){
-      yloc <- getCoords(0, side=2, input='f')
-      yadj <- 0
+legend_margin <- function(x, legend, adj = NULL, ...) {
+    xloc <- getCoords(0.5, side = 1, input = "f")
+    yloc <- getCoords(0.5, side = 2, input = "f")
+    xadj <- 0.5
+    yadj <- 0.5
+    if (is.character(x)) {
+        if (grepl("top", x)) {
+            yloc <- getCoords(1, side = 2, input = "f")
+            yadj <- 1
+        } else if (grepl("bottom", x)) {
+            yloc <- getCoords(0, side = 2, input = "f")
+            yadj <- 0
+        }
+        if (grepl("left", x)) {
+            xloc <- getCoords(0, input = "f")
+            xadj <- 0
+        } else if (grepl("right", x)) {
+            xloc <- getCoords(1, input = "f")
+            xadj <- 1
+        }
+    } else if (is.numeric(x)) {
+        if (length(x) < 2) {
+            stop("Provide two numerical values for x. Proportion of width and height of figure region respectively.")
+        } else if (length(x) > 2) {
+            warning("Only first two values of x will be used.")
+        }
+        xloc <- getCoords(x[1], input = "f")
+        yloc <- getCoords(x[2], input = "f")
+        if (!is.null(adj)) {
+            xadj <- adj[1]
+            if (length(x) == 1) {
+                yadj <- adj[1]
+            } else {
+                yadj <- adj[2]
+            }
+        }
     }
-    if(grepl("left", x)){
-      xloc <- getCoords(0, input='f')
-      xadj <- 0
-    }else if (grepl("right", x)){
-      xloc <- getCoords(1, input='f')
-      xadj <- 1
-    }
-  }else if(is.numeric(x)){
-    if(length(x) < 2){
-      stop("Provide two numerical values for x. Proportion of width and height of figure region respectively.")
-    }else if(length(x)>2){
-      warning("Only first two values of x will be used.")
-    }
-    xloc <- getCoords(x[1], input='f')
-    yloc <- getCoords(x[2], input='f')
-    if(!is.null(adj)){
-      xadj <- adj[1]
-      if(length(x)==1){
-        yadj <- adj[1]
-      }else{
-        yadj <- adj[2]
-      }
-    }
-  }
-  legend(x=xloc, y=yloc, legend=legend, xjust=xadj, yjust=yadj, xpd=TRUE, ...)
+    legend(x = xloc, y = yloc, legend = legend, xjust = xadj, yjust = yadj, xpd = TRUE, ...)
 }
 
 
@@ -2102,7 +2250,7 @@ legend_margin <- function(x, legend, adj=NULL, ... ){
 #' 
 #' # plot qqnorm
 #' qqnorm(val2, main='t distribution',
-#'        pch="*", col='steelblue',
+#'        pch='*', col='steelblue',
 #'        xlim=c(-3,3),
 #'        bty='n')
 #' qqline(val1)
@@ -2111,61 +2259,58 @@ legend_margin <- function(x, legend, adj=NULL, ... ){
 #' 
 #' # filled distribution in right margin:
 #' marginDensityPlot(dens2, side=4, allDensities=list(dens1, dens2),
-#' 	col='steelblue',lwd=2)
+#'     col='steelblue',lwd=2)
 #' # add lines:
 #' marginDensityPlot(dens2, side=4, allDensities=list(dens1, dens2),
-#' 	col='steelblue',density=25, lwd=2)
+#'     col='steelblue',density=25, lwd=2)
 #' # compare to normal:
 #' marginDensityPlot(dens1, side=4, allDensities=list(dens1, dens2), 
-#' 	col=NA, border=1)
+#'     col=NA, border=1)
 #' # Other sides are also possible:
 #' marginDensityPlot(dens1, side=3, allDensities=list(dens1, dens2), 
-#' 	col=NA, border=alpha(1), lwd=2)
+#'     col=NA, border=alpha(1), lwd=2)
 #' marginDensityPlot(dens2, side=3, allDensities=list(dens1, dens2), 
-#' 	col=NA, border=alpha('steelblue'), lwd=3)
+#'     col=NA, border=alpha('steelblue'), lwd=3)
 #' # adjust the starting point with argument 'from' to bottom of plot:
 #' marginDensityPlot(dens1, side=3, 
-#' 	from=getCoords(0, side=2), lwd=2)
+#'     from=getCoords(0, side=2), lwd=2)
 #' marginDensityPlot(dens2, side=3, 
-#' 	col='steelblue', from=getCoords(0, side=2), lwd=2,
+#'     col='steelblue', from=getCoords(0, side=2), lwd=2,
 #'  maxDensityValue=2*max(dens2$y))
 #' 
 #' legend(getFigCoords('p')[2], getFigCoords('p')[3],
-#' 	yjust=0,
-#' 	legend=c("t distribution", "Gaussian"),
-#' 	fill=c("steelblue", 'black'),
-#' 	cex=.75,
-#' 	xpd=TRUE, bty='n')
-#' 
+#'     yjust=0, legend=c('t distribution', 'Gaussian'),
+#'     fill=c('steelblue', 'black'),
+#'     cex=.75, xpd=TRUE, bty='n')
 #' 
 #' @seealso \code{\link{check_normaldist}}
 #' @family Functions for plotting
 #' 
-marginDensityPlot <- function(x, y=NULL, side, 
-	from=NULL, scale=1,
-	maxDensityValue=NULL, 
-	allDensities=NULL, plot=TRUE, ...){
-    if(!inherits(x, "density")){
-        if(is.null(y)){
-            d <- density(x, na.rm=TRUE)
+marginDensityPlot <- function(x, y = NULL, side, from = NULL, scale = 1, maxDensityValue = NULL, allDensities = NULL, 
+    plot = TRUE, ...) {
+    if (!inherits(x, "density")) {
+        if (is.null(y)) {
+            d <- density(x, na.rm = TRUE)
             x <- d$x
             y <- d$y
             message("x converted to density object.")
-        }else{
-            if(length(x) != length(y)){
+        } else {
+            if (length(x) != length(y)) {
                 stop("x and y do not have the same length.")
             }
         }
-    }else{
+    } else {
         y <- x$y
         x <- x$x
     }
-    if(is.null(maxDensityValue) & is.null(allDensities)){
-        maxDensityValue = max(y, na.rm=TRUE)
-    }else if (is.null(maxDensityValue) & !is.null(allDensities)){
-    	maxDensityValue <- max( unlist( lapply(allDensities, function(a){ max(a$y)}) ) )
+    if (is.null(maxDensityValue) & is.null(allDensities)) {
+        maxDensityValue = max(y, na.rm = TRUE)
+    } else if (is.null(maxDensityValue) & !is.null(allDensities)) {
+        maxDensityValue <- max(unlist(lapply(allDensities, function(a) {
+            max(a$y)
+        })))
     }
-    horiz=TRUE
+    horiz = TRUE
     # set region:
     x0 <- y0 <- 0
     x1 <- y1 <- 1
@@ -2173,56 +2318,60 @@ marginDensityPlot <- function(x, y=NULL, side,
     y.dist <- 1
     gfc.f <- getFigCoords("f")
     gfc.p <- getFigCoords("p")
-    if( side==1){       # bottom, going down
+    if (side == 1) {
+        # bottom, going down
         x0 <- gfc.p[1]
         x1 <- gfc.p[2]
-        y.range <- scale*.95*(gfc.f[3] - gfc.p[3])
+        y.range <- scale * 0.95 * (gfc.f[3] - gfc.p[3])
         y0 <- gfc.p[3]
-        if(!is.null(from)){
-        	y0 <- from
+        if (!is.null(from)) {
+            y0 <- from
         }
-        y1 <- y0+y.range
-        y.dist <- y1-y0
-    }else if (side==2){   # left
+        y1 <- y0 + y.range
+        y.dist <- y1 - y0
+    } else if (side == 2) {
+        # left
         x0 <- gfc.p[3]
         x1 <- gfc.p[4]
-        y.range <- scale*.95*(gfc.f[1] - gfc.p[1])
+        y.range <- scale * 0.95 * (gfc.f[1] - gfc.p[1])
         y0 <- gfc.p[1]
-        if(!is.null(from)){
-        	y0 <- from
+        if (!is.null(from)) {
+            y0 <- from
         }
-        y1 <- y0+y.range
-        y.dist <- y1-y0
+        y1 <- y0 + y.range
+        y.dist <- y1 - y0
         horiz = FALSE
-    }else if (side==3){   # top
+    } else if (side == 3) {
+        # top
         x0 <- gfc.p[1]
         x1 <- gfc.p[2]
-        y.range <- scale*.95*(gfc.f[4] - gfc.p[4])
+        y.range <- scale * 0.95 * (gfc.f[4] - gfc.p[4])
         y0 <- gfc.p[4]
-        if(!is.null(from)){
-        	y0 <- from
+        if (!is.null(from)) {
+            y0 <- from
         }
-        y1 <- y0+y.range
-        y.dist <- y1-y0
-    }else if (side==4){   # right
+        y1 <- y0 + y.range
+        y.dist <- y1 - y0
+    } else if (side == 4) {
+        # right
         x0 <- gfc.p[3]
         x1 <- gfc.p[4]
-        y.range <- scale*.95*(gfc.f[2] - gfc.p[2])
+        y.range <- scale * 0.95 * (gfc.f[2] - gfc.p[2])
         y0 <- gfc.p[2]
-        if(!is.null(from)){
-        	y0 <- from
+        if (!is.null(from)) {
+            y0 <- from
         }
-        y1 <- y0+y.range
-        y.dist <- y1-y0
+        y1 <- y0 + y.range
+        y.dist <- y1 - y0
         horiz = FALSE
     }
-    f <- y.dist / maxDensityValue
-    if(plot){
-        fill_area(x, y*f+y0, from=y0, horiz=horiz, xpd=TRUE, ...)
+    f <- y.dist/maxDensityValue
+    if (plot) {
+        fill_area(x, y * f + y0, from = y0, horiz = horiz, xpd = TRUE, ...)
     }
     
-    invisible( list(plot.x=x, plot.y=y*f+y0, x=x, y=y, f=f, y0=y0 ))
- 
+    invisible(list(plot.x = x, plot.y = y * f + y0, x = x, y = y, f = f, y0 = y0))
+    
 }
 
 
@@ -2291,79 +2440,88 @@ marginDensityPlot <- function(x, y=NULL, side,
 #' plot_error(x, y, s, shade=TRUE, lty=1, lwd=3, density=10, ci.lwd=3)
 #'
 #' @family Functions for plotting
-plot_error <- function(x, fit, se.fit, se.fit2=NULL, 
-    shade=FALSE, f=1, col='black', ci.lty=NULL, ci.lwd=NULL, 
-    border=FALSE, alpha=.25,  ...){
-    parlist=list(...)
-    if(is.na(border)){
+plot_error <- function(x, fit, se.fit, se.fit2 = NULL, shade = FALSE, f = 1, col = "black", ci.lty = NULL, 
+    ci.lwd = NULL, border = FALSE, alpha = 0.25, ...) {
+    parlist = list(...)
+    if (is.na(border)) {
         border = FALSE
     }
-    if(is.logical(border) & border==TRUE){
-        border=col
+    if (is.logical(border) & border == TRUE) {
+        border = col
     }
     
-    if(is.null(ci.lty)){
-        if(shade){
-            if(border==FALSE){
+    if (is.null(ci.lty)) {
+        if (shade) {
+            if (border == FALSE) {
                 ci.lty = 1
-            }else{
-                if("lty" %in% names(parlist)){
-                     ci.lty = parlist[['lty']]
-                }else{
-                     ci.lty=1
+            } else {
+                if ("lty" %in% names(parlist)) {
+                  ci.lty = parlist[["lty"]]
+                } else {
+                  ci.lty = 1
                 }
             }
-        }else{
-             ci.lty=2
-        } 
+        } else {
+            ci.lty = 2
+        }
     }
-    if(is.null(ci.lwd)){
-        if(shade){
-            if(border==FALSE){
+    if (is.null(ci.lwd)) {
+        if (shade) {
+            if (border == FALSE) {
                 ci.lwd = 0
-            }else{
-                if("lwd" %in% names(parlist)){
-                     ci.lwd = parlist[['lwd']]
-                }else{
-                     ci.lwd=1
+            } else {
+                if ("lwd" %in% names(parlist)) {
+                  ci.lwd = parlist[["lwd"]]
+                } else {
+                  ci.lwd = 1
                 }
             }
-        }else{
+        } else {
             ci.lwd = 1
         }
     }
-                
-    line.par   <- c("type", "pch", "lty", "bg", "cex", "lwd", "lend", "ljoin", "lmitre", "xpd")
-    line.args  <- list2str(x=line.par,inputlist=parlist)
-    err.par   <- c("type", "pch", "bg", "cex", "lend", "ljoin", "lmitre", "xpd")
-    err.args   <- list2str(x=err.par,inputlist=parlist)
-    shade.par  <- c("density", "angle", "fillOddEven", "xpd")
-    shade.args <- list2str(x=shade.par,inputlist=parlist)
-    if(shade){
+    
+    line.par <- c("type", "pch", "lty", "bg", "cex", "lwd", "lend", "ljoin", "lmitre", "xpd")
+    line.args <- list2str(x = line.par, inputlist = parlist)
+    err.par <- c("lend", "ljoin", "lmitre", "xpd")
+    err.args <- list2str(x = err.par, inputlist = parlist)
+    shade.par <- c("density", "angle", "fillOddEven", "xpd")
+    shade.args <- list2str(x = shade.par, inputlist = parlist)
+    if (shade) {
         xval <- c(x, rev(x))
         yval <- NA
-        if(is.null(se.fit2)){
-            yval <- c(fit+f*se.fit, rev(fit-f*se.fit))
-        }else{
+        if (is.null(se.fit2)) {
+            yval <- c(fit + f * se.fit, rev(fit - f * se.fit))
+        } else {
             yval <- c(se.fit, rev(se.fit2))
         }
-        suppressWarnings( {
-            if("density" %in% names(parlist) && ci.lwd > 0){
-                eval(parse(text=sprintf("polygon(x=xval, y=yval, lty=ci.lty, col=alpha(col, f=alpha), border=border, lwd=ci.lwd, %s)", shade.args)))
-            }else{
-                eval(parse(text=sprintf("polygon(x=xval, y=yval, lty=ci.lty, col=alpha(col, f=alpha), border=border, %s)", shade.args)))
+        if (any(is.na(xval)) | any(is.na(yval))) {
+            warning("NA values detected and removed.")
+            el.narm <- which(is.na(xval) | is.na(yval))
+            el <- 1:length(xval)
+            el <- el[!el %in% el.narm]
+            xval <- xval[el]
+            yval <- yval[el]
+        }
+        suppressWarnings({
+            if ("density" %in% names(parlist) && ci.lwd > 0) {
+                eval(parse(text = sprintf("polygon(x=xval, y=yval, lty=ci.lty, col=alpha(col, f=alpha), border=border, lwd=ci.lwd, %s)", 
+                  shade.args)))
+            } else {
+                eval(parse(text = sprintf("polygon(x=xval, y=yval, lty=ci.lty, col=alpha(col, f=alpha), border=border, %s)", 
+                  shade.args)))
             }
         })
-    }else{
-        if(is.null(se.fit2)){
-            eval(parse(text=sprintf("lines(x, fit+f*se.fit, lty=  ci.lty, col=col, lwd= ci.lwd, %s)", err.args)))
-            eval(parse(text=sprintf("lines(x, fit-f*se.fit, lty= ci.lty, col=col, lwd= ci.lwd, %s)", err.args)))
-        }else{
-            eval(parse(text=sprintf("lines(x, se.fit, lty=ci.lty, col=col, lwd=ci.lwd, %s)", err.args)))
-            eval(parse(text=sprintf("lines(x, se.fit2, lty=ci.lty, col=col, lwd=ci.lwd, %s)", err.args)))
-        } 
+    } else {
+        if (is.null(se.fit2)) {
+            eval(parse(text = sprintf("lines(x, fit+f*se.fit, lty=  ci.lty, col=col, lwd= ci.lwd, %s)", err.args)))
+            eval(parse(text = sprintf("lines(x, fit-f*se.fit, lty= ci.lty, col=col, lwd= ci.lwd, %s)", err.args)))
+        } else {
+            eval(parse(text = sprintf("lines(x, se.fit, lty=ci.lty, col=col, lwd=ci.lwd, %s)", err.args)))
+            eval(parse(text = sprintf("lines(x, se.fit2, lty=ci.lty, col=col, lwd=ci.lwd, %s)", err.args)))
+        }
     }
-    eval(parse(text=sprintf("lines(x, fit, col=col, %s)", line.args)))
+    eval(parse(text = sprintf("lines(x, fit, col=col, %s)", line.args)))
 }
 
 
@@ -2388,6 +2546,11 @@ plot_error <- function(x, fit, se.fit, se.fit2=NULL,
 #' values of the picture. Default set to c(0,1).
 #' @param yrange Two-value vector providing the ybottom and ytop coordinate 
 #' values of the picture. Default set to c(0,1).
+#' @param keep.ratio Logical: whether or not to keep the original picture 
+#' ratio.
+#' @param adj Numeric value indicating the position of the shortest picture 
+#' side with respect to \code{xrange} or \code{yrange}. Only applies when 
+#' \code{keep.ratio=TRUE}. See examples.
 #' @param fill.plotregion Logical: whether or not to fill the complete plot 
 #' region. Defaults to FALSE.
 #' @param replace.colors Named list for replacing colors. The names are the 
@@ -2405,7 +2568,7 @@ plot_error <- function(x, fit, se.fit, se.fit2=NULL,
 #' # create image object:
 #' myimg <- list(image=volcano-min(volcano), col=terrain.colors(max(volcano)-min(volcano)))
 #' # create emoty plot window:
-#' emptyPlot(1,1, main="Volcano images")
+#' emptyPlot(1,1, main='Volcano images')
 #' # add image topleft corner:
 #' plot_image(img=myimg, xrange=c(0,.25), yrange=c(.75,1), add=TRUE)
 #' # add transparent image as overlay:
@@ -2417,155 +2580,191 @@ plot_error <- function(x, fit, se.fit, se.fit2=NULL,
 #' # add some points and lines:
 #' points(runif(10,0,1), runif(10,0,1), type='o')
 #' 
+#' # keep ratio:
+#' emptyPlot(1,1, main='Volcano images')
+#' # I would like to add an image in the following field:
+#' rect(xleft=0, xright=.5, ybottom=0, ytop=.3, col='gray', border=NA)
+#' # add image with keep.ratio=true
+#' plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,.3), 
+#'     add=TRUE, keep.ratio=TRUE, border=NA)
+#' # as y-side is longest, this side will be fitted in 
+#' # the rectangle and the x position adjusted with adj:
+#' plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,.3), 
+#'     add=TRUE, keep.ratio=TRUE, border=2, adj=0.5)
+#' plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,.3), 
+#'     add=TRUE, keep.ratio=TRUE, border=3, adj=1)
+#' 
+#' # keep.ratio and border:
+#' plot_image(img=myimg, xrange=c(0,1), yrange=c(0,1), 
+#'     keep.ratio=TRUE, adj=0.5)
+#' plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,1), 
+#'     keep.ratio=TRUE, adj=0.5)
+#' emptyPlot(1,1, axes=FALSE)
+#' plot_image(img=myimg, xrange=c(0,1), yrange=c(0,1), 
+#'     add=TRUE, keep.ratio=TRUE, adj=0.5)
+#' 
 #' @family Functions for plotting
-plot_image <- function(img, type='image',
-	col = NULL,
-	show.axes = FALSE,
-	xrange=c(0,1), yrange=c(0,1), 
-	fill.plotregion=FALSE,
-	replace.colors=NULL, 
-	add=FALSE, interpolate=TRUE, ...){
-	# Check if the appropriate packages are installed:
-	checkpkg <- function(x){
-	    if(x %in% rownames(installed.packages())==FALSE) {
-	        stop(sprintf("Cannot load image, because package %s is not installed. See help(plot_image) for instructions.", x))
-	    } else {
-	        eval(parse(text=sprintf("require(%s)",x)))
-	    }
-	}
-	get_file_type <- function(x){
-		if(!grepl('\\.', x)){
-			warning('No file extension found.')
-			return(NULL)
-		}
-		return( gsub('^(.*)(\\.)([^\\.]+)$', '\\3', x) )
-	}
-	convert2colors <- function(x){
-		out <- NULL
-		if(is.null(dim(x))){
-			return(x)
-		}else if(length(dim(x))<=2){
-			if(is.null(col)){
-				if(max(x) <= 1){
-					out <- gray(x)
-				}else{
-					x <- x / max(x)
-					out <- gray(x)
-				}
-			}else{
-				if(length(col) >= max(x)){
-					out <- col[x]
-				}else{
-					warning('Color definition does not fit image. Converted to gray scale.')
-					x <- x / max(x)
-					out <- gray(x)					
-				}
-			}
-		}else if(dim(x)[3]==1){
-			# grayscale
-			out <- gray(x)
-		}else if(dim(x)[3]==2){
-			# GA
-			stop('Not implemented for GA colors.')
-		}else if(dim(x)[3]==3){
-			out <- rgb(x[,,1], x[,,2], x[,,3])
-		}else if(dim(x)[3]==4){
-			out <- rgb(x[,,1], x[,,2], x[,,3], alpha=x[,,4])
-		}
-		col <- sort(unique(out))
-		colnum <- 1:length(col)
-		names(colnum) <- col
-		out <- as.vector(colnum[out])
-		out <- list(image= matrix(out, nrow=dim(x)[1], byrow=FALSE), col=col)
-	}
-	shift.col <- 0
-	type <- tolower(type)
-	if(type=="image"){
-		if(is.character(img)){
-			type = tolower(get_file_type(img))
-		}else if(is.matrix(img)){
-			img <- convert2colors(img)
-		}
-	}
-	if(!type %in% c("image", "gif","png", "jpg", "jpeg")){
-		stop("Image type must be one of 'image', 'gif', 'png', or 'jpeg'. Other image formats are currently not implemented.")
-	}
-	if(type=="gif"){
-		checkpkg("caTools")
-		eval(parse(text=sprintf("img <- caTools::read.gif('%s')", img)))
-		shift.col <- 1
-	}else if(type=="png"){
-		checkpkg("png")
-		eval(parse(text=sprintf("img <- convert2colors(png::readPNG('%s'))", img)))
-	}else if(type %in% c("jpeg", "jpg")){
-		checkpkg("jpeg")
-		eval(parse(text=sprintf("img <- convert2colors(jpeg::readJPEG('%s'))", img)))
-		shift.col <- 1
-	}
-	if(is.list(img)){
-		if(is.null(col) & ("col" %in% names(img))){
-			col = img$col
-		}
-		if(! "image" %in% names(img)){
-			stop(sprintf("Cannot find image in list %s. Please provide image matrix in field 'image'.", 
-				deparse(substitute(img))) )
-		}else{
-			img = img$image
-		}
-	}
-	if(!is.null(replace.colors)){
-		for(i in names(replace.colors)){
-			if(any(grepl(i, col)) ){
-				col[grepl(i, col)] <- replace.colors[[i]]
-			}
-		}
-	}
-	parlist=list(...)
-	plot.args <- list2str(x=c("main", "sub", "xlab", "ylab", "asp", "h0", "v0", "eegAxis", "xpd"), inputlist=list(...))
-    box.args <- list2str(x= c("col", "lwd", "lty", "xpd"), inputlist=list(...))
-	fc <- c(xrange, yrange)
-	if(add==FALSE){
-		par(xaxs='i', yaxs='i')
-		eval(parse(text=sprintf("emptyPlot(xrange,yrange, axes=show.axes, %s)",
-			plot.args)))
-		par(xaxs='r', yaxs='r')
-	}
-	if(fill.plotregion==TRUE){
-		fc <- getFigCoords('p')
-	}
-	
-	xpd=FALSE
-	if('xpd' %in% names(parlist)){
-		xpd=parlist[['xpd']]
-	}		
-	rasterImage(as.raster(matrix(col[img+shift.col], nrow=nrow(img))), 
-		xleft=fc[1], xright=fc[2], ybottom=fc[3], ytop=fc[4], xpd=xpd, interpolate=interpolate)
-	if(!'bty' %in% names(parlist)){
-		if(add==TRUE){
-			parlist[['border']] <- parlist[['col']]
-			parlist[['col']] <- NA
-			box.args <- list2str(x= c("border", "lwd", "lty", "xpd"), inputlist=list(...))
-			eval(parse(text=sprintf(
-				"rect(xleft=xrange[1], xright=xrange[2], ybottom=yrange[1], ytop=yrange[2], %s)",
-				box.args)))
-		}else{
-			eval(parse(text=sprintf("box(%s)", box.args)))
-		}
-	}else{
-		if(parlist[['bty']] %in% c("o", "l", "7", "c", "u", "]")){
-			if(add==TRUE){
-				parlist[['border']] <- parlist[['col']]
-				parlist[['col']] <- NA
-				box.args <- list2str(x= c("border", "lwd", "lty", "xpd"), inputlist=list(...))
-				eval(parse(text=sprintf(
-					"rect(xleft=xrange[1], xright=xrange[2], ybottom=yrange[1], ytop=yrange[2], %s)",
-					box.args)))
-			}else{
-				eval(parse(text=sprintf("box(%s)", box.args)))
-			}			
-		}
-	}
-	invisible(list(image=img, col=col))
+plot_image <- function(img, type = "image", col = NULL, show.axes = FALSE, xrange = c(0, 1), yrange = c(0, 
+    1), keep.ratio = FALSE, adj = 0, fill.plotregion = FALSE, replace.colors = NULL, add = FALSE, interpolate = TRUE, 
+    ...) {
+    # Check if the appropriate packages are installed:
+    checkpkg <- function(x) {
+        if (x %in% rownames(installed.packages()) == FALSE) {
+            stop(sprintf("Cannot load image, because package %s is not installed. See help(plot_image) for instructions.", 
+                x))
+        } else {
+            eval(parse(text = sprintf("require(%s)", x)))
+        }
+    }
+    get_file_type <- function(x) {
+        if (!grepl("\\.", x)) {
+            warning("No file extension found.")
+            return(NULL)
+        }
+        return(gsub("^(.*)(\\.)([^\\.]+)$", "\\3", x))
+    }
+    convert2colors <- function(x) {
+        out <- NULL
+        if (is.null(dim(x))) {
+            return(x)
+        } else if (length(dim(x)) <= 2) {
+            if (is.null(col)) {
+                if (max(x) <= 1) {
+                  out <- gray(x)
+                } else {
+                  x <- x/max(x)
+                  out <- gray(x)
+                }
+            } else {
+                if (length(col) >= max(x)) {
+                  out <- col[x]
+                } else {
+                  warning("Color definition does not fit image. Converted to gray scale.")
+                  x <- x/max(x)
+                  out <- gray(x)
+                }
+            }
+        } else if (dim(x)[3] == 1) {
+            # grayscale
+            out <- gray(x)
+        } else if (dim(x)[3] == 2) {
+            # GA
+            stop("Not implemented for GA colors.")
+        } else if (dim(x)[3] == 3) {
+            out <- rgb(x[, , 1], x[, , 2], x[, , 3])
+        } else if (dim(x)[3] == 4) {
+            out <- rgb(x[, , 1], x[, , 2], x[, , 3], alpha = x[, , 4])
+        }
+        col <- sort(unique(out))
+        colnum <- 1:length(col)
+        names(colnum) <- col
+        out <- as.vector(colnum[out])
+        out <- list(image = matrix(out, nrow = dim(x)[1], byrow = FALSE), col = col)
+    }
+    shift.col <- 0
+    type <- tolower(type)
+    if (type == "image") {
+        if (is.character(img)) {
+            type = tolower(get_file_type(img))
+        } else if (is.matrix(img)) {
+            img <- convert2colors(img)
+        }
+    }
+    if (!type %in% c("image", "gif", "png", "jpg", "jpeg")) {
+        stop("Image type must be one of 'image', 'gif', 'png', or 'jpeg'. Other image formats are currently not implemented.")
+    }
+    if (type == "gif") {
+        checkpkg("caTools")
+        eval(parse(text = sprintf("img <- caTools::read.gif('%s')", img)))
+        shift.col <- 1
+    } else if (type == "png") {
+        checkpkg("png")
+        eval(parse(text = sprintf("img <- convert2colors(png::readPNG('%s'))", img)))
+    } else if (type %in% c("jpeg", "jpg")) {
+        checkpkg("jpeg")
+        eval(parse(text = sprintf("img <- convert2colors(jpeg::readJPEG('%s'))", img)))
+        shift.col <- 1
+    }
+    if (is.list(img)) {
+        if (is.null(col) & ("col" %in% names(img))) {
+            col = img$col
+        }
+        if (!"image" %in% names(img)) {
+            stop(sprintf("Cannot find image in list %s. Please provide image matrix in field 'image'.", deparse(substitute(img))))
+        } else {
+            img = img$image
+        }
+    }
+    if (min(img) < 1) {
+        shift.col <- 1 - min(img)
+    }
+    if (!is.null(replace.colors)) {
+        for (i in names(replace.colors)) {
+            if (any(grepl(i, col))) {
+                col[grepl(i, col)] <- replace.colors[[i]]
+            }
+        }
+    }
+    parlist = list(...)
+    plot.args <- list2str(x = c("main", "sub", "xlab", "ylab", "asp", "h0", "v0", "eegAxis", "xpd"), inputlist = list(...))
+    box.args <- list2str(x = c("col", "lwd", "lty", "xpd"), inputlist = list(...))
+    fc <- c(xrange, yrange)
+    if (fill.plotregion == TRUE) {
+        fc <- getFigCoords("p")
+    }
+    if (keep.ratio == TRUE) {
+        xdim <- ncol(img)
+        ydim <- nrow(img)
+        dx <- diff(fc[1:2])
+        dy <- diff(fc[3:4])
+        if (xdim > ydim) {
+            f <- ydim/xdim
+            dy.new <- f * dx
+            fc[3] <- fc[3] + adj * max(c(dy - dy.new, 0))
+            fc[4] <- fc[3] + dy.new
+        } else if (ydim > xdim) {
+            f <- xdim/ydim
+            dx.new <- f * dy
+            fc[1] <- fc[1] + adj * max(c(dx - dx.new, 0))
+            fc[2] <- fc[1] + dx.new
+        }
+    }
+    if (add == FALSE) {
+        par(xaxs = "i", yaxs = "i")
+        eval(parse(text = sprintf("emptyPlot(xrange,yrange, axes=show.axes, %s)", plot.args)))
+        par(xaxs = "r", yaxs = "r")
+    }
+    
+    
+    xpd = FALSE
+    if ("xpd" %in% names(parlist)) {
+        xpd = parlist[["xpd"]]
+    }
+    rasterImage(as.raster(matrix(col[img + shift.col], nrow = nrow(img))), xleft = fc[1], xright = fc[2], 
+        ybottom = fc[3], ytop = fc[4], xpd = xpd, interpolate = interpolate)
+    if (!"bty" %in% names(parlist)) {
+        if (add == TRUE) {
+            parlist[["border"]] <- parlist[["col"]]
+            parlist[["col"]] <- NA
+            box.args <- list2str(x = c("border", "lwd", "lty", "xpd"), inputlist = list(...))
+            eval(parse(text = sprintf("rect(xleft=fc[1], xright=fc[2], ybottom=fc[3], ytop=fc[4], %s)", box.args)))
+        } else {
+            eval(parse(text = sprintf("box(%s)", box.args)))
+        }
+    } else {
+        if (parlist[["bty"]] %in% c("o", "l", "7", "c", "u", "]")) {
+            if (add == TRUE) {
+                parlist[["border"]] <- parlist[["col"]]
+                parlist[["col"]] <- NA
+                box.args <- list2str(x = c("border", "lwd", "lty", "xpd"), inputlist = list(...))
+                eval(parse(text = sprintf("rect(xleft=xrange[1], xright=xrange[2], ybottom=yrange[1], ytop=yrange[2], %s)", 
+                  box.args)))
+            } else {
+                eval(parse(text = sprintf("box(%s)", box.args)))
+            }
+        }
+    }
+    invisible(list(image = img, col = col))
 }
 
 
@@ -2579,7 +2778,7 @@ plot_image <- function(img, type='image',
 #' @import grDevices
 #' @import graphics
 #' @description This function is a wrapper around \code{\link[graphics]{image}}
-#' and \code{\link[graphics]{contour}}. See \code{vignette("plotfunctions")} 
+#' and \code{\link[graphics]{contour}}. See \code{vignette('plotfunctions')} 
 #' for an example of how you could use \code{\link[graphics]{image}} and 
 #' \code{\link[graphics]{contour}}.
 #'
@@ -2604,8 +2803,8 @@ plot_image <- function(img, type='image',
 #' @param ylim y-limits for the plot.
 #' @param zlim z-limits for the plot.
 #' @param col Color for the  contour lines and labels.
-#' @param color The color scheme to use for plots. One of "topo", "heat", 
-#' "cm", "terrain", "gray" or "bw". Or a list of colors such as that 
+#' @param color The color scheme to use for plots. One of 'topo', 'heat', 
+#' 'cm', 'terrain', 'gray', 'bwr' (blue-white-red) or 'bw'. Or a list of colors such as that 
 #' generated by \code{\link[grDevices]{rainbow}}, 
 #' \code{\link[grDevices]{heat.colors}}
 #' \code{\link[grDevices]{colors}}, \code{\link[grDevices]{topo.colors}}, 
@@ -2636,217 +2835,216 @@ plot_image <- function(img, type='image',
 #' y <- 10*(1:ncol(volcano))
 #' image(x, y, volcano, col = terrain.colors(100), axes = FALSE)
 #' contour(x, y, volcano, levels = seq(90, 200, by = 5),
-#'         add = TRUE, col = "peru")
+#'         add = TRUE, col = 'peru')
 #' axis(1, at = seq(100, 800, by = 100))
 #' axis(2, at = seq(100, 600, by = 100))
 #' box()
-#' title(main = "Maunga Whau Volcano", font.main = 4)
+#' title(main = 'Maunga Whau Volcano', font.main = 4)
 #' 
 #' # now with plot surface:
 #' # first convert to data frame
 #' tmp <- data.frame(value = as.vector(volcano), 
 #'     x = 10*rep(1:nrow(volcano), ncol(volcano)), 
 #'     y = 10*rep(1:ncol(volcano), each=nrow(volcano)))
-#' plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
+#' plotsurface(tmp, view=c('x', 'y'), predictor='value', 
+#'     main='Maunga Whau Volcano')
 #' 
-#' # or with terrain colors:
-#' plotsurface(tmp, view=c('x', "y"), predictor='value', 
-#'     main="Maunga Whau Volcano", color="terrain")
+#' # or with gray scale colors:
+#' plotsurface(tmp, view=c('x', 'y'), predictor='value', 
+#'     main='Maunga Whau Volcano', color='gray')
 #' 
 #' # change color range:
-#' plotsurface(tmp, view=c('x', "y"), predictor='value', 
-#'     main="Maunga Whau Volcano", zlim=c(0,200))
+#' plotsurface(tmp, view=c('x', 'y'), predictor='value', 
+#'     main='Maunga Whau Volcano', zlim=c(0,200))
 #' 
 #' #' remove color and color legend:
-#' plotsurface(tmp, view=c('x', "y"), predictor='value', 
-#'     main="Maunga Whau Volcano", 
+#' plotsurface(tmp, view=c('x', 'y'), predictor='value', 
+#'     main='Maunga Whau Volcano', 
 #'     color=NULL, col=1, add.color.legend=FALSE)
 #'
 #' @family Functions for plotting
-plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
-	main=NULL, xlab=NULL, ylab=NULL, 
-	xlim=NULL, ylim=NULL, zlim=NULL,
-	col=NULL, color=topo.colors(50), ci.col =c('green', 'red'), nCol=50,
-	add.color.legend=TRUE, dec=NULL, fit.margin=TRUE, ...){
-	xval <- c()
-	yval <- c()
-	zval <- c()
-	cival.l <- NULL
-	cival.u <- NULL
-	# check input:
-	# 1. check data:
-	if(is.null(data)){
-		stop("No data provided. Please provide data and view predictors.")
-	}else if(is.list(data)){
-			# 2a. check view
-			if(is.numeric(view)){
-				if(view[1] <= length(data)){
-					xval <- data[[view[1]]]
-				}else{
-					stop(sprintf("First view element incorrect: data has only %d elements.", length(data)))
-				}
-				if(view[2] <= length(data)){
-					yval <- data[[view[2]]]
-				}else{
-					stop(sprintf("Second view element incorrect: data has only %d elements.", length(data)))
-				}
-			}else{
-				cn <- names(data)
-				if(view[1] %in% cn){
-					xval <- data[[view[1]]]
-				}else{
-					stop(sprintf("%s not available in data.", view[1]))
-				}
-				if(view[2] %in% cn){
-					yval <- data[[view[2]]]
-				}else{
-					stop(sprintf("%s not available in data.", view[2]))
-				}
-			}
-			# 3a. check predictor
-			if(is.null(predictor)){
-				if(length(data)==3){
-					cn <- 1:3
-					if(!is.numeric(view)){
-						cn <- names(data)
-					}
-					zval <- data[[ cn[!cn %in% view] ]]
-				}else{
-					stop(sprintf("Not sure which element of %s should be plotted. Provide predictor.", deparse(substitute(data))))
-				}
-			}else{
-				if(is.numeric(predictor)){
-					if(length(data) >= predictor){
-						zval <- data[[predictor]]
-					}else{
-						stop(sprintf("Value of predictor incorrect: data has only %d elements.", length(data)))
-					}
-				}else{
-					cn <- names(data)
-					if(predictor %in% cn){
-						zval <- data[[predictor]]
-					}else{
-						stop(sprintf("%s not available in data.", predictor))
-					}
-				}
-			}
-			
-			# 4a. check CI
-			if(!is.null(valCI)){
-				if(is.numeric(valCI)){
-					if(length(data) >= valCI[1]){
-						cival.l <- cival.u <- names(data)[valCI[1]]
-					}else{
-						stop(sprintf("Value of valCI incorrect: data has only %d elements.", length(data)))
-					}
-					if(length(valCI)>1){
-						valCI <- valCI[1:2]
-						if(length(data) >= valCI[2]){
-							cival.u <- names(data)[valCI[2]]
-						}else{
-							warning(sprintf("Value of second valCI incorrect: data has only %d elements. First valCI is also used for upper limit.", length(data)))
-						}
-					}
-				}else{
-					cn <- names(data)
-					if(valCI[1] %in% cn){
-						cival.l <- cival.u <- valCI[1]
-					}else{
-						stop(sprintf("%s not available in data.", valCI[1]))
-					}
-					if(length(valCI)>1){
-						valCI <- valCI[1:2]
-						if(valCI[2] %in% cn){
-							cival.u <- valCI[2]
-						}else{
-							warning(sprintf("Value of second valCI incorrect: %s not available in data. First valCI is also used for upper limit.", valCI[2]))
-						}
-					}
-				}
-			} # end valCI
-			if(!is.matrix(zval)){
-				# sort data:
-				data <- as.data.frame(data)
-				data <- data[order(data[[view[1]]], data[[view[2]]]),]
-				xval <- sort(unique(xval))
-				yval <- sort(unique(yval))
-				zval <- matrix(data[, predictor], byrow=TRUE, 
-					nrow=length(xval),ncol=length(yval))
-				if(!is.null(cival.l)){
-					cival.l <- matrix(data[, cival.l], byrow=TRUE, 
-						nrow=length(xval),ncol=length(yval))
-					cival.u <- matrix(data[, cival.u], byrow=TRUE, 
-						nrow=length(xval),ncol=length(yval))
-				}
-				# warning('z-values should be provided as matrix. List is converted to data frame with x values, y values, and z values (and optionally CI values). See examples.')
-			}else{
-				if(!is.null(cival.l)){
-					cival.l <- data[[cival.l]]
-					cival.u <- data[[cival.u]]
-				}
-			}
-	}else{
-	 	stop('Data is not a list or data frame.')
-	}
-	
-	## Check plot settings
-	if(is.null(main)){
-		if(is.null(predictor)){
-			main=""
-		}else{
-			main=predictor
-		}
-	}
-	if(is.null(xlab)){
-		xlab=view[1]
-	}
-	if(is.null(ylab)){
-		ylab=view[2]
-	}
-	if(is.null(xlim)){
-		xlim=range(xval)
-	}
-	if(is.null(ylim)){
-		ylim=range(yval)
-	}	
-	if(is.null(zlim)){
-		zlim=range(zval)
-	}	
-	if(add.color.legend==TRUE & !is.null(dec)){
-        if(dec == -1){
+plotsurface <- function(data, view, predictor = NULL, valCI = NULL, main = NULL, xlab = NULL, ylab = NULL, 
+    xlim = NULL, ylim = NULL, zlim = NULL, col = NULL, color = terrain.colors(50), ci.col = c("green", "red"), 
+    nCol = 50, add.color.legend = TRUE, dec = NULL, fit.margin = TRUE, ...) {
+    xval <- c()
+    yval <- c()
+    zval <- c()
+    cival.l <- NULL
+    cival.u <- NULL
+    # check input: 1. check data:
+    if (is.null(data)) {
+        stop("No data provided. Please provide data and view predictors.")
+    } else if (is.list(data)) {
+        # 2a. check view
+        if (is.numeric(view)) {
+            if (view[1] <= length(data)) {
+                xval <- data[[view[1]]]
+            } else {
+                stop(sprintf("First view element incorrect: data has only %d elements.", length(data)))
+            }
+            if (view[2] <= length(data)) {
+                yval <- data[[view[2]]]
+            } else {
+                stop(sprintf("Second view element incorrect: data has only %d elements.", length(data)))
+            }
+        } else {
+            cn <- names(data)
+            if (view[1] %in% cn) {
+                xval <- data[[view[1]]]
+            } else {
+                stop(sprintf("%s not available in data.", view[1]))
+            }
+            if (view[2] %in% cn) {
+                yval <- data[[view[2]]]
+            } else {
+                stop(sprintf("%s not available in data.", view[2]))
+            }
+        }
+        # 3a. check predictor
+        if (is.null(predictor)) {
+            if (length(data) == 3) {
+                cn <- 1:3
+                if (!is.numeric(view)) {
+                  cn <- names(data)
+                }
+                zval <- data[[cn[!cn %in% view]]]
+            } else {
+                stop(sprintf("Not sure which element of %s should be plotted. Provide predictor.", deparse(substitute(data))))
+            }
+        } else {
+            if (is.numeric(predictor)) {
+                if (length(data) >= predictor) {
+                  zval <- data[[predictor]]
+                } else {
+                  stop(sprintf("Value of predictor incorrect: data has only %d elements.", length(data)))
+                }
+            } else {
+                cn <- names(data)
+                if (predictor %in% cn) {
+                  zval <- data[[predictor]]
+                } else {
+                  stop(sprintf("%s not available in data.", predictor))
+                }
+            }
+        }
+        
+        # 4a. check CI
+        if (!is.null(valCI)) 
+            {
+                if (is.numeric(valCI)) {
+                  if (length(data) >= valCI[1]) {
+                    cival.l <- cival.u <- names(data)[valCI[1]]
+                  } else {
+                    stop(sprintf("Value of valCI incorrect: data has only %d elements.", length(data)))
+                  }
+                  if (length(valCI) > 1) {
+                    valCI <- valCI[1:2]
+                    if (length(data) >= valCI[2]) {
+                      cival.u <- names(data)[valCI[2]]
+                    } else {
+                      warning(sprintf("Value of second valCI incorrect: data has only %d elements. First valCI is also used for upper limit.", 
+                        length(data)))
+                    }
+                  }
+                } else {
+                  cn <- names(data)
+                  if (valCI[1] %in% cn) {
+                    cival.l <- cival.u <- valCI[1]
+                  } else {
+                    stop(sprintf("%s not available in data.", valCI[1]))
+                  }
+                  if (length(valCI) > 1) {
+                    valCI <- valCI[1:2]
+                    if (valCI[2] %in% cn) {
+                      cival.u <- valCI[2]
+                    } else {
+                      warning(sprintf("Value of second valCI incorrect: %s not available in data. First valCI is also used for upper limit.", 
+                        valCI[2]))
+                    }
+                  }
+                }
+            }  # end valCI
+        if (!is.matrix(zval)) {
+            # sort data:
+            data <- as.data.frame(data)
+            data <- data[order(data[[view[1]]], data[[view[2]]]), ]
+            xval <- sort(unique(xval))
+            yval <- sort(unique(yval))
+            zval <- matrix(data[, predictor], byrow = TRUE, nrow = length(xval), ncol = length(yval))
+            if (!is.null(cival.l)) {
+                cival.l <- matrix(data[, cival.l], byrow = TRUE, nrow = length(xval), ncol = length(yval))
+                cival.u <- matrix(data[, cival.u], byrow = TRUE, nrow = length(xval), ncol = length(yval))
+            }
+            # warning('z-values should be provided as matrix. List is converted to data frame with x values, y values,
+            # and z values (and optionally CI values). See examples.')
+        } else {
+            if (!is.null(cival.l)) {
+                cival.l <- data[[cival.l]]
+                cival.u <- data[[cival.u]]
+            }
+        }
+    } else {
+        stop("Data is not a list or data frame.")
+    }
+    
+    ## Check plot settings
+    if (is.null(main)) {
+        if (is.null(predictor)) {
+            main = ""
+        } else {
+            main = predictor
+        }
+    }
+    if (is.null(xlab)) {
+        xlab = view[1]
+    }
+    if (is.null(ylab)) {
+        ylab = view[2]
+    }
+    if (is.null(xlim)) {
+        xlim = range(xval)
+    }
+    if (is.null(ylim)) {
+        ylim = range(yval)
+    }
+    if (is.null(zlim)) {
+        zlim = range(zval)
+    }
+    if (add.color.legend == TRUE & !is.null(dec)) {
+        if (dec == -1) {
             dec <- getDec(min(zlim))
         }
-        zlim <- getRange(zlim, step=(.1^dec), n.seg=2)
-	}
-	# colors:
-    if(is.null(color)){
-    	color <- alphaPalette('white', f.seq=c(0,0), n=nCol)
+        zlim <- getRange(zlim, step = (0.1^dec), n.seg = 2)
+    }
+    # colors:
+    if (is.null(color)) {
+        color <- alphaPalette("white", f.seq = c(0, 0), n = nCol)
     } else if (color[1] == "heat") {
         color <- heat.colors(nCol)
-        if(is.null(col)){
-        	col <- 3
+        if (is.null(col)) {
+            col <- 3
         }
     } else if (color[1] == "topo") {
         color <- topo.colors(nCol)
-        if(is.null(col)){
-        	col <- 2
+        if (is.null(col)) {
+            col <- 2
         }
     } else if (color[1] == "cm") {
         color <- cm.colors(nCol)
-        if(is.null(col)){
-        	col <- 1
+        if (is.null(col)) {
+            col <- 1
         }
     } else if (color[1] == "terrain") {
         color <- terrain.colors(nCol)
-        if(is.null(col)){
-        	col <- 2
+        if (is.null(col)) {
+            col <- 2
         }
     } else if (color[1] == "bpy") {
         if (requireNamespace("sp", quietly = TRUE)) {
             color <- sp::bpy.colors(nCol)
-            if(is.null(col)){
-        		col <- 3
-        	}
+            if (is.null(col)) {
+                col <- 3
+            }
         } else {
             warning("Package 'sp' needed for bpy color palette. Using topo.colors instead (default).")
             color <- topo.colors(nCol)
@@ -2856,69 +3054,68 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
         color <- gray(seq(0.1, 0.9, length = nCol))
         col <- 1
     } else {
-        if( all(isColor(color)) ){
-        	if(length(color) < nCol){
-        		color <- colorRampPalette(color)(nCol)
-        	}
-        }else{
+        if (all(isColor(color))) {
+            if (length(color) < nCol) {
+                color <- colorRampPalette(color)(nCol)
+            }
+        } else {
             stop("color scheme not recognised")
-        }  
-    } 
-    if (is.null(col)){
-    	col <- 'red'
-    } 
-	dnm <- list(...)
-	parlist <- names(dnm)
-	type2string <- function(x){
-		out <- ""
-		if(length(x)>1){
-			if(is.character(x)){
-				out <- sprintf("c(%s)", paste(sprintf("'%s'", x), collapse=','))
-			}else{
-				out <- sprintf("c(%s)", paste(x, collapse=','))
-			}
-		}else{
-			if(is.character(x)){
-				out <- sprintf("'%s'", x)
-			}else{
-				out <- sprintf("%s", x)
-			}
-		}
-		return(out)
-	}
-	# check contour input:
-	cpar <- c()
-	contourarg <- c('nlevels', 'levels', 'labels', 'labcex', 'drawlabels', 'method', 'lty', 'lwd')
-	for(i in parlist[parlist %in% contourarg] ){
-		cpar <- c(cpar, sprintf("%s=%s", i, type2string(dnm[[i]])))
-	}
-	cpar <- paste(",", paste(cpar, collapse=','))
-	cpar2 <- c()
-	for(i in parlist[parlist %in% c('nlevels', 'levels', 'method')] ){
-		cpar2 <- c(cpar2, sprintf("%s=%s", i, type2string(dnm[[i]])))
-	}
-	cpar2 <- paste(",", paste(cpar2, collapse=','))
-	# check image input:
-	ipar <- c()
-	contourarg <- c('nlevels', 'levels', 'labels', 'labcex', 'drawlabels', 'method', 'lty', 'lwd')
-	for(i in parlist[!parlist %in% contourarg] ){
-		ipar <- c(ipar, sprintf("%s=%s", i, type2string(dnm[[i]])))
-	}
-	ipar <- paste(",", paste(ipar, collapse=','))
-	eval(parse(text=sprintf("image(xval, yval, zval, col=color, xlim=xlim, ylim=ylim, zlim=zlim, main=main, xlab=xlab, ylab=ylab, add=FALSE%s)", ipar)))
-	eval(parse(text=sprintf("contour(xval, yval, zval, col=col, add=TRUE%s)",
-		cpar)))
-	if(!is.null(valCI)){
-		eval(parse(text=sprintf("contour(xval, yval, zval-cival.l, col=ci.col[1], add=TRUE, lty=3, drawlabels=FALSE%s)",
-			cpar2)))
-		eval(parse(text=sprintf("contour(xval, yval, zval+cival.u, col=ci.col[2], add=TRUE, lty=3, drawlabels=FALSE%s)",
-			cpar2)))	
-	}
-    if(add.color.legend){
-        gradientLegend(zlim, n.seg=3, pos=.875, dec=dec,
-            color=color, fit.margin=fit.margin)
+        }
     }
-	invisible(list(x=xval, y=yval, z=zval, ci.l = cival.l, ci.u = cival.u))
+    if (is.null(col)) {
+        col <- "red"
+    }
+    dnm <- list(...)
+    parlist <- names(dnm)
+    type2string <- function(x) {
+        out <- ""
+        if (length(x) > 1) {
+            if (is.character(x)) {
+                out <- sprintf("c(%s)", paste(sprintf("'%s'", x), collapse = ","))
+            } else {
+                out <- sprintf("c(%s)", paste(x, collapse = ","))
+            }
+        } else {
+            if (is.character(x)) {
+                out <- sprintf("'%s'", x)
+            } else {
+                out <- sprintf("%s", x)
+            }
+        }
+        return(out)
+    }
+    # check contour input:
+    cpar <- c()
+    contourarg <- c("nlevels", "levels", "labels", "labcex", "drawlabels", "method", "lty", "lwd")
+    for (i in parlist[parlist %in% contourarg]) {
+        cpar <- c(cpar, sprintf("%s=%s", i, type2string(dnm[[i]])))
+    }
+    cpar <- paste(",", paste(cpar, collapse = ","))
+    cpar2 <- c()
+    for (i in parlist[parlist %in% c("nlevels", "levels", "method")]) {
+        cpar2 <- c(cpar2, sprintf("%s=%s", i, type2string(dnm[[i]])))
+    }
+    cpar2 <- paste(",", paste(cpar2, collapse = ","))
+    # check image input:
+    ipar <- c()
+    contourarg <- c("nlevels", "levels", "labels", "labcex", "drawlabels", "method", "lty", "lwd")
+    for (i in parlist[!parlist %in% contourarg]) {
+        ipar <- c(ipar, sprintf("%s=%s", i, type2string(dnm[[i]])))
+    }
+    ipar <- paste(",", paste(ipar, collapse = ","))
+    eval(parse(text = sprintf("image(xval, yval, zval, col=color, xlim=xlim, ylim=ylim, zlim=zlim, main=main, xlab=xlab, ylab=ylab, add=FALSE%s)", 
+        ipar)))
+    eval(parse(text = sprintf("contour(xval, yval, zval, col=col, add=TRUE%s)", cpar)))
+    if (!is.null(valCI)) {
+        eval(parse(text = sprintf("contour(xval, yval, zval-cival.l, col=ci.col[1], add=TRUE, lty=3, drawlabels=FALSE%s)", 
+            cpar2)))
+        eval(parse(text = sprintf("contour(xval, yval, zval+cival.u, col=ci.col[2], add=TRUE, lty=3, drawlabels=FALSE%s)", 
+            cpar2)))
+    }
+    if (add.color.legend) {
+        gradientLegend(zlim, n.seg = 3, pos = 0.875, dec = dec, color = color, fit.margin = fit.margin)
+    }
+    invisible(list(x = xval, y = yval, z = zval, ci.l = cival.l, ci.u = cival.u))
 }
 
 
@@ -2961,99 +3158,99 @@ plotsurface <- function(data, view, predictor=NULL, valCI=NULL,
 #'     x = 10*rep(1:nrow(volcano), ncol(volcano)), 
 #'     y = 10*rep(1:ncol(volcano), each=nrow(volcano)),
 #'     CI = rep(20, nrow(volcano)*ncol(volcano)))
-#' plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
-#' plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI")
+#' plotsurface(tmp, view=c('x', 'y'), predictor='value', main='Maunga Whau Volcano')
+#' plot_signifArea(tmp, view=c('x', 'y'), predictor='value', valCI='CI')
 #' 
 #' # change color:
-#' plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
-#' plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI", 
-#'     col="red")
-#' # or completely remove "nonsignificant" area:
-#' plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI", 
-#'     col="white", alpha=1)
+#' plotsurface(tmp, view=c('x', 'y'), predictor='value', main='Maunga Whau Volcano')
+#' plot_signifArea(tmp, view=c('x', 'y'), predictor='value', valCI='CI', 
+#'     col='red')
+#' # or completely remove 'nonsignificant' area:
+#' plot_signifArea(tmp, view=c('x', 'y'), predictor='value', valCI='CI', 
+#'     col='white', alpha=1)
 #' 
 # valCI: lower and upper CI
-plot_signifArea <- function(data, view, predictor=NULL, 
-	valCI, col=1, alpha=.5, ...){
-	# 1. check input: only list or data frames allowed
-	if(is.data.frame(data)){
-		# 2a. check view
-		if(is.numeric(view)){
-			if(view[1] > length(data)){
-				stop(sprintf("First view element incorrect: data has only %d elements.", length(data)))
-			}
-			if(view[2] > length(data)){
-				stop(sprintf("Second view element incorrect: data has only %d elements.", length(data)))
-			}
-			view = names(data)[view]
-		}else{
-			cn <- names(data)
-			if(!view[1] %in% cn){
-				stop(sprintf("%s not available in data.", view[1]))
-			}
-			if(!view[2] %in% cn){
-				stop(sprintf("%s not available in data.", view[2]))
-			}
-		}
-		# 3a. check predictor
-		if(is.null(predictor)){
-			if(length(data)==3){
-				cn <- 1:3
-				if(!is.numeric(view)){
-					cn <- names(data)
-				}
-				predictor = cn[!cn %in% view]
-			}else{
-				stop(sprintf("Not sure which element of %s should be plotted. Provide predictor.", deparse(substitute(data))))
-			}
-		}else{
-			if(is.numeric(predictor)){
-				if(length(data) < predictor){
-					stop(sprintf("Value of predictor incorrect: data has only %d elements.", length(data)))
-				}
-				predictor = names(data)[predictor]
-			}else{
-				cn <- names(data)
-				if(!predictor %in% cn){
-					stop(sprintf("%s not available in data.", predictor))
-				}
-			}
-		}
-		# 4a. check CI
-		if(length(valCI)==1){
-			valCI <- rep(valCI, 2)
-		}else if(length(valCI) > 2){
-			valCI <- valCI[1:2]
-		}
-		if(is.numeric(valCI)){
-			if((length(data) < valCI[1]) | (length(data) < valCI[2])){
-				stop(sprintf("Value of valCI incorrect: data has only %d elements.", length(data)))
-			}
-			valCI = names(data)[valCI]
-		}else{
-			cn <- names(data)
-			if(!valCI[1] %in% cn){
-				stop(sprintf("%s not available in data.", valCI[1]))
-			}
-			if(!valCI[2] %in% cn){
-				stop(sprintf("%s not available in data.", valCI[2]))
-			}
-		}
-	}else{
-		stop("Data should be a list or data frame.")
-	}
-	# order data:
-	data$sign <- ((data[,predictor]-data[,valCI[1]]) <= 0) & ((data[,predictor]+data[,valCI[2]]) >= 0)
-    data <- data[order(data[,view[1]], data[,view[2]]),]
-    sign.raster <- rep(alpha('white', f=0), nrow(data))
-    sign.raster[data$sign] <- alpha(col, f=alpha)
+plot_signifArea <- function(data, view, predictor = NULL, valCI, col = 1, alpha = 0.5, ...) {
+    # 1. check input: only list or data frames allowed
+    if (is.data.frame(data)) {
+        # 2a. check view
+        if (is.numeric(view)) {
+            if (view[1] > length(data)) {
+                stop(sprintf("First view element incorrect: data has only %d elements.", length(data)))
+            }
+            if (view[2] > length(data)) {
+                stop(sprintf("Second view element incorrect: data has only %d elements.", length(data)))
+            }
+            view = names(data)[view]
+        } else {
+            cn <- names(data)
+            if (!view[1] %in% cn) {
+                stop(sprintf("%s not available in data.", view[1]))
+            }
+            if (!view[2] %in% cn) {
+                stop(sprintf("%s not available in data.", view[2]))
+            }
+        }
+        # 3a. check predictor
+        if (is.null(predictor)) {
+            if (length(data) == 3) {
+                cn <- 1:3
+                if (!is.numeric(view)) {
+                  cn <- names(data)
+                }
+                predictor = cn[!cn %in% view]
+            } else {
+                stop(sprintf("Not sure which element of %s should be plotted. Provide predictor.", deparse(substitute(data))))
+            }
+        } else {
+            if (is.numeric(predictor)) {
+                if (length(data) < predictor) {
+                  stop(sprintf("Value of predictor incorrect: data has only %d elements.", length(data)))
+                }
+                predictor = names(data)[predictor]
+            } else {
+                cn <- names(data)
+                if (!predictor %in% cn) {
+                  stop(sprintf("%s not available in data.", predictor))
+                }
+            }
+        }
+        # 4a. check CI
+        if (length(valCI) == 1) {
+            valCI <- rep(valCI, 2)
+        } else if (length(valCI) > 2) {
+            valCI <- valCI[1:2]
+        }
+        if (is.numeric(valCI)) {
+            if ((length(data) < valCI[1]) | (length(data) < valCI[2])) {
+                stop(sprintf("Value of valCI incorrect: data has only %d elements.", length(data)))
+            }
+            valCI = names(data)[valCI]
+        } else {
+            cn <- names(data)
+            if (!valCI[1] %in% cn) {
+                stop(sprintf("%s not available in data.", valCI[1]))
+            }
+            if (!valCI[2] %in% cn) {
+                stop(sprintf("%s not available in data.", valCI[2]))
+            }
+        }
+    } else {
+        stop("Data should be a list or data frame.")
+    }
+    # order data:
+    data$sign <- ((data[, predictor] - data[, valCI[1]]) <= 0) & ((data[, predictor] + data[, valCI[2]]) >= 
+        0)
+    data <- data[order(data[, view[1]], data[, view[2]]), ]
+    sign.raster <- rep(alpha("white", f = 0), nrow(data))
+    sign.raster[data$sign] <- alpha(col, f = alpha)
     # raster images are row-first, in contrast to images...
-    n.grid1 <- length(unique(data[,view[1]]))
-    n.grid2 <- length(unique(data[,view[2]]))
-    sign.raster <- matrix(sign.raster, byrow=FALSE, nrow=n.grid2, ncol=n.grid1)
-    sign.raster <- as.raster(sign.raster[nrow(sign.raster):1,])
-    gfc <- getFigCoords('p')
-    rasterImage(sign.raster, xleft=gfc[1], xright=gfc[2], ybottom=gfc[3], ytop=gfc[4], ...)
+    n.grid1 <- length(unique(data[, view[1]]))
+    n.grid2 <- length(unique(data[, view[2]]))
+    sign.raster <- matrix(sign.raster, byrow = FALSE, nrow = n.grid2, ncol = n.grid1)
+    sign.raster <- as.raster(sign.raster[nrow(sign.raster):1, ])
+    gfc <- getFigCoords("p")
+    rasterImage(sign.raster, xleft = gfc[1], xright = gfc[2], ybottom = gfc[3], ytop = gfc[4], ...)
 }
 
 
@@ -3080,10 +3277,10 @@ plot_signifArea <- function(data, view, predictor=NULL,
 #' @author Jacolien van Rij
 #' @family Utility functions
 #' 
-sortGroups <- function(formula, FUN='mean', decreasing=FALSE, ...){
-	tmp <- aggregate(formula, FUN=FUN, ...)
-	idx <- sort.int(tmp[,ncol(tmp)], index.return=TRUE, decreasing=decreasing)
-	return(idx$ix)
+sortGroups <- function(formula, FUN = "mean", decreasing = FALSE, ...) {
+    tmp <- aggregate(formula, FUN = FUN, ...)
+    idx <- sort.int(tmp[, ncol(tmp)], index.return = TRUE, decreasing = decreasing)
+    return(idx$ix)
 }
 #' Order boxplot stats following a given ordering.
 #' 
@@ -3104,20 +3301,20 @@ sortGroups <- function(formula, FUN='mean', decreasing=FALSE, ...){
 #' @author Jacolien van Rij
 #' @family Utility functions
 #' 
-orderBoxplot <- function(stats, idx){
-	for( i in c("stats", "n", "conf", "names")){
-		if(is.null( dim(stats[[i]]) ) ){
-			stats[[i]] <- stats[[i]][idx]
-		}else if ( length( dim(stats[[i]]) ) == 2  ){
-			stats[[i]] <- stats[[i]][,idx]
-		}
-	}
-	if(!is.null(stats$group) & length(stats$group) > 0){
-		tmp <- 1:length(stats[['names']])
-		names(tmp) <- idx
-		stats[['group']] <- as.vector( tmp[as.character(stats[['group']])] )
-	}
-	return(stats)
+orderBoxplot <- function(stats, idx) {
+    for (i in c("stats", "n", "conf", "names")) {
+        if (is.null(dim(stats[[i]]))) {
+            stats[[i]] <- stats[[i]][idx]
+        } else if (length(dim(stats[[i]])) == 2) {
+            stats[[i]] <- stats[[i]][, idx]
+        }
+    }
+    if (!is.null(stats$group) & length(stats$group) > 0) {
+        tmp <- 1:length(stats[["names"]])
+        names(tmp) <- idx
+        stats[["group"]] <- as.vector(tmp[as.character(stats[["group"]])])
+    }
+    return(stats)
 }
 #' Produce box-and-whisker plot(s) ordered by function such as 
 #' mean or median.
@@ -3153,52 +3350,51 @@ orderBoxplot <- function(stats, idx){
 #' @author Jacolien van Rij
 #' @family Functions for plotting
 #' 
-sortBoxplot <- function(formula, data=NULL, 
-	decreasing=TRUE, FUN = "median", idx=NULL, 
-	col = "gray", ...){
-	bps <- boxplot(formula, data=data, FUN=FUN, plot=FALSE, ...)
-	additional <- par(...)
-	# determine order:
-	if(is.null(idx)){
-		if(FUN %in% c("median", "min", "max", "lower.hinge", "upper.hinge", "n", "group.names")){
-			if(FUN=="median"){
-				sorti <- sort.int(bps$stats[3,], decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}else if(FUN=="min"){
-				sorti <- sort.int(bps$stats[1,], decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}else if(FUN=="max"){
-				sorti <- sort.int(bps$stats[5,], decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}else if(FUN=="lower.hinge"){
-				sorti <- sort.int(bps$stats[2,], decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}else if(FUN=="upper.hinge"){
-				sorti <- sort.int(bps$stats[4,], decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}else if(FUN=="n"){
-				sorti <- sort.int(bps$n, decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}else if(FUN=="group.names"){
-				sorti <- sort.int(bps$names, decreasing = decreasing, index.return=TRUE)
-				idx <- sorti$ix
-			}
-		}else{
-			idx <- sortGroups(formula, data=data, FUN=FUN, decreasing=decreasing)
-			
-		}
-	}
-	# order:
-	bps <- orderBoxplot(bps, idx)
-	# plot boxplots:
-	par <- list(...)
-	if(!"boxfill" %in% names(par)){
-		par[['boxfill']] <- col
-	}
-	bp.args <- list2str(names(par), par)
-	eval(parse(text=sprintf("bxp(bps, %s)",bp.args)))
-	
-	invisible(bps)
+sortBoxplot <- function(formula, data = NULL, decreasing = TRUE, FUN = "median", idx = NULL, col = "gray", 
+    ...) {
+    bps <- boxplot(formula, data = data, FUN = FUN, plot = FALSE, ...)
+    additional <- par(...)
+    # determine order:
+    if (is.null(idx)) {
+        if (FUN %in% c("median", "min", "max", "lower.hinge", "upper.hinge", "n", "group.names")) {
+            if (FUN == "median") {
+                sorti <- sort.int(bps$stats[3, ], decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            } else if (FUN == "min") {
+                sorti <- sort.int(bps$stats[1, ], decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            } else if (FUN == "max") {
+                sorti <- sort.int(bps$stats[5, ], decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            } else if (FUN == "lower.hinge") {
+                sorti <- sort.int(bps$stats[2, ], decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            } else if (FUN == "upper.hinge") {
+                sorti <- sort.int(bps$stats[4, ], decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            } else if (FUN == "n") {
+                sorti <- sort.int(bps$n, decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            } else if (FUN == "group.names") {
+                sorti <- sort.int(bps$names, decreasing = decreasing, index.return = TRUE)
+                idx <- sorti$ix
+            }
+        } else {
+            idx <- sortGroups(formula, data = data, FUN = FUN, decreasing = decreasing)
+            
+        }
+    }
+    # order:
+    bps <- orderBoxplot(bps, idx)
+    # plot boxplots:
+    par <- list(...)
+    if (!"boxfill" %in% names(par)) {
+        par[["boxfill"]] <- col
+    }
+    bp.args <- list2str(names(par), par)
+    eval(parse(text = sprintf("bxp(bps, %s)", bp.args)))
+    
+    invisible(bps)
 }
 
 

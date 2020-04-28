@@ -30,23 +30,32 @@ b <- barplot(avg, beside=TRUE, names.arg=FALSE, ylim=c(0,450))
 text(b, rep(0, length(b)), labels=names(avg), srt=90, adj=-.25)
 
 # calculate mean collapsing over feeding types:
-abline(h=mean(avg), lwd=1.5, col="red1")
+abline(h=mean(avg), lwd=1.5, col='red1')
 # add SE reflecting variation between feeding types:
-abline(h=mean(avg)+c(-1,1)*se(avg), lty=2, col="red1")
+abline(h=mean(avg)+c(-1,1)*se(avg), lty=2, col='red1')
 text(getCoords(.5), mean(avg)+se(avg), 
-    labels=expression("mean" \%+-\% "1SE"), pos=3, col="red1")
+    labels=expression('mean' \%+-\% '1SE'), pos=3, col='red1')
 
 # Note that SE makes more sense for experiments with 
 # different groups or participants.
 
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRange}},
-  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
-  \code{\link{inch2coords}}, \code{\link{isColor}},
-  \code{\link{list2str}}, \code{\link{move_n_point}},
-  \code{\link{orderBoxplot}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{sortGroups}()}
 }
+\concept{Utility functions}

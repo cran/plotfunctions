@@ -12,7 +12,7 @@ add_bars(x, y, y0 = NULL, width = 1, horiz = FALSE, ...)
 \item{y}{Numeric vector with height of the bars.}
 
 \item{y0}{Optional numeric value or vector with the onset(s) of the bars. 
-When \code{y0} is not specified, the lowest value of the y-axis is used.}
+When \\code{y0} is not specified, the lowest value of the y-axis is used.}
 
 \item{width}{Numeric value, determining the width of the bars in units of 
 the x-axis.}
@@ -20,7 +20,8 @@ the x-axis.}
 \item{horiz}{Logical value: whether or not to plot horizontal bars. 
 Defaults to FALSE.}
 
-\item{...}{Other arguments for plotting, see \code{\link[graphics]{par}}.}
+\item{...}{Other arguments for plotting, see 
+\\code{\\link[graphics]{par}}.}
 }
 \description{
 Adding bars to an existing plot.
@@ -32,43 +33,61 @@ children =  stats::rpois(100, lambda = 4)
 newd <- data.frame(Adults = table( factor(adults, levels=0:15) ),
     Children = table( factor(children, levels=0:15) ) )
 newd <- newd[,c(1,2,4)]
-names(newd)[1] <- "value"
+names(newd)[1] <- 'value'
 
 # barplot of Adults:
-b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, border=NA, ylim=c(0,30))
+b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, 
+    border=NA, ylim=c(0,30))
 # overlay Children measures:
 add_bars(b, newd$Children.Freq, col='red', density=25, xpd=TRUE)
 
 # variants:
-b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, border=NA, ylim=c(0,30))
-add_bars(b+.1, newd$Children.Freq, width=.85, col=alpha('red'), border=NA, xpd=TRUE)
+b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, 
+    border=NA, ylim=c(0,30))
+add_bars(b+.1, newd$Children.Freq, width=.85, col=alpha('red'), 
+    border=NA, xpd=TRUE)
 
-emptyPlot(c(-30,30), c(0,15), v0=0, ylab="Condition")
-add_bars(-1*newd$Children.Freq, 0:15, y0=0, col=alpha("blue"), 
-    border="blue", horiz=TRUE)
-add_bars(newd$Adults.Freq, 0:15, y0=0, col=alpha("red"), 
-    border="red", horiz=TRUE)
-mtext(c("Children", "Adults"), side=3, at=c(-15,15), line=1, cex=1.25, font=2)
+emptyPlot(c(-30,30), c(0,15), v0=0, ylab='Condition')
+add_bars(-1*newd$Children.Freq, 0:15, y0=0, col=alpha('blue'), 
+    border='blue', horiz=TRUE)
+add_bars(newd$Adults.Freq, 0:15, y0=0, col=alpha('red'), 
+    border='red', horiz=TRUE)
+mtext(c('Children', 'Adults'), side=3, at=c(-15,15), line=1, cex=1.25, 
+    font=2)
 
 # adding shadow:
-b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, with=.9, col='black', border=NA)
-add_bars(b+.2, newd$Adults.Freq+.2, y0=.2, width=.9, col=alpha('black', f=.2), border=NA, xpd=TRUE)
+b <- barplot(newd$Adults.Freq, beside=TRUE, names.arg=newd$value, 
+    width=.9, 
+    col='black', border=NA)
+add_bars(b+.2, newd$Adults.Freq+.2, y0=.2, width=.9, 
+    col=alpha('black', f=.2), border=NA, xpd=TRUE)
 
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_n_points}}, \code{\link{alphaPalette}},
-  \code{\link{alpha}}, \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

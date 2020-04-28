@@ -9,8 +9,8 @@ legend_margin(x, legend, adj = NULL, ...)
 }
 \arguments{
 \item{x}{Text string, the location of the legend relative to the figure 
-region. Single keyword from the list "bottomright", "bottom", "bottomleft", 
-"left", "topleft", "top", "topright", "right" and "center".}
+region. Single keyword from the list 'bottomright', 'bottom', 'bottomleft', 
+'left', 'topleft', 'top', 'topright', 'right' and 'center'.}
 
 \item{legend}{Vector with text strings to appear in the legend.}
 
@@ -26,24 +26,35 @@ Wrapper around the function \code{\link[graphics]{legend}}.
 }
 \examples{
 plot(cars$speed, cars$dist, pch=16)
-legend_margin("topleft", legend=c("points"), pch=16)
+legend_margin('topleft', legend=c('points'), pch=16)
 # compare with default legend:
-legend("topleft", legend=c("points"), pch=16)
+legend('topleft', legend=c('points'), pch=16)
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

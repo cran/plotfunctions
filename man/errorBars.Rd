@@ -4,7 +4,16 @@
 \alias{errorBars}
 \title{Add error bars to a plot.}
 \usage{
-errorBars(x, mean, ci, ci.l = NULL, minmax = NULL, horiz = FALSE, ...)
+errorBars(
+  x,
+  mean,
+  ci,
+  ci.l = NULL,
+  minmax = NULL,
+  horiz = FALSE,
+  border = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{Vector with x-values (or y-values in case \code{horiz=TRUE}).}
@@ -26,6 +35,12 @@ bars are not corrected.}
 \item{horiz}{Logical: whether or not to plot horizontal error bars. 
 Defaults to FALSE (plotting vertical error bars).}
 
+\item{border}{Logical: whether or not to add a border around the error 
+bars. Defaults to FALSE (no border added). 
+Color and width of the borders can be adjusted using \code{border.col} and 
+\code{border.width}. (Basically all parameters that work for errorBars, 
+with \code{border.} added before.) See examples.}
+
 \item{...}{Optional graphical parameters (see \code{\link[graphics]{par}}).}
 }
 \description{
@@ -35,48 +50,68 @@ Add vertical error bars.
 
 # example InsectSprays from R datasets
 
-InsectSprays$type <- ifelse( InsectSprays$spray \%in\% c("A", "B", "F"), 1,2)
+InsectSprays$type <- ifelse( InsectSprays$spray \%in\% c('A', 'B', 'F'), 1,2)
 avg <- with(InsectSprays, tapply(count, list(spray), mean))
 sds <- with(InsectSprays, tapply(count, list(spray), sd))
 
 
 # barplot:
-b <- barplot(avg, besides=TRUE, main="Insect Sprays", ylim=c(0,20))
+b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20))
 errorBars(b, avg, sds, xpd=TRUE, length=.05)
 
 # constrain error bars to max and min of plot:
-b <- barplot(avg, besides=TRUE, main="Insect Sprays", ylim=c(0,20))
+b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20))
 errorBars(b, avg, sds, minmax=c(0,20), xpd=TRUE, length=.05)                
 
-# line plot:
-emptyPlot(toupper(letters[1:6]), 20, main="Averages", xlab="Spray")
+# add borders:
+b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20),
+     col=1, border=NA)
+errorBars(b, avg, sds, minmax=c(0,20), xpd=TRUE, length=.05, border=TRUE) 
 
-# fake errors:
+# change layout:
+b <- barplot(avg, beside=TRUE, main='Insect Sprays', ylim=c(0,20),
+     col=1, border=NA)
+errorBars(b, avg, sds, minmax=c(0,20), xpd=TRUE, border=TRUE, 
+     length=.05, col='blue', # settings for error bars 
+     border.length=.1, border.col='yellow', border.lwd=5) # settings border
+
+# line plot with asymmetric fake errors:
+emptyPlot(toupper(letters[1:6]), 20, main='Averages', xlab='Spray')
 ci.low <- abs(rnorm(6, mean=2))
 ci.high <-  abs(rnorm(6, mean=4))
 
 errorBars(1:6, avg, ci.high, ci.l= ci.low, length=.05, lwd=2)
 points(1:6, avg, pch=21, type='o', lty=3, lwd=2,
-    bg="white", xpd=TRUE)
+    bg='white', xpd=TRUE)
 # also horizontal bars possible:
 errorBars(10, 1, 1.2, horiz=TRUE, col='red')
 
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{fill_area}}, \code{\link{getCoords}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

@@ -4,8 +4,13 @@
 \alias{drawDevArrows}
 \title{Draw arrows between different plots.}
 \usage{
-drawDevArrows(start, end = NULL, arrows = c("end", "start", "both", "none"),
-  units = c("inch", "prop", "coords"), ...)
+drawDevArrows(
+  start,
+  end = NULL,
+  arrows = c("end", "start", "both", "none"),
+  units = c("inch", "prop", "coords"),
+  ...
+)
 }
 \arguments{
 \item{start}{The x and y coordinates of a set of points that define 
@@ -19,10 +24,10 @@ the end points of the arrow(s), specified in a
 list with x and y slots.}
 
 \item{arrows}{On which end of the line to draw arrows: 
-"end" (default), "start", "both", "none".}
+'end' (default), 'start', 'both', 'none'.}
 
 \item{units}{Units in which x- and y-coordinates are provided:
-"inch" (default), "prop" (proportion), "coords". "inch" and "prop" are 
+'inch' (default), 'prop' (proportion), 'coords'. 'inch' and 'prop' are 
 with respect to device region.}
 
 \item{...}{graphical parameters and parameters provided for 
@@ -42,40 +47,40 @@ par(mfrow=c(2,2))
 # PLOT 1: two points
 #------------------
 
-plot(0.5, 0.5, main="1", 
-	pch=21, lwd=3, col='red', bg='white', cex=1.2)
-points(.5, .375, pch=22, lwd=3, col="blue", cex=1.2)
+plot(0.5, 0.5, main='1', 
+    pch=21, lwd=3, col='red', bg='white', cex=1.2)
+points(.5, .375, pch=22, lwd=3, col='blue', cex=1.2)
 
 # Draw an error between the two points:
 drawDevArrows(start=c(.5,.5), end=c(.5,.375), 
-	units="coords", arrows="start", length=.1, lty=1)
+    units='coords', arrows='start', length=.1, lty=1)
 # ... which is the same as using arrows:
 arrows(x0=.5, x1=.5, y0=.5, y1=.375, code=1, length=.1, lty=1)
 
 # ... but these arrows can also be clipped to the device 
 # instead of the plot region (see leftbottom corner):
 drawDevArrows(start=c(.5,.5), end=c(.5,.375), 
-	units="dev", arrows="start", length=.1, lty=1)
+    units='dev', arrows='start', length=.1, lty=1)
 
 # The function getArrowPos converts coordinates to device coordinates:
-x1 <- getArrowPos(x=0.5, y=0.5, units="coords")
-x2 <- getArrowPos(x=0.5, y=0.375, units="coords")
-drawDevArrows(x1, x2, col="purple",
-	arrows="start", length=.1, lty=2, lwd=2)
+x1 <- getArrowPos(x=0.5, y=0.5, units='coords')
+x2 <- getArrowPos(x=0.5, y=0.375, units='coords')
+drawDevArrows(x1, x2, col='purple',
+    arrows='start', length=.1, lty=2, lwd=2)
 
 
 # Setup 4 arrows with the same starting points, 
 # but defined differently:
-a1 <- getArrowPos(x=0.5, y=0.375, units="coords")
-a2 <- getArrowPos(x=0.5, y=0.21, units="prop")
-a3 <- getArrowPos(x=0.55, y=0.36, units="prop", dev="fig")
-a4 <- getArrowPos(x=0.5*0.55, y=.5*0.36+.5, units="prop", dev="dev")
+a1 <- getArrowPos(x=0.5, y=0.375, units='coords')
+a2 <- getArrowPos(x=0.5, y=0.21, units='prop')
+a3 <- getArrowPos(x=0.55, y=0.36, units='prop', dev='fig')
+a4 <- getArrowPos(x=0.5*0.55, y=.5*0.36+.5, units='prop', dev='dev')
 
 # Setup 3 arrows with the same x and y values, 
 # which define different starting points in practice:
-b1 <- getArrowPos(x=.5, y=.5, units="prop", dev="plot")
-b2 <- getArrowPos(x=.5, y=.5, units="prop", dev="fig")
-b3 <- getArrowPos(x=.5, y=.5, units="prop", dev="dev")
+b1 <- getArrowPos(x=.5, y=.5, units='prop', dev='plot')
+b2 <- getArrowPos(x=.5, y=.5, units='prop', dev='fig')
+b3 <- getArrowPos(x=.5, y=.5, units='prop', dev='dev')
 
 
 #------------------
@@ -89,7 +94,7 @@ points(15,.8, pch=21, lwd=3, col='red', bg='white', cex=1.2)
 b <- getArrowPos(x=15, y=.8)
 
 # Draw arrow b1:
-drawDevArrows(start=b1, end=b, arrows="start", length=.1, lty=1)
+drawDevArrows(start=b1, end=b, arrows='start', length=.1, lty=1)
 
 
 #------------------
@@ -111,12 +116,12 @@ points(x,y, pch=18)
 a.start <- list(x=c(a1$x, a2$x, a3$x, a4$x), y=c(a1$y, a2$y, a3$y, a4$y))
 # Define end points on the line:
 a.end <- getArrowPos(x=x, y=y)
-drawDevArrows(start=a.start, end=a.end, arrows="none", lty=3)
+drawDevArrows(start=a.start, end=a.end, arrows='none', lty=3)
 
 # Note that these four coordinates are actually referring 
 # to the same starting point!
 # So instead we could have written:
-drawDevArrows(start=a1, end=a.end, arrows="none", col=alpha("red"), lwd=2)
+drawDevArrows(start=a1, end=a.end, arrows='none', col=alpha('red'), lwd=2)
 
 
 #------------------
@@ -125,14 +130,14 @@ drawDevArrows(start=a1, end=a.end, arrows="none", col=alpha("red"), lwd=2)
 
 # Arrows could be constructed when the plot is not yet called, 
 # as they are clipped to the device:
-drawDevArrows(start=c(0,7), end=c(7,0), col='gray', lwd=4, lty=3, arrows="none")
+drawDevArrows(start=c(0,7), end=c(7,0), col='gray', lwd=4, lty=3, arrows='none')
 
 # Add the plot:
-plot(1,1, bg="green")
+plot(1,1, bg='green')
 
 # Finish b2 and b3: same x and y, but different coordinates
-drawDevArrows(start=b2, end=b, arrows="start", length=.1, lty=2)
-drawDevArrows(start=b3, end=b, arrows="start", length=.1, lty=3)
+drawDevArrows(start=b2, end=b, arrows='start', length=.1, lty=2)
+drawDevArrows(start=b3, end=b, arrows='start', length=.1, lty=3)
 
 
 
@@ -202,29 +207,39 @@ d2 <- getArrowPos(x=x, y=y)
 # DRAW ARROWS
 #------------------
 
-drawDevArrows(start=a, end=b, arrows="none", col='gray')
-drawDevArrows(start=c, end=d1, arrows="none", col='gray')
+drawDevArrows(start=a, end=b, arrows='none', col='gray')
+drawDevArrows(start=c, end=d1, arrows='none', col='gray')
 
-drawDevArrows(start=a, end=c, arrows="none", 
+drawDevArrows(start=a, end=c, arrows='none', 
     col=alphaPalette(c('green', 'blue'), f.seq=c(0,1), n=n))
-drawDevArrows(start=b, end=d2, arrows="none", 
+drawDevArrows(start=b, end=d2, arrows='none', 
     col=alphaPalette('pink', f.seq=c(1,.1), n=n))
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{emptyPlot}}, \code{\link{errorBars}},
-  \code{\link{fill_area}}, \code{\link{getCoords}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

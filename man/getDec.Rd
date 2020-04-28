@@ -19,15 +19,24 @@ Return the number of decimal places.
 getDec(c(10,10.432, 11.01, .000001))
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getRange}}, \code{\link{getRatioCoords}},
-  \code{\link{group_sort}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
 \author{
 Based on http://stackoverflow.com/questions/5173692/how-to-return-number-of-decimal-places-in-r, but improved
 }
+\concept{Utility functions}

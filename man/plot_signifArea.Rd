@@ -4,8 +4,7 @@
 \alias{plot_signifArea}
 \title{Creates a colored surface plot from data frame input.}
 \usage{
-plot_signifArea(data, view, predictor = NULL, valCI, col = 1, alpha = 0.5,
-  ...)
+plot_signifArea(data, view, predictor = NULL, valCI, col = 1, alpha = 0.5, ...)
 }
 \arguments{
 \item{data}{Data frame with plot data. A data frame needs to have a 
@@ -45,16 +44,16 @@ tmp <- data.frame(value = (as.vector(volcano) - 120),
     x = 10*rep(1:nrow(volcano), ncol(volcano)), 
     y = 10*rep(1:ncol(volcano), each=nrow(volcano)),
     CI = rep(20, nrow(volcano)*ncol(volcano)))
-plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
-plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI")
+plotsurface(tmp, view=c('x', 'y'), predictor='value', main='Maunga Whau Volcano')
+plot_signifArea(tmp, view=c('x', 'y'), predictor='value', valCI='CI')
 
 # change color:
-plotsurface(tmp, view=c('x', "y"), predictor='value', main="Maunga Whau Volcano")
-plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI", 
-    col="red")
-# or completely remove "nonsignificant" area:
-plot_signifArea(tmp, view=c("x", "y"), predictor="value", valCI="CI", 
-    col="white", alpha=1)
+plotsurface(tmp, view=c('x', 'y'), predictor='value', main='Maunga Whau Volcano')
+plot_signifArea(tmp, view=c('x', 'y'), predictor='value', valCI='CI', 
+    col='red')
+# or completely remove 'nonsignificant' area:
+plot_signifArea(tmp, view=c('x', 'y'), predictor='value', valCI='CI', 
+    col='white', alpha=1)
 
 }
 \seealso{

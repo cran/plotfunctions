@@ -4,8 +4,20 @@
 \alias{emptyPlot}
 \title{Utility function}
 \usage{
-emptyPlot(xlim, ylim, main = NULL, xlab = NULL, ylab = NULL, h0 = NULL,
-  v0 = NULL, bty = "n", eegAxis = FALSE, ...)
+emptyPlot(
+  xlim,
+  ylim,
+  main = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  h0 = NULL,
+  v0 = NULL,
+  bty = "n",
+  eegAxis = FALSE,
+  xmark = NULL,
+  ymark = NULL,
+  ...
+)
 }
 \arguments{
 \item{xlim}{A one- or two-value vector indicating the range of the x-axis. 
@@ -33,14 +45,22 @@ reference. By default no values provided.}
 reference. By default no values provided.}
 
 \item{bty}{A character string which determined the type of box which is 
-drawn about plots. If bty is one of "o", "l", "7", "c", "u", or "]" the 
+drawn about plots. If bty is one of 'o', 'l', '7', 'c', 'u', or ']' the 
 resulting box resembles the corresponding upper case letter. A value of 
-"n"  (the default) suppresses the box.}
+'n'  (the default) suppresses the box.}
 
 \item{eegAxis}{Logical: whether or not to reverse the y-axis, plotting the 
 negative amplitudes upwards as traditionally is done in EEG research.
 If eeg.axes is TRUE, labels for x- and y-axis are provided, when not 
 provided by the user. Default value is FALSE.}
+
+\item{xmark}{Numeric factor with x-axis tick marks and limits. 
+If NULL (default) R's default system is used. If TRUE, only the \code{xlim} 
+values are indicated.}
+
+\item{ymark}{Numeric factor with y-axis tick marks and limits.
+If NULL (default) R's default system is used. If TRUE, only the \code{ylim} 
+values are indicated.}
 
 \item{...}{Other arguments for plotting, see \code{\link[graphics]{par}}.}
 }
@@ -85,8 +105,17 @@ lines(as.numeric(names(m)), m, type='o', pch=4)
 emptyPlot(1, 1, h0=.5, v0=.75)
 # eeg axis (note the axes labels):
 emptyPlot(c(-200,1000), c(-5,5),
-    main="EEG", v0=0, h0=0,
+    main='EEG', v0=0, h0=0,
     eegAxis=TRUE)
+
+# simplify axes:
+emptyPlot(c(-3.2,1.1), c(53,58),
+    xmark=TRUE, ymark=TRUE, las=1)
+# compare with R default:
+emptyPlot(c(-3.2,1.1), c(53,58), las=1)
+# also possible to specify values manually:
+emptyPlot(c(-3.2,1.1), c(53,58),
+    xmark=c(-3.2,0, 1.1), ymark=c(55,57), las=1)
 
 # empty window:
 emptyPlot(1,1,axes=FALSE)
@@ -102,20 +131,30 @@ for plotting the data;
 use \code{\link[graphics]{legend}} or 
 \code{\link{legend_margin}} for adding a legend.
 
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{errorBars}},
-  \code{\link{fill_area}}, \code{\link{getCoords}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

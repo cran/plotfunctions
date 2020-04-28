@@ -4,9 +4,21 @@
 \alias{plot_image}
 \title{Add images to plots.}
 \usage{
-plot_image(img, type = "image", col = NULL, show.axes = FALSE,
-  xrange = c(0, 1), yrange = c(0, 1), fill.plotregion = FALSE,
-  replace.colors = NULL, add = FALSE, interpolate = TRUE, ...)
+plot_image(
+  img,
+  type = "image",
+  col = NULL,
+  show.axes = FALSE,
+  xrange = c(0, 1),
+  yrange = c(0, 1),
+  keep.ratio = FALSE,
+  adj = 0,
+  fill.plotregion = FALSE,
+  replace.colors = NULL,
+  add = FALSE,
+  interpolate = TRUE,
+  ...
+)
 }
 \arguments{
 \item{img}{Matrix or image object (list with 'image', a matrix, and 'col', 
@@ -24,6 +36,13 @@ values of the picture. Default set to c(0,1).}
 
 \item{yrange}{Two-value vector providing the ybottom and ytop coordinate 
 values of the picture. Default set to c(0,1).}
+
+\item{keep.ratio}{Logical: whether or not to keep the original picture 
+ratio.}
+
+\item{adj}{Numeric value indicating the position of the shortest picture 
+side with respect to \code{xrange} or \code{yrange}. Only applies when 
+\code{keep.ratio=TRUE}. See examples.}
 
 \item{fill.plotregion}{Logical: whether or not to fill the complete plot 
 region. Defaults to FALSE.}
@@ -51,7 +70,7 @@ Add images to plots.
 # create image object:
 myimg <- list(image=volcano-min(volcano), col=terrain.colors(max(volcano)-min(volcano)))
 # create emoty plot window:
-emptyPlot(1,1, main="Volcano images")
+emptyPlot(1,1, main='Volcano images')
 # add image topleft corner:
 plot_image(img=myimg, xrange=c(0,.25), yrange=c(.75,1), add=TRUE)
 # add transparent image as overlay:
@@ -63,22 +82,55 @@ plot_image(img=myimg, xrange=c(0.125,.375), yrange=c(.5,.875), add=TRUE)
 # add some points and lines:
 points(runif(10,0,1), runif(10,0,1), type='o')
 
+# keep ratio:
+emptyPlot(1,1, main='Volcano images')
+# I would like to add an image in the following field:
+rect(xleft=0, xright=.5, ybottom=0, ytop=.3, col='gray', border=NA)
+# add image with keep.ratio=true
+plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,.3), 
+    add=TRUE, keep.ratio=TRUE, border=NA)
+# as y-side is longest, this side will be fitted in 
+# the rectangle and the x position adjusted with adj:
+plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,.3), 
+    add=TRUE, keep.ratio=TRUE, border=2, adj=0.5)
+plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,.3), 
+    add=TRUE, keep.ratio=TRUE, border=3, adj=1)
+
+# keep.ratio and border:
+plot_image(img=myimg, xrange=c(0,1), yrange=c(0,1), 
+    keep.ratio=TRUE, adj=0.5)
+plot_image(img=myimg, xrange=c(0,.5), yrange=c(0,1), 
+    keep.ratio=TRUE, adj=0.5)
+emptyPlot(1,1, axes=FALSE)
+plot_image(img=myimg, xrange=c(0,1), yrange=c(0,1), 
+    add=TRUE, keep.ratio=TRUE, adj=0.5)
+
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plotsurface}},
-  \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

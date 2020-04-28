@@ -4,14 +4,14 @@
 \alias{add_n_points}
 \title{Add groups of points to a plot}
 \usage{
-add_n_points(x, y, n, horiz = TRUE, width = 1, sep = 0.2, ...)
+add_n_points(x, y, n, horiz = TRUE, width = NULL, sep = NULL, plot = TRUE, ...)
 }
 \arguments{
 \item{x}{average X position of points to plot,}
 
 \item{y}{average Y position of points to plot,}
 
-\item{n}{number of points to plot.}
+\item{n}{number of points to plot (integer).}
 
 \item{horiz}{Logical: whether or not to plot the sequence of point in 
 horizontal direction (x-axis). Defaults to TRUE, the points are plotted in 
@@ -22,6 +22,10 @@ horizontal direction.}
 \item{sep}{Numeric value: separation between sequences of points. 
 Separation reduces the width. If the value is smaller, the sequences take 
 more space.}
+
+\item{plot}{Logical: whether or not to add the points to the plot. 
+Defaults to true. If set to false, the x- and y-coordinates of the points 
+are returned in a list.}
 
 \item{...}{Optional graphical parameters (see \code{\link[graphics]{par}}).}
 }
@@ -34,39 +38,50 @@ s <- table(cars$speed)
 d <- tapply(cars$dist, list(cars$speed), mean)
 
 emptyPlot(range(as.numeric(names(s))), range(d), 
-    xlab="dist", ylab="mean speed")
-add_n_points(as.numeric(names(s)), d, s)
+    xlab='dist', ylab='mean speed')
+add_n_points(as.numeric(names(s)), d, s, pch='*')
 
 # decrease space between groups of points:
 emptyPlot(range(as.numeric(names(s))), range(d), 
-    xlab="dist", ylab="mean speed")
+    xlab='dist', ylab='mean speed')
 add_n_points(as.numeric(names(s)), d, s, sep=0)
 
 # decrease width of groups of points:
 emptyPlot(range(as.numeric(names(s))), range(d), 
-    xlab="dist", ylab="mean speed")
+    xlab='dist', ylab='mean speed')
 add_n_points(as.numeric(names(s)), d, s, width=0.8)
 
 # horizontal vs vertical:
 emptyPlot(range(d),range(as.numeric(names(s))),  
-    ylab="dist", xlab="mean speed")
+    ylab='dist', xlab='mean speed')
 add_n_points(d, as.numeric(names(s)), s, horiz=FALSE) 
 
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{alphaPalette}},
-  \code{\link{alpha}}, \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

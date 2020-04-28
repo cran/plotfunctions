@@ -24,7 +24,7 @@ of of a vector, sorted per group.
 }
 \examples{
 # example InsectSprays from R datasets
-InsectSprays$Type <- ifelse(InsectSprays$spray \%in\% c("A","B", "F"), 1, 2)
+InsectSprays$Type <- ifelse(InsectSprays$spray \%in\% c('A','B', 'F'), 1, 2)
 
 ind <- group_sort(InsectSprays$count, 
     group=list(Spray=InsectSprays$spray, Type=InsectSprays$Type))
@@ -34,15 +34,24 @@ InsectSprays
 \seealso{
 \code{\link[base]{sort.list}}
 
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRange}},
-  \code{\link{getRatioCoords}}, \code{\link{inch2coords}},
-  \code{\link{isColor}}, \code{\link{list2str}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{list2str}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Utility functions}

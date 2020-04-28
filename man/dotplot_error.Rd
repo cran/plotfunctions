@@ -4,10 +4,26 @@
 \alias{dotplot_error}
 \title{Utility function}
 \usage{
-dotplot_error(x, se.val = NULL, labels = NULL, groups = NULL,
-  gdata = NULL, cex = par("cex"), pch = 21, gpch = 21, bg = "black",
-  color = par("fg"), gcolor = par("fg"), lcolor = "gray", xlim = NULL,
-  main = NULL, xlab = NULL, ylab = NULL, lwd = 1, ...)
+dotplot_error(
+  x,
+  se.val = NULL,
+  labels = NULL,
+  groups = NULL,
+  gdata = NULL,
+  cex = par("cex"),
+  pch = 21,
+  gpch = 21,
+  bg = "black",
+  color = par("fg"),
+  gcolor = par("fg"),
+  lcolor = "gray",
+  xlim = NULL,
+  main = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  lwd = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{either a vector or matrix of numeric values (NAs are allowed). 
@@ -29,7 +45,7 @@ as the median or mean of each group.}
 
 \item{cex}{the character size to be used. Setting cex to a value smaller
 than one can be a useful way of avoiding label overlap. Unlike many other 
-graphics functions, this sets the actual size, not a multiple of par("cex").}
+graphics functions, this sets the actual size, not a multiple of par('cex').}
 
 \item{pch}{the plotting character or symbol to be used.}
 
@@ -68,7 +84,7 @@ intervals.
 avg <- aggregate(count ~ spray, data=InsectSprays, mean)
 avg <- merge(avg, 
     aggregate(count ~ spray, data=InsectSprays, sd),
-    by="spray", all=TRUE)
+    by='spray', all=TRUE)
 
 dotplot_error(avg$count.x, se.val=avg$count.y, labels=avg$spray)
 
@@ -80,22 +96,32 @@ dotplot_error(avg$count.x, se.val=avg$count.y, groups=avg$type, labels=avg$spray
 \seealso{
 \code{\link[graphics]{dotchart}}
 
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{drawDevArrows}},
-  \code{\link{emptyPlot}}, \code{\link{errorBars}},
-  \code{\link{fill_area}}, \code{\link{getCoords}},
-  \code{\link{getFigCoords}}, \code{\link{getProps}},
-  \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}, \code{\link{sortBoxplot}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()},
+\code{\link{sortBoxplot}()}
 }
 \author{
 This function is a slightly adjusted version of the function 
 \code{\link[graphics]{dotchart}} of the package \code{\link{graphics}} 
 version 3.1.1
 }
+\concept{Functions for plotting}

@@ -5,8 +5,15 @@
 \title{Produce box-and-whisker plot(s) ordered by function such as 
 mean or median.}
 \usage{
-sortBoxplot(formula, data = NULL, decreasing = TRUE, FUN = "median",
-  idx = NULL, col = "gray", ...)
+sortBoxplot(
+  formula,
+  data = NULL,
+  decreasing = TRUE,
+  FUN = "median",
+  idx = NULL,
+  col = "gray",
+  ...
+)
 }
 \arguments{
 \item{formula}{a formula, such as 'y ~ Condition', where 'y' is a numeric vector
@@ -48,20 +55,30 @@ sortBoxplot(len ~ dose:supp, data = ToothGrowth, decreasing=FALSE)
 sortBoxplot(len ~ dose:supp, data = ToothGrowth, FUN='sd', col=alpha(2))
 }
 \seealso{
-Other Functions for plotting: \code{\link{addInterval}},
-  \code{\link{add_bars}}, \code{\link{add_n_points}},
-  \code{\link{alphaPalette}}, \code{\link{alpha}},
-  \code{\link{check_normaldist}},
-  \code{\link{color_contour}}, \code{\link{dotplot_error}},
-  \code{\link{drawDevArrows}}, \code{\link{emptyPlot}},
-  \code{\link{errorBars}}, \code{\link{fill_area}},
-  \code{\link{getCoords}}, \code{\link{getFigCoords}},
-  \code{\link{getProps}}, \code{\link{gradientLegend}},
-  \code{\link{legend_margin}},
-  \code{\link{marginDensityPlot}},
-  \code{\link{plot_error}}, \code{\link{plot_image}},
-  \code{\link{plotsurface}}
+Other Functions for plotting: 
+\code{\link{addInterval}()},
+\code{\link{add_bars}()},
+\code{\link{add_n_points}()},
+\code{\link{alphaPalette}()},
+\code{\link{alpha}()},
+\code{\link{check_normaldist}()},
+\code{\link{color_contour}()},
+\code{\link{dotplot_error}()},
+\code{\link{drawDevArrows}()},
+\code{\link{emptyPlot}()},
+\code{\link{errorBars}()},
+\code{\link{fill_area}()},
+\code{\link{getCoords}()},
+\code{\link{getFigCoords}()},
+\code{\link{getProps}()},
+\code{\link{gradientLegend}()},
+\code{\link{legend_margin}()},
+\code{\link{marginDensityPlot}()},
+\code{\link{plot_error}()},
+\code{\link{plot_image}()},
+\code{\link{plotsurface}()}
 }
 \author{
 Jacolien van Rij
 }
+\concept{Functions for plotting}

@@ -18,16 +18,25 @@ String
 Combine list values as string.
 }
 \examples{
-test <- list(a=c(1,2,3), b="a", c=c(TRUE, FALSE), d="test")
-list2str(c("a","c", "d"), test) 
+test <- list(a=c(1,2,3), b='a', c=c(TRUE, FALSE), d='test')
+list2str(c('a','c', 'd'), test) 
 }
 \seealso{
-Other Utility functions: \code{\link{findAbsMin}},
-  \code{\link{find_n_neighbors}},
-  \code{\link{firstLetterCap}}, \code{\link{getArrowPos}},
-  \code{\link{getDec}}, \code{\link{getRange}},
-  \code{\link{getRatioCoords}}, \code{\link{group_sort}},
-  \code{\link{inch2coords}}, \code{\link{isColor}},
-  \code{\link{move_n_point}}, \code{\link{orderBoxplot}},
-  \code{\link{se}}, \code{\link{sortGroups}}
+Other Utility functions: 
+\code{\link{findAbsMin}()},
+\code{\link{find_n_neighbors}()},
+\code{\link{firstLetterCap}()},
+\code{\link{getArrowPos}()},
+\code{\link{getDec}()},
+\code{\link{getRange}()},
+\code{\link{getRatioCoords}()},
+\code{\link{get_palette}()},
+\code{\link{group_sort}()},
+\code{\link{inch2coords}()},
+\code{\link{isColor}()},
+\code{\link{move_n_point}()},
+\code{\link{orderBoxplot}()},
+\code{\link{se}()},
+\code{\link{sortGroups}()}
 }
+\concept{Utility functions}
